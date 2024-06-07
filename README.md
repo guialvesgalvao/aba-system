@@ -14,6 +14,22 @@ Foram utilizadas as seguintes tecnologias:
 
 Backend:
 
-Frontend:
+obs:
+- Handler que fique visualizando os eventos para alterar no banco de dados
+- Integração com whatsapp
+- Rotas
 
-Bnaco de Dados:
+Frontend:
+- React (Vite)
+- Vitest (Testes unitários)
+- Shadcn + Tailwind (CSS)
+- React Router dom
+- React hook form
+- Zustand
+- React Query
+
+Banco de Dados:
+- MySQL
+- Hospedado no Railways
+- Migrations
+

@@ -1,5 +1,13 @@
 @tailwind base;
 @tailwind components;
+
+#root {
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 @tailwind utilities;
 
 @layer base {
@@ -52,6 +60,7 @@
 @layer base {
   * {
     @apply border-border;
+    @apply font-sans;
   }
   body {
     @apply bg-background text-foreground;

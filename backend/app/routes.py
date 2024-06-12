@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, abort
-from .models import db, RecurringBill, Bills
+from .models import db, Suppliers
 import os
 import dotenv
-bills_bp = Blueprint('bills', __name__)
+suppliers_bp = Blueprint('suppliers', __name__)
 
 dotenv.load_dotenv()
 
@@ -15,98 +15,47 @@ def check_api_key():
         print(f"{header}: {value}")
     if api_key != api_key_env:
         abort(401, 'Unauthorized: Missing or invalid API key')
+        
 # Buscar Todos
-@bills_bp.route('/bills', methods=['GET'])
-def get_bills():
-    bills = Bills.query.all()
-    return jsonify([bill.as_dict() for bill in bills])
+@suppliers_bp.route('/suppliers', methods=['GET'])
+def get_suppliers():
+    suppliers = Suppliers.query.all()
+    return jsonify([suppliers.as_dict() for supplier in suppliers])
 
 # Buscar por IDw
-@bills_bp.route('/bills/<int:id>', methods=['GET'])
-def get_bill_by_id(id):
-    bill = Bills.query.get_or_404(id)
-    return jsonify(bill.as_dict())
+@suppliers_bp.route('/suppliers/<int:id>', methods=['GET'])
+def get_supplier_by_id(id):
+    supplier = Suppliers.query.get_or_404(id)
+    return jsonify(supplier.as_dict())
 
 # Alterar
-@bills_bp.route('/bills/<int:id>', methods=['PUT'])
-def edit_bill_by_id(id):
-    bill = Bills.query.get_or_404(id)
+@suppliers_bp.route('/suppliers/<int:id>', methods=['PUT'])
+def edit_supplier_by_id(id):
+    supplier = Suppliers.query.get_or_404(id)
     data = request.get_json()
-    bill.name = data.get('name', bill.name)
-    bill.amount = data.get('amount', bill.amount)
-    bill.due_date = data.get('due_date', bill.due_date)
+    supplier.name = data.get('name', supplier.name)
+    supplier.amount = data.get('amount', supplier.amount)
+    supplier.due_date = data.get('due_date', supplier.due_date)
     db.session.commit()
-    return jsonify(bill.as_dict())
+    return jsonify(supplier.as_dict())
 
 # Criar
-@bills_bp.route('/bills', methods=['POST'])
-def create_new_bill():
+@suppliers_bp.route('/suppliers', methods=['POST'])
+def create_new_supplier():
     data = request.get_json()
-    new_bill = Bills(
+    new_supplier = Suppliers(
         name=data['name'],
         amount=data['amount'],
         due_date=data['due_date']
     )
-    db.session.add(new_bill)
+    db.session.add(new_supplier)
     db.session.commit()
-    return jsonify(new_bill.as_dict()), 201
+    return jsonify(new_supplier.as_dict()), 201
 
 # Excluir
-@bills_bp.route('/bills/<int:id>', methods=['DELETE'])
-def delete_bill(id):
-    bill = Bills.query.get_or_404(id)
-    db.session.delete(bill)
-    db.session.commit()
-    return '', 204
-
-
-# Buscar Todos
-@bills_bp.route('/recurring_bills', methods=['GET'])
-def get_recurring_bills():
-    check_api_key()
-    bills = RecurringBill.query.all()
-    return jsonify([bill.as_dict() for bill in bills])
-
-# Buscar por ID
-@bills_bp.route('/recurring_bills/<int:id>', methods=['GET'])
-def get_recurring_bill_by_id(id):
-    check_api_key()
-    bill = RecurringBill.query.get_or_404(id)
-    return jsonify(bill.as_dict())
-
-# Alterar
-@bills_bp.route('/recurring_bills/<int:id>', methods=['PUT'])
-def edit_recurring_bill_by_id(id):
-    check_api_key()
-    bill = RecurringBill.query.get_or_404(id)
-    data = request.get_json()
-    bill.name = data.get('name', bill.name)
-    bill.average_value = data.get('average_value', bill.average_value)
-    bill.day_due_date = data.get('day_due_date', bill.day_due_date)
-    bill.relational_code = data.get('relational_code', bill.relational_code)
-    db.session.commit()
-    return jsonify(bill.as_dict())
-
-# Criar
-@bills_bp.route('/recurring_bills', methods=['POST'])
-def create_new_recurring_bill():
-    check_api_key()
-    data = request.get_json()
-    new_bill = RecurringBill(
-        name=data['name'],
-        average_value=data['average_value'],
-        day_due_date=data['day_due_date'],
-        relational_code=data['relational_code']
-    )
-    db.session.add(new_bill)
-    db.session.commit()
-    return jsonify(new_bill.as_dict()), 201
-
-# Excluir
-@bills_bp.route('/recurring_bills/<int:id>', methods=['DELETE'])
-def delete_recurring_bill(id):
-    check_api_key()
-    bill = RecurringBill.query.get_or_404(id)
-    db.session.delete(bill)
+@suppliers_bp.route('/suppliers/<int:id>', methods=['DELETE'])
+def delete_supplier(id):
+    supplier = Suppliers.query.get_or_404(id)
+    db.session.delete(supplier)
     db.session.commit()
     return '', 204

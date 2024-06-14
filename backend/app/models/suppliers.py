@@ -1,8 +1,7 @@
+from ..extensions import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import INTEGER
 from datetime import datetime
-
-db = SQLAlchemy()
 
 class Suppliers(db.Model):
     __tablename__ = 'suppliers'

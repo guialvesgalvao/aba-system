@@ -1,34 +1,29 @@
 from flask import Blueprint, request, jsonify, abort
-from .models import db, Suppliers
-import os
-import dotenv
+from ..extensions import db
+from ..models.suppliers import Suppliers
+from ..config import Config
+
 suppliers_bp = Blueprint('suppliers', __name__)
 
-dotenv.load_dotenv()
-
-api_key_env = os.getenv('API_KEY')
-
-# Função para verificar a chave API em todas as solicitações
 def check_api_key():
     api_key = request.headers.get('X-Api-Key')
-    for header, value in request.headers.items():
-        print(f"{header}: {value}")
-    if api_key != api_key_env:
+    if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
-        
-# Buscar Todos
+
+@suppliers_bp.before_request
+def before_request_func():
+    check_api_key()
+
 @suppliers_bp.route('/suppliers', methods=['GET'])
 def get_suppliers():
     suppliers = Suppliers.query.all()
     return jsonify([supplier.as_dict() for supplier in suppliers])
 
-# Buscar por IDw
 @suppliers_bp.route('/suppliers/<int:id>', methods=['GET'])
 def get_supplier_by_id(id):
     supplier = Suppliers.query.get_or_404(id)
     return jsonify(supplier.as_dict())
 
-# Alterar
 @suppliers_bp.route('/suppliers/<int:id>', methods=['PUT'])
 def edit_supplier_by_id(id):
     supplier = Suppliers.query.get_or_404(id)
@@ -39,7 +34,6 @@ def edit_supplier_by_id(id):
     db.session.commit()
     return jsonify(supplier.as_dict())
 
-# Criar
 @suppliers_bp.route('/suppliers', methods=['POST'])
 def create_new_supplier():
     data = request.get_json()
@@ -52,7 +46,6 @@ def create_new_supplier():
     db.session.commit()
     return jsonify(new_supplier.as_dict()), 201
 
-# Excluir
 @suppliers_bp.route('/suppliers/<int:id>', methods=['DELETE'])
 def delete_supplier(id):
     supplier = Suppliers.query.get_or_404(id)

@@ -1,6 +1,13 @@
-export type ProductStatus = "enabled" | "draft" | "archived";
+export enum ProductStatusEnum {
+  enabled = "enabled",
+  draft = "draft",
+  archived = "archived",
+}
+
+export type ProductStatus = keyof typeof ProductStatusEnum;
 
 export type ProductModel = {
+  image?: string;
   id: number;
   title: string;
   description?: string;

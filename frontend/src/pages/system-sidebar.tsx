@@ -1,70 +1,41 @@
-import { Package, GithubIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GithubIcon } from "lucide-react";
 
-import { Link, useLocation } from "react-router-dom";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { AppRoute, Nav } from "@/components/nav/nav";
+import { Logo } from "@/components/logo/logo";
+import { Separator } from "@/components/ui/separator";
+import { useSidebar } from "@/shared/hooks/use-sidebar";
+import { cn } from "@/lib/utils";
+import { CollapseButton } from "@/components/collapse-button/collapse-button";
+import { UserAvatar } from "@/components/user-avatar/user-avatar";
 
-const APP_ROUTES = [
-  {
-    icon: <Package className="h-4 w-4" />,
-    to: "/products",
-    tooltip: "Produtos",
-  },
-  {
-    icon: <Package className="h-4 w-4" />,
-    to: "/teste",
-  },
-];
+interface ISystemSidebarProps {
+  routes: AppRoute[];
+}
 
-export function SystemSidebar() {
-  const { pathname } = useLocation();
+export function SystemSidebar(props: ISystemSidebarProps) {
+  const { routes } = props;
+  const { isCollapsed } = useSidebar();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-      <div className="border-b">
-        <Link to="/" className="flex items-center justify-center h-14">
-          <GithubIcon className="w-6 h-6" />
-        </Link>
+    <aside
+      className={cn(
+        "w-full h-screen group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 border-r relative transition",
+        isCollapsed ? "max-w-20" : "max-w-52"
+      )}
+    >
+      <div className="w-full h-full flex flex-col">
+        <Logo icon={<GithubIcon size={32} />} to="/" />
+        <Separator className="mb-2" />
+        <Nav routes={routes} />
+
+        <div className="flex items-center justify-center mt-auto">
+          <UserAvatar />
+        </div>
       </div>
 
-      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-        {APP_ROUTES.map(({ icon, to, tooltip }, index) => {
-          if (!tooltip) {
-            return (
-              <Link key={index} to={to}>
-                <Button
-                  variant={pathname === to ? "default" : "outline"}
-                  size="icon"
-                  className="w-8 h-8 lg:w-10 lg:h-10 rounded-full"
-                >
-                  {icon}
-                </Button>
-              </Link>
-            );
-          }
-
-          return (
-            <Tooltip key={index}>
-              <TooltipTrigger asChild>
-                <Link to={to}>
-                  <Button
-                    variant={pathname === to ? "default" : "outline"}
-                    size="icon"
-                    className="w-8 h-8 lg:w-10 lg:h-10 rounded-full"
-                  >
-                    {icon}
-                  </Button>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">{tooltip}</TooltipContent>
-            </Tooltip>
-          );
-        })}
-      </nav>
+      <div className="top-1/2 -right-3 absolute">
+        <CollapseButton />
+      </div>
     </aside>
   );
 }

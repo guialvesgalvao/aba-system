@@ -1,6 +1,7 @@
-import { ProductsActive } from "@/components/products/products-active/products-active";
-import { ProductsAll } from "@/components/products/products-all/products-all";
 import { ProductsFormCreate } from "@/components/products/products-form-create";
+import { ProductsRequest } from "@/components/products/products-request/products-request";
+import { ProductsTable } from "@/components/products/products-table";
+import { SystemTray } from "@/components/system-tray/system-tray";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +13,12 @@ import {
 } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
+import {
+  getActiveProducts,
+  getAllProducts,
+  getArchivedProducts,
+  getDraftProducts,
+} from "@/shared/services/products-service";
 
 import { TabsContent } from "@radix-ui/react-tabs";
 import { CirclePlus } from "lucide-react";
@@ -24,10 +31,12 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
   const { defaultTab = "all" } = props;
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
+      <SystemTray />
+
       <Tabs
         onValueChange={(value) => console.log(value)}
-        className="w-full h-full p-8 flex flex-col gap-4"
+        className="w-full h-full flex flex-col gap-4"
         defaultValue={defaultTab}
       >
         <div className="w-full flex justify-between">
@@ -35,9 +44,7 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
             <TabsTrigger value="all">Todos</TabsTrigger>
             <TabsTrigger value="active">Ativos</TabsTrigger>
             <TabsTrigger value="draft">Rascunhos</TabsTrigger>
-            <TabsTrigger value="archived" className="hidden sm:flex">
-              Arquivados
-            </TabsTrigger>
+            <TabsTrigger value="archived">Arquivados</TabsTrigger>
           </TabsList>
 
           <Dialog>
@@ -65,7 +72,11 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
             </CardHeader>
 
             <CardContent className="h-full overflow-y-auto">
-              <ProductsAll />
+              <ProductsRequest
+                storages={["products", "all"]}
+                request={getAllProducts}
+                component={ProductsTable}
+              />
             </CardContent>
           </TabsContent>
 
@@ -80,7 +91,49 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
             </CardHeader>
 
             <CardContent className="h-full overflow-y-auto">
-              <ProductsActive />
+              <ProductsRequest
+                storages={["products", "active"]}
+                request={getActiveProducts}
+                component={ProductsTable}
+              />
+            </CardContent>
+          </TabsContent>
+
+          <TabsContent className="h-full" value="draft">
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
+                Produtos em rascunho
+              </CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
+                Lista de todos produtos em rascunho no sistema
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="h-full overflow-y-auto">
+              <ProductsRequest
+                storages={["products", "draft"]}
+                request={getDraftProducts}
+                component={ProductsTable}
+              />
+            </CardContent>
+          </TabsContent>
+
+          <TabsContent className="h-full" value="archived">
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
+                Produtos arquivados
+              </CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
+                Lista de todos produtos arquivados no sistema
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="h-full overflow-y-auto">
+              <ProductsRequest
+                storages={["products", "archived"]}
+                request={getArchivedProducts}
+                component={ProductsTable}
+              />
             </CardContent>
           </TabsContent>
         </Card>

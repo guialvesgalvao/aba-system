@@ -26,13 +26,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { StatusBadge } from "../status-badge/status-badge";
+import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 
-interface ProductsTableProps {
+export interface IProductsTableProps {
   products: ProductModel[];
+  isLoading?: boolean;
+  isFetching?: boolean;
 }
 
-export function ProductsTable(props: ProductsTableProps) {
-  const { products } = props;
+export function ProductsTable(props: IProductsTableProps) {
+  const { products, isLoading, isFetching } = props;
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <LoadingSpinner text="Buscando todos produtos" className="w-12 h-12" />
+      </div>
+    );
 
   return (
     <Table>

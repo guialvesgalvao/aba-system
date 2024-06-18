@@ -118,8 +118,9 @@ export function ProductsFormCreate() {
                         <FormLabel>Descrição</FormLabel>
                         <FormControl>
                           <Textarea
+                            className="resize-none"
                             placeholder="Diga um pouco sobre o produto"
-                            rows={6}
+                            rows={8}
                             {...field}
                           />
                         </FormControl>

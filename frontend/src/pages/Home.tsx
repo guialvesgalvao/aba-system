@@ -1,17 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { ProductsDashboard } from "./products-dashboard";
 
 function Home() {
-  function handleClick() {
-    alert("Clicou no botão");
-  }
-
   return (
-    <div>
-      <h1>Home</h1>
-      <Button type="button" onClick={handleClick}>
-        Clica aqui para testar
-      </Button>
-    </div>
+    <div className="w-full h-screen flex items-center justify-center"></div>
   );
 }
 

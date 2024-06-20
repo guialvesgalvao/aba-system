@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,6 +9,21 @@ import {
 } from "../ui/breadcrumb";
 
 export function SystemTray() {
+  const location = useLocation();
+  console.log("SystemTray", location);
+
+  function generateBreadCrumbItems(pathname: string) {
+    const parts = pathname.split("/");
+
+    return parts.map((part, index) => {
+      return (
+        <BreadcrumbItem key={index}>
+          <BreadcrumbLink>{part}</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    });
+  }
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -15,13 +31,9 @@ export function SystemTray() {
           <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-        </BreadcrumbItem>
+        <BreadcrumbItem>Páginas</BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem>
+        {generateBreadCrumbItems(location.pathname)}
       </BreadcrumbList>
     </Breadcrumb>
   );

@@ -1,4 +1,4 @@
-import { ProductsFormCreate } from "@/components/products/products-form-create";
+import { ProductsForm } from "@/components/products/products-form";
 import { ProductsRequest } from "@/components/products/products-request/products-request";
 import { ProductsTable } from "@/components/products/products-table";
 import { SystemTray } from "@/components/system-tray/system-tray";
@@ -55,7 +55,7 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[900px]">
-              <ProductsFormCreate />
+              <ProductsForm />
             </DialogContent>
           </Dialog>
         </div>

@@ -7,6 +7,8 @@ import { SystemSidebar } from "./pages/system-sidebar";
 import { ProductsDashboard } from "./pages/products-dashboard";
 import { AppRoute } from "./components/nav/nav";
 import { Package, Home as HomeIcon } from "lucide-react";
+import { NotFound } from "./pages/not-found";
+import { SystemRoutes } from "./shared/enums/app";
 
 const SYSTEM_ROUTES: AppRoute[] = [
   {
@@ -31,8 +33,12 @@ export default function App() {
 
         <div className="w-full h-screen flex flex-col">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ProductsDashboard />} />
+            <Route path={SystemRoutes.ALL} element={<NotFound />} />
+            <Route path={SystemRoutes.HOME} element={<Home />} />
+            <Route
+              path={SystemRoutes.PRODUCTS}
+              element={<ProductsDashboard />}
+            />
           </Routes>
         </div>
       </BrowserRouter>

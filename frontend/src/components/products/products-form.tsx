@@ -46,22 +46,20 @@ const ProductsFormCreateValidation = z.object({
     })
     .min(1, "Adicione um nome ao produto")
     .max(255, "Adicione no máximo 255 caracteres"),
-  description: z.string().optional(),
+  description: z.string(),
   status: status,
   images: z.any(),
 });
 
-type ProductsFormCreateValidationType = z.infer<
-  typeof ProductsFormCreateValidation
->;
+type ProductsFormValidationType = z.infer<typeof ProductsFormCreateValidation>;
 
-export function ProductsFormCreate() {
+export function ProductsForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<ProductsFormCreateValidationType>({
+  const form = useForm<ProductsFormValidationType>({
     resolver: zodResolver(ProductsFormCreateValidation),
     defaultValues: {
-      title: "Teste",
+      title: "",
       description: "",
       status: "enabled",
     },
@@ -69,7 +67,7 @@ export function ProductsFormCreate() {
 
   const { handleSubmit } = form;
 
-  function onSubmit(data: ProductsFormCreateValidationType) {
+  function onSubmit(data: ProductsFormValidationType) {
     const product = ProductsFormCreateValidation.parse(data);
 
     console.log(product);

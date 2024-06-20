@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from ..extensions import db
 from ..models.suppliers import Suppliers
 from ..config import Config
+from datetime import datetime
 
 suppliers_bp = Blueprint('suppliers', __name__)
 
@@ -28,19 +29,34 @@ def get_supplier_by_id(id):
 def edit_supplier_by_id(id):
     supplier = Suppliers.query.get_or_404(id)
     data = request.get_json()
+    if not data:
+        abort(400, 'Invalid data')
+
     supplier.name = data.get('name', supplier.name)
-    supplier.amount = data.get('amount', supplier.amount)
-    supplier.due_date = data.get('due_date', supplier.due_date)
+    supplier.cnpj = data.get('cnpj', supplier.cnpj)
+    supplier.automatic_invoicing = data.get('automatic_invoicing', supplier.automatic_invoicing)
+    supplier.status = data.get('status', supplier.status)
+    supplier.modified_by = data.get('modified_by', supplier.modified_by)
+    supplier.modified_at = datetime.now(datetime.UTC)
+
     db.session.commit()
     return jsonify(supplier.as_dict())
 
 @suppliers_bp.route('/suppliers', methods=['POST'])
 def create_new_supplier():
     data = request.get_json()
+    if not data or not all(k in data for k in ("name", "cnpj", "automatic_invoicing", "status", "created_by")):
+        abort(400, 'Invalid data')
+
     new_supplier = Suppliers(
         name=data['name'],
-        amount=data['amount'],
-        due_date=data['due_date']
+        cnpj=data['cnpj'],
+        automatic_invoicing=data['automatic_invoicing'],
+        status=data['status'],
+        created_by=data['created_by'],
+        modified_by=data.get('modified_by'),
+        modified_at=datetime.now(datetime.UTC),
+        created_at=datetime.now(datetime.UTC)
     )
     db.session.add(new_supplier)
     db.session.commit()

@@ -1,4 +1,5 @@
-import { ProductsDashboard } from "./products-dashboard";
+// Resolver essa parte do código comentada
+// import { ProductsDashboard } from "./products-dashboard";
 
 function Home() {
   return (

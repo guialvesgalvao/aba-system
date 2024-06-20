@@ -52,6 +52,8 @@ export function ProductsFormEdit(props: ProductsFormEditProps) {
 
   const form = useForm<ProductsFormValidationType>({
     resolver: zodResolver(ProductsFormValidation),
+    // Resolver essa parte do código comentada
+    //@ts-ignore
     defaultValues: product,
     mode: "onChange",
   });

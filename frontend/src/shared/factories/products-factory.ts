@@ -55,6 +55,10 @@ export class Product {
   public async update(data: ProductsFormValidationType): Promise<void> {
     const model = this.mapFormDataToModel(data);
     await updateProduct(model);
+
+    this._title = model.title;
+    this._description = model.description;
+    this._status = model.active;
   }
 
   public async delete(): Promise<void> {

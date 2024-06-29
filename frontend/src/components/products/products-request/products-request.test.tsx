@@ -3,7 +3,7 @@ import { describe, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { CreateQueryProviderWrapper } from "@/shared/helpers/testing-helper";
 import { ProductsRequest } from "./products-request";
-import { ProductsTable } from "../products-table";
+import { ProductsTable } from "../products-table/products-table";
 import {
   getActiveProducts,
   getAllProducts,

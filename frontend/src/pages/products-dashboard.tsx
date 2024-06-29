@@ -1,6 +1,6 @@
 import { ProductsForm } from "@/components/products/products-form/products-form";
 import { ProductsRequest } from "@/components/products/products-request/products-request";
-import { ProductsTable } from "@/components/products/products-table";
+import { ProductsTable } from "@/components/products/products-table/products-table";
 import { SystemTray } from "@/components/system-tray/system-tray";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
+import { TabsStatusEnum } from "@/shared/enums/data";
 import {
   getActiveProducts,
   getAllProducts,
@@ -22,20 +23,36 @@ import {
 
 import { TabsContent } from "@radix-ui/react-tabs";
 import { CirclePlus } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
-interface IProductsDashboardProps {
-  defaultTab?: "all" | "active" | "draft" | "archived";
-}
+export function ProductsDashboard() {
+  let [searchParams, setSearchParams] = useSearchParams();
+  const defaultTab = getDefaultTab();
 
-export function ProductsDashboard(props: IProductsDashboardProps) {
-  const { defaultTab = "all" } = props;
+  function getDefaultTab(): TabsStatusEnum {
+    return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
+  }
+
+  function handleTabChange(value: string) {
+    controlTabSearchParam(value as TabsStatusEnum);
+  }
+
+  function controlTabSearchParam(value: TabsStatusEnum) {
+    const hasSearchParam = searchParams.has("status");
+
+    if (hasSearchParam && value === TabsStatusEnum.All) {
+      searchParams.delete("status");
+    } else {
+      searchParams.set("status", value);
+    }
+
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <SystemTray />
-
       <Tabs
-        onValueChange={(value) => console.log(value)}
+        onValueChange={handleTabChange}
         className="w-full h-full flex flex-col gap-4"
         defaultValue={defaultTab}
       >

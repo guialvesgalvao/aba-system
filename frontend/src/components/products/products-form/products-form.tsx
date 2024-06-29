@@ -69,9 +69,16 @@ export function ProductsForm(props: IProductsFormProps) {
 
   const form = useForm<ProductsFormValidationType>({
     resolver: zodResolver(ProductsFormCreateValidation),
-    defaultValues: product,
+    defaultValues: {
+      id: product?.id,
+      title: product?.title,
+      description: product?.description,
+      status: product?.status,
+      image: product?.image,
+    },
   });
 
+  const isEditMode = !!product?.id;
   const { handleSubmit } = form;
 
   async function onSubmit(data: ProductsFormValidationType) {
@@ -203,22 +210,27 @@ export function ProductsForm(props: IProductsFormProps) {
                       <FormItem>
                         <Button
                           variant="secondary"
-                          className="w-full h-40 flex items-center justify-center rounded-md"
+                          className="w-full h-40 flex items-center justify-center rounded-md p-0"
                           onClick={() => {
                             fileInputRef.current?.click();
                           }}
                         >
-                          <ImagePlus />
+                          {!isEditMode ? (
+                            <ImagePlus />
+                          ) : (
+                            <img src={product?.image} className="w-full h-full"/>
+                          )}
                         </Button>
 
                         <FormControl>
-                          {/* <Input
+                          <Input
                             className="hidden"
                             type="file"
                             placeholder="Adicione a imagem"
                             {...field}
+                            value={""}
                             ref={fileInputRef}
-                          /> */}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -28,8 +28,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { StatusBadge } from "../status-badge/status-badge";
 import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 
+import { Product } from "@/shared/factories/products-factory";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { ProductsForm } from "./products-form/products-form";
+
 export interface IProductsTableProps {
-  products: ProductModel[];
+  products: Product[];
   isLoading?: boolean;
   isFetching?: boolean;
 }
@@ -74,56 +78,67 @@ export function ProductsTable(props: IProductsTableProps) {
             : "-";
 
           return (
-            <TableRow key={index}>
-              <TableCell>
-                <Avatar className="w-16 h-16 aspect-square rounded-md object-cover">
-                  <AvatarImage src={product?.image ?? ""} />
-                  <AvatarFallback
-                    className="w-16 h-16 aspect-square rounded-md object-cover"
-                    delayMs={600}
-                  >
-                    {product.title}
-                  </AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell>{product.title}</TableCell>
-              <TableCell>
-                <Tooltip delayDuration={400}>
-                  <TooltipTrigger>{description}</TooltipTrigger>
-                  <TooltipContent className="max-w-80">
-                    {product?.description ?? "-"}
-                  </TooltipContent>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <StatusBadge
-                  text={getProductTextByStatus(product.active)}
-                  className={getBadgeColorBasedOnStatus(product.active)}
-                  description={getProductDescriptionByStatus(product.active)}
-                />
-              </TableCell>
-              <TableCell>
-                {new Date(product.created_at).toLocaleDateString()}
-              </TableCell>
-              <TableCell>
-                {new Date(product.updated_at).toLocaleDateString()}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuItem>Editar</DropdownMenuItem>
-                    <DropdownMenuItem>Excluir</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
+            <Dialog key={index}>
+              <TableRow>
+                <TableCell>
+                  <Avatar className="w-16 h-16 aspect-square rounded-md object-cover">
+                    <AvatarImage src={product?.image ?? ""} />
+                    <AvatarFallback
+                      className="w-16 h-16 aspect-square rounded-md object-cover"
+                      delayMs={600}
+                    >
+                      {product.title}
+                    </AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell>{product.title}</TableCell>
+                <TableCell>
+                  <Tooltip delayDuration={400}>
+                    <TooltipTrigger>{description}</TooltipTrigger>
+                    <TooltipContent className="max-w-80">
+                      {product?.description ?? "-"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <StatusBadge
+                    text={getProductTextByStatus(product.status)}
+                    className={getBadgeColorBasedOnStatus(product.status)}
+                    description={getProductDescriptionByStatus(product.status)}
+                  />
+                </TableCell>
+                <TableCell>
+                  {product.createdDate.toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  {product.updatedDate.toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+
+                      <DropdownMenuItem>
+                        <DialogTrigger>Editar</DialogTrigger>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={product.delete}>
+                        Excluir
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+
+                <DialogContent className="max-w-[900px]">
+                  <ProductsForm product={product} />
+                </DialogContent>
+              </TableRow>
+            </Dialog>
           );
         })}
       </TableBody>

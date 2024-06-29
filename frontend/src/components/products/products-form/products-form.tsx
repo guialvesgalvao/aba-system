@@ -10,13 +10,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/form";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 
 import {
   Card,
@@ -32,45 +32,68 @@ import {
   SelectContent,
   SelectItem,
   SelectValue,
-} from "../ui/select";
+} from "../../ui/select";
 
 import { ImagePlus } from "lucide-react";
 import { useRef } from "react";
-
-const status = z.enum(["enabled", "draft", "archived"]);
+import { Product } from "@/shared/factories/products-factory";
 
 const ProductsFormCreateValidation = z.object({
+  id: z
+    .number()
+    .positive("O ID do produto deve ser um número positivo")
+    .optional(),
   title: z
     .string({
       required_error: "Adicione um nome ao produto",
     })
     .min(1, "Adicione um nome ao produto")
     .max(255, "Adicione no máximo 255 caracteres"),
-  description: z.string(),
-  status: status,
-  images: z.any(),
+  description: z.string().optional(),
+  status: z.enum(["enabled", "draft", "archived"]),
+  image: z.any(),
 });
 
-type ProductsFormValidationType = z.infer<typeof ProductsFormCreateValidation>;
+export type ProductsFormValidationType = z.infer<
+  typeof ProductsFormCreateValidation
+>;
 
-export function ProductsForm() {
+interface IProductsFormProps {
+  product?: Product;
+}
+
+export function ProductsForm(props: IProductsFormProps) {
+  const { product } = props;
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ProductsFormValidationType>({
     resolver: zodResolver(ProductsFormCreateValidation),
-    defaultValues: {
-      title: "",
-      description: "",
-      status: "enabled",
-    },
+    defaultValues: product,
   });
 
   const { handleSubmit } = form;
 
-  function onSubmit(data: ProductsFormValidationType) {
-    const product = ProductsFormCreateValidation.parse(data);
+  async function onSubmit(data: ProductsFormValidationType) {
+    const product = validateFormData(data);
+    await redirectToNewOrEditSubmit(product);
+  }
 
-    console.log(product);
+  function validateFormData(data: ProductsFormValidationType) {
+    const product = ProductsFormCreateValidation.parse(data);
+    return product;
+  }
+
+  async function redirectToNewOrEditSubmit(data: ProductsFormValidationType) {
+    if (product?.id) {
+      await product.update(data);
+    }
+  }
+
+  async function deleteProduct() {
+    if (!product?.id) return;
+
+    await product.delete();
   }
 
   return (
@@ -78,6 +101,7 @@ export function ProductsForm() {
       <h3 className="text-2xl font-semibold leading-none tracking-tight">
         Produto
       </h3>
+
       <Form {...form}>
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -149,7 +173,7 @@ export function ProductsForm() {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Selecione o Status do produto" />
+                              <SelectValue placeholder="Selecione o status do produto" />
                             </SelectTrigger>
                           </FormControl>
                           <FormMessage />
@@ -174,7 +198,7 @@ export function ProductsForm() {
                 <CardContent>
                   <FormField
                     control={form.control}
-                    name="images"
+                    name="image"
                     render={({ field }) => (
                       <FormItem>
                         <Button
@@ -188,13 +212,13 @@ export function ProductsForm() {
                         </Button>
 
                         <FormControl>
-                          <Input
+                          {/* <Input
                             className="hidden"
                             type="file"
                             placeholder="Adicione a imagem"
                             {...field}
                             ref={fileInputRef}
-                          />
+                          /> */}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -205,7 +229,10 @@ export function ProductsForm() {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-x-2">
+            <Button type="button" variant="destructive" onClick={deleteProduct}>
+              Excluir
+            </Button>
             <Button type="submit">Salvar produto</Button>
           </div>
         </form>

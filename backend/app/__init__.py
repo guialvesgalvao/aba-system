@@ -1,19 +1,16 @@
 from flask import Flask
-from flask_cors import CORS
 from .config import Config
-from .models import db
+from .extensions import db
+from .routes import register_blueprints
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app)
+    # Inicializar extensões
     db.init_app(app)
 
-    with app.app_context():
-        db.create_all()
-
-    from .routes import bills_bp
-    app.register_blueprint(bills_bp)
+    # Registrar blueprints
+    register_blueprints(app)
 
     return app

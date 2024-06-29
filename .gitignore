@@ -7,3 +7,6 @@ tasks.md
 
 /frontend/node_modules
 /backend/__pycache__
+/backend/app/__pycache__
+/backend/app/routes/__pycache__
+/backend/app/models/__pycache__

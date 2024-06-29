@@ -37,7 +37,7 @@ def edit_supplier_by_id(id):
     supplier.automatic_invoicing = data.get('automatic_invoicing', supplier.automatic_invoicing)
     supplier.status = data.get('status', supplier.status)
     supplier.modified_by = data.get('modified_by', supplier.modified_by)
-    supplier.modified_at = datetime.now(datetime.UTC)
+    supplier.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(supplier.as_dict())
@@ -55,8 +55,8 @@ def create_new_supplier():
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_supplier)
     db.session.commit()

@@ -42,8 +42,8 @@ def create_new_order():
         client_address=data.get('client_address'),
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_order)
     db.session.commit()
@@ -65,7 +65,7 @@ def edit_order_by_id(id):
     order.invoicing_date = datetime.fromisoformat(data['invoicing_date']) if 'invoicing_date' in data else order.invoicing_date
     order.client_address = data.get('client_address', order.client_address)
     order.modified_by = data.get('modified_by', order.modified_by)
-    order.modified_at = datetime.now(datetime.UTC)
+    order.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(order.as_dict())

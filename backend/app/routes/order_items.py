@@ -43,8 +43,8 @@ def create_new_order_item():
         product_id=data['product_id'],
         invoicing_id=data.get('invoicing_id'),
         delivery_person_id=data.get('delivery_person_id'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_order_item)
     db.session.commit()
@@ -67,7 +67,7 @@ def edit_order_item_by_id(id):
     order_item.product_id = data.get('product_id', order_item.product_id)
     order_item.invoicing_id = data.get('invoicing_id', order_item.invoicing_id)
     order_item.delivery_person_id = data.get('delivery_person_id', order_item.delivery_person_id)
-    order_item.modified_at = datetime.now(datetime.UTC)
+    order_item.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(order_item.as_dict())

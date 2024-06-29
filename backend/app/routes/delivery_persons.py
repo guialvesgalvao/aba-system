@@ -36,8 +36,8 @@ def create_new_delivery_person():
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_delivery_person)
     db.session.commit()
@@ -53,7 +53,7 @@ def edit_delivery_person_by_id(id):
     delivery_person.name = data.get('name', delivery_person.name)
     delivery_person.status = data.get('status', delivery_person.status)
     delivery_person.modified_by = data.get('modified_by', delivery_person.modified_by)
-    delivery_person.modified_at = datetime.now(datetime.UTC)
+    delivery_person.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(delivery_person.as_dict())

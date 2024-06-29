@@ -35,7 +35,7 @@ def edit_supplier_product_by_id(id):
     supplier_product.validity_period = data.get('validity_period', supplier_product.validity_period)
     supplier_product.value = data.get('value', supplier_product.value)
     supplier_product.modified_by = data.get('modified_by', supplier_product.modified_by)
-    supplier_product.modified_at = datetime.now(datetime.UTC)
+    supplier_product.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(supplier_product.as_dict())
@@ -53,8 +53,8 @@ def create_new_supplier_product():
         product_id=data['product_id'],
         supplier_id=data['supplier_id'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_supplier_product)
     db.session.commit()

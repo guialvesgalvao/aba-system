@@ -35,7 +35,7 @@ def edit_origin_by_id(id):
     origin.name = data.get('name', origin.name)
     origin.status = data.get('status', origin.status)
     origin.modified_by = data.get('modified_by', origin.modified_by)
-    origin.modified_at = datetime.now(datetime.UTC)
+    origin.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(origin.as_dict())
@@ -51,8 +51,8 @@ def create_new_origin():
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_origin)
     db.session.commit()

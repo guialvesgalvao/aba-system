@@ -35,7 +35,7 @@ def edit_product_by_id(id):
     product.name = data.get('name', product.name)
     product.status = data.get('status', product.status)
     product.modified_by = data.get('modified_by', product.modified_by)
-    product.modified_at = datetime.now(datetime.UTC)
+    product.modified_at = datetime.now()
 
     db.session.commit()
     return jsonify(product.as_dict())
@@ -51,8 +51,8 @@ def create_new_product():
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
-        modified_at=datetime.now(datetime.UTC),
-        created_at=datetime.now(datetime.UTC)
+        modified_at=datetime.now(),
+        created_at=datetime.now()
     )
     db.session.add(new_product)
     db.session.commit()

@@ -1,5 +1,5 @@
 import { ProductsForm } from "@/components/products/products-form/products-form";
-import { ProductsRequest } from "@/components/products/products-request/products-request";
+import { ComponentRequest } from "@/components/component-request/component-request";
 import { ProductsTable } from "@/components/products/products-table/products-table";
 import { SystemTray } from "@/components/system-tray/system-tray";
 
@@ -14,20 +14,19 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import { TabsStatusEnum } from "@/shared/enums/data";
-import {
-  getActiveProducts,
-  getAllProducts,
-  getArchivedProducts,
-  getDraftProducts,
-} from "@/shared/services/products-service";
+
+import ProductsService from "@/shared/services/products-service";
 
 import { TabsContent } from "@radix-ui/react-tabs";
 import { CirclePlus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { Product } from "@/shared/factories/products-factory";
 
 export function ProductsDashboard() {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultTab = getDefaultTab();
+
+  const { getProducts } = new ProductsService();
 
   function getDefaultTab(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
@@ -71,6 +70,7 @@ export function ProductsDashboard() {
                 Criar novo produto
               </Button>
             </DialogTrigger>
+
             <DialogContent className="max-w-[1000px]">
               <ProductsForm />
             </DialogContent>
@@ -89,66 +89,9 @@ export function ProductsDashboard() {
             </CardHeader>
 
             <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
+              <ComponentRequest<Product>
                 storages={["products", "all"]}
-                request={getAllProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="active">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos ativos
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos ativos no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "active"]}
-                request={getActiveProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="draft">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos em rascunho
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos em rascunho no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "draft"]}
-                request={getDraftProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="archived">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos arquivados
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos arquivados no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "archived"]}
-                request={getArchivedProducts}
+                request={getProducts}
                 component={ProductsTable}
               />
             </CardContent>

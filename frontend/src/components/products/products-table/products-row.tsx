@@ -23,6 +23,8 @@ import {
 } from "@/shared/helpers/products-helper/products-helper";
 import { MoreHorizontal } from "lucide-react";
 import { ProductsForm } from "../products-form/products-form";
+import { FormRequest } from "@/components/form-request/form-request";
+import ProductsService from "@/shared/services/products-service";
 
 interface IProductRowProps {
   product: Product;
@@ -30,6 +32,7 @@ interface IProductRowProps {
 
 export function ProductRow(props: IProductRowProps) {
   const { product } = props;
+  const { getProductById } = new ProductsService();
 
   function getShortedDescription(description?: string) {
     if (description === undefined) return "-";
@@ -42,6 +45,10 @@ export function ProductRow(props: IProductRowProps) {
     return shortDescription;
   }
 
+  function handleDelete() {
+    if (!product.id) return;
+  }
+
   return (
     <Dialog>
       <TableRow>
@@ -52,11 +59,11 @@ export function ProductRow(props: IProductRowProps) {
               className="w-16 h-16 aspect-square rounded-md object-cover"
               delayMs={600}
             >
-              {product.title}
+              {product.name}
             </AvatarFallback>
           </Avatar>
         </TableCell>
-        <TableCell>{product.title}</TableCell>
+        <TableCell>{product.name}</TableCell>
         <TableCell>
           <Tooltip delayDuration={400}>
             <TooltipTrigger>
@@ -74,8 +81,8 @@ export function ProductRow(props: IProductRowProps) {
             description={getProductDescriptionByStatus(product.status)}
           />
         </TableCell>
-        <TableCell>{product.createdDate.toLocaleDateString()}</TableCell>
-        <TableCell>{product.updatedDate.toLocaleDateString()}</TableCell>
+        <TableCell>{product?.createdDate?.toLocaleDateString()}</TableCell>
+        <TableCell>{product?.modifiedDate?.toLocaleDateString()}</TableCell>
         <TableCell>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -90,7 +97,7 @@ export function ProductRow(props: IProductRowProps) {
               <DropdownMenuItem>
                 <DialogTrigger>Editar</DialogTrigger>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={product.delete}>
+              <DropdownMenuItem onClick={handleDelete}>
                 Excluir
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -98,7 +105,13 @@ export function ProductRow(props: IProductRowProps) {
         </TableCell>
 
         <DialogContent className="max-w-[900px]">
-          <ProductsForm product={product} />
+          <FormRequest
+            id={product.id}
+            component={ProductsForm}
+            form="products"
+            request={getProductById}
+            loading="Carregando produto"
+          />
         </DialogContent>
       </TableRow>
     </Dialog>

@@ -1,103 +1,60 @@
-import { ProductModel } from "../models/products-model";
-
-import { wait } from "../helpers/testing-helper";
-import { createProductsMockBasedOnLength } from "../mocks/products-mocks";
-
 import axios from "axios";
 
-/**
- * Service to get all products from the API
- * @returns  {Promise<Array<ProductModel>>} List of all products
- */
-export async function getAllProducts(): Promise<Array<ProductModel>> {
-  try {
-    const response = await axios
-      .get("https://aba-system.netlify.app/products")
-      .then((response) => response.data);
+import { Product } from "../factories/products-factory";
+import { ProductsModel } from "../models/products-model";
+import { ProductsRepo } from "../repositories/products-repo";
+import { ProductRequest, ProductResponse } from "../types/products-types";
 
-    console.log(response);
+export default class ProductsService implements ProductsModel {
+  private _repository: ProductsRepo;
 
-    return response;
-  } catch (error) {
-    throw new Error("Error getting all products");
+  constructor() {
+    this._repository = new ProductsRepo();
+
+    this.getProducts = this.getProducts.bind(this);
+    this.getProductById = this.getProductById.bind(this);
+    this.createProduct = this.createProduct.bind(this);
+    this.updateProduct = this.updateProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
   }
-}
 
-/**
- * Service to get active products
- * @returns {Promise<Array<ProductModel>>} List of active products
- */
-export async function getActiveProducts(): Promise<Array<ProductModel>> {
-  try {
-    const response = await createProductsMockBasedOnLength(100).then(
-      (products) => wait<ProductModel[]>(1500, products)
-    );
+  async getProducts(): Promise<Product[]> {
+    const productsFromRepo = await this._repository.getAllProducts();
+    const products = productsFromRepo.map((product) => new Product(product));
 
-    const filtered = await response.filter(
-      (product) => product.active === "enabled"
-    );
-
-    return filtered;
-  } catch (error) {
-    throw new Error("Error getting active products");
+    return products;
   }
-}
 
-/**
- * Service to get draft products
- * @returns {Promise<Array<ProductModel>>} List of draft products
- */
-export async function getDraftProducts(): Promise<Array<ProductModel>> {
-  try {
-    const response = await createProductsMockBasedOnLength(100).then(
-      (products) => wait<ProductModel[]>(1500, products)
-    );
+  async getProductById(id: number): Promise<Product> {
+    const productFromRepo = await this._repository.getById(id);
+    const product = new Product(productFromRepo);
 
-    const filtered = await response.filter(
-      (product) => product.active === "draft"
-    );
-
-    return filtered;
-  } catch (error) {
-    throw new Error("Error getting draft products");
+    return product;
   }
-}
 
-/**
- * Service to get archived products
- * @returns {Promise<Array<ProductModel>>} List of archived products
- */
-export async function getArchivedProducts(): Promise<Array<ProductModel>> {
-  try {
-    const response = await createProductsMockBasedOnLength(100).then(
-      (products) => wait<ProductModel[]>(1500, products)
-    );
-
-    const filtered = await response.filter(
-      (product) => product.active === "archived"
-    );
-
-    console.log({ archived: filtered });
-    return filtered;
-  } catch (error) {
-    throw new Error("Error getting archived products");
+  async createProduct(product: ProductRequest): Promise<Product> {
+    try {
+      const newProduct = await this._repository.addProduct(product);
+      return new Product(newProduct);
+    } catch (error) {
+      throw new Error("Error adding product");
+    }
   }
-}
 
-export async function updateProduct(
-  product: Omit<ProductModel, "created_at" | "updated_at">
-) {
-  try {
-    console.log("Update product", product);
-  } catch (error) {
-    throw new Error("Error updating product");
+  async updateProduct(product: ProductRequest): Promise<Product> {
+    if (!product.id) throw new Error("Product ID is required");
+
+    try {
+      const updatedProduct = await this._repository.updateProduct(product);
+      return new Product(updatedProduct);
+    } catch (error) {
+      throw new Error("Error updating product");
+    }
   }
-}
 
-export async function deleteProduct(id: number) {
-  try {
-    console.log("Delete product", id);
-  } catch (error) {
-    throw new Error("Error deleting product");
+  async deleteProduct(id: number): Promise<void> {
+    if (!id) throw new Error("Product ID is required");
+
+    await this._repository.deleteProduct(id);
   }
 }

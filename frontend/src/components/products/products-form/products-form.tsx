@@ -18,13 +18,7 @@ import { Input } from "../../ui/input";
 
 import { Textarea } from "../../ui/textarea";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
   Select,
@@ -36,14 +30,30 @@ import {
 
 import { ImagePlus } from "lucide-react";
 import { useRef } from "react";
+
 import { Product } from "@/shared/factories/products-factory";
+import ProductsService from "@/shared/services/products-service";
+import { ProductRequest } from "@/shared/types/products-types";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { SubmitDialog } from "./products-form-dialogs";
 
 const ProductsFormCreateValidation = z.object({
   id: z
     .number()
     .positive("O ID do produto deve ser um número positivo")
     .optional(),
-  title: z
+  name: z
     .string({
       required_error: "Adicione um nome ao produto",
     })
@@ -52,6 +62,7 @@ const ProductsFormCreateValidation = z.object({
   description: z.string().optional(),
   status: z.enum(["enabled", "draft", "archived"]),
   image: z.any(),
+  created_by: z.string(),
 });
 
 export type ProductsFormValidationType = z.infer<
@@ -59,31 +70,55 @@ export type ProductsFormValidationType = z.infer<
 >;
 
 interface IProductsFormProps {
-  product?: Product;
+  item?: Product;
 }
 
 export function ProductsForm(props: IProductsFormProps) {
-  const { product } = props;
+  const { item: product } = props;
+
+  const { createProduct, updateProduct, deleteProduct } = new ProductsService();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ProductsFormValidationType>({
     resolver: zodResolver(ProductsFormCreateValidation),
-    defaultValues: {
-      id: product?.id,
-      title: product?.title,
-      description: product?.description,
-      status: product?.status,
-      image: product?.image,
-    },
+    defaultValues: getDefaultValues(),
   });
 
   const isEditMode = !!product?.id;
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { isValid, isSubmitSuccessful, isSubmitting },
+  } = form;
+
+  function getDefaultValues() {
+    if (product) {
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        status: product.status,
+        image: product.image,
+        created_by: "admin",
+      };
+    }
+
+    return {
+      created_by: "admin",
+    };
+  }
 
   async function onSubmit(data: ProductsFormValidationType) {
-    const product = validateFormData(data);
-    await redirectToNewOrEditSubmit(product);
+    const product: ProductRequest = validateFormData(data);
+    handleSubmitController(product);
+  }
+
+  function handleSubmitController(data: ProductRequest) {
+    if (isEditMode) {
+      return updateProduct(data);
+    }
+
+    return createProduct(data);
   }
 
   function validateFormData(data: ProductsFormValidationType) {
@@ -91,23 +126,21 @@ export function ProductsForm(props: IProductsFormProps) {
     return product;
   }
 
-  async function redirectToNewOrEditSubmit(data: ProductsFormValidationType) {
-    if (product?.id) {
-      await product.update(data);
-    }
-  }
-
-  async function deleteProduct() {
+  async function handleDelete() {
     if (!product?.id) return;
 
-    await product.delete();
+    await deleteProduct(product.id);
   }
 
   return (
-    <div className="w-full max-w-[900px] flex flex-col gap-6">
-      <h3 className="text-2xl font-semibold leading-none tracking-tight">
-        Produto
-      </h3>
+    <div className="w-full flex flex-col gap-6">
+      <div className="flex flex-col">
+        <h3 className="text-2xl font-semibold leading-none tracking-tight">
+          {isEditMode ? "Editar produto" : "Criar novo produto"}
+        </h3>
+
+        <h6>Produtos são utilizados nos pedidos</h6>
+      </div>
 
       <Form {...form}>
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
@@ -116,15 +149,12 @@ export function ProductsForm(props: IProductsFormProps) {
               <Card className="h-full">
                 <CardHeader>
                   <CardTitle>Detalhes do produto</CardTitle>
-                  <CardDescription>
-                    Crie um novo produto para seu aplicativo
-                  </CardDescription>
                 </CardHeader>
 
                 <CardContent className="flex flex-col gap-6">
                   <FormField
                     control={form.control}
-                    name="title"
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel htmlFor="title">Nome</FormLabel>
@@ -218,7 +248,10 @@ export function ProductsForm(props: IProductsFormProps) {
                           {!isEditMode ? (
                             <ImagePlus />
                           ) : (
-                            <img src={product?.image} className="w-full h-full"/>
+                            <img
+                              src={product?.image}
+                              className="w-full h-full"
+                            />
                           )}
                         </Button>
 
@@ -242,10 +275,17 @@ export function ProductsForm(props: IProductsFormProps) {
           </div>
 
           <div className="flex justify-end gap-x-2">
-            <Button type="button" variant="destructive" onClick={deleteProduct}>
-              Excluir
-            </Button>
-            <Button type="submit">Salvar produto</Button>
+            {isEditMode && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+              >
+                Excluir
+              </Button>
+            )}
+
+            <SubmitDialog isEditMode={isEditMode} onSubmit={onSubmit} />
           </div>
         </form>
       </Form>

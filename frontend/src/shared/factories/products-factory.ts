@@ -1,27 +1,27 @@
-import { ProductsFormValidationType } from "@/components/products/products-form/products-form";
-import { ProductModel, ProductStatus } from "../models/products-model";
-import { deleteProduct, updateProduct } from "../services/products-service";
-
+import { ProductResponse, ProductStatus } from "../types/products-types";
 export class Product {
   private _image?: string;
   private _id: number;
-  private _title: string;
+  private _name: string;
   private _description?: string;
   private _status: ProductStatus;
   private _createdDate: Date;
-  private _updatedDate: Date;
+  private _createdBy: string;
+  private _modifiedDate: Date;
+  private _modifiedBy: string;
 
-  constructor(data: ProductModel) {
+  constructor(data: ProductResponse) {
     this._image = data.image;
     this._id = data.id;
-    this._title = data.title;
+    this._name = data.name;
     this._description = data.description;
-    this._status = data.active;
-    this._createdDate = new Date(data.created_at);
-    this._updatedDate = new Date(data.updated_at);
+    this._status = data.status;
 
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+    // If the data is not provided, the date will be undefined
+    this._createdDate = new Date(data.created_at);
+    this._createdBy = data.created_by;
+    this._modifiedDate = new Date(data.modified_at);
+    this._modifiedBy = data.modified_by;
   }
 
   public get image(): string | undefined {
@@ -32,8 +32,8 @@ export class Product {
     return this._id;
   }
 
-  public get title(): string {
-    return this._title;
+  public get name(): string {
+    return this._name;
   }
 
   public get description(): string | undefined {
@@ -48,32 +48,15 @@ export class Product {
     return this._createdDate;
   }
 
-  public get updatedDate(): Date {
-    return this._updatedDate;
+  public get createdBy(): string {
+    return this._createdBy;
   }
 
-  public async update(data: ProductsFormValidationType): Promise<void> {
-    const model = this.mapFormDataToModel(data);
-    await updateProduct(model);
-
-    this._title = model.title;
-    this._description = model.description;
-    this._status = model.active;
+  public get modifiedDate(): Date {
+    return this._modifiedDate;
   }
 
-  public async delete(): Promise<void> {
-    await deleteProduct(this._id);
-  }
-
-  private mapFormDataToModel(
-    data: ProductsFormValidationType
-  ): Omit<ProductModel, "created_at" | "updated_at"> {
-    return {
-      image: this._image,
-      id: this._id,
-      title: data.title,
-      description: data.description,
-      active: data.status,
-    };
+  public get modifiedBy(): string {
+    return this._modifiedBy;
   }
 }

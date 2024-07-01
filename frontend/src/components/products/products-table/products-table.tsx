@@ -9,17 +9,16 @@ import {
 import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Product } from "@/shared/factories/products-factory";
-import { Dialog } from "../../ui/dialog";
 import { ProductRow } from "./products-row";
 
 export interface IProductsTableProps {
-  products: Product[];
+  data: Product[];
   isLoading?: boolean;
   isFetching?: boolean;
 }
 
 export function ProductsTable(props: IProductsTableProps) {
-  const { products, isLoading, isFetching } = props;
+  const { data: products, isLoading, isFetching } = props;
 
   if (isLoading || isFetching)
     return (
@@ -50,9 +49,18 @@ export function ProductsTable(props: IProductsTableProps) {
       </TableHeader>
 
       <TableBody>
-        {products.map((product, index) => (
-          <ProductRow product={product} key={index} />
-        ))}
+        {products.length === 0 && (
+          <TableRow>
+            <td colSpan={7} className="p-20 text-center">
+              <h2 className="text-xl">Nenhum produto encontrado</h2>
+            </td>
+          </TableRow>
+        )}
+
+        {products.length > 0 &&
+          products.map((product, index) => (
+            <ProductRow product={product} key={index} />
+          ))}
       </TableBody>
     </Table>
   );

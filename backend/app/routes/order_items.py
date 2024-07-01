@@ -11,22 +11,21 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@order_items_bp.before_request
-def before_request_func():
-    check_api_key()
-
 @order_items_bp.route('/order_items', methods=['GET'])
 def get_order_items():
+    check_api_key()
     order_items = OrderItems.query.all()
     return jsonify([item.as_dict() for item in order_items])
 
 @order_items_bp.route('/order_items/<int:id>', methods=['GET'])
 def get_order_item_by_id(id):
+    check_api_key()
     order_item = OrderItems.query.get_or_404(id)
     return jsonify(order_item.as_dict())
 
 @order_items_bp.route('/order_items', methods=['POST'])
 def create_new_order_item():
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("cost_value", "quantity", "status", "sale_value", "created_by", "order_id", "product_id")):
         abort(400, 'Invalid data')
@@ -52,6 +51,7 @@ def create_new_order_item():
 
 @order_items_bp.route('/order_items/<int:id>', methods=['PUT'])
 def edit_order_item_by_id(id):
+    check_api_key()
     order_item = OrderItems.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -74,6 +74,7 @@ def edit_order_item_by_id(id):
 
 @order_items_bp.route('/order_items/<int:id>', methods=['DELETE'])
 def delete_order_item(id):
+    check_api_key()
     order_item = OrderItems.query.get_or_404(id)
     db.session.delete(order_item)
     db.session.commit()

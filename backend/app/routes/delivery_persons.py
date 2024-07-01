@@ -11,22 +11,21 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@delivery_persons_bp.before_request
-def before_request_func():
-    check_api_key()
-
 @delivery_persons_bp.route('/delivery_persons', methods=['GET'])
 def get_delivery_persons():
+    check_api_key()
     delivery_persons = DeliveryPersons.query.all()
     return jsonify([person.as_dict() for person in delivery_persons])
 
 @delivery_persons_bp.route('/delivery_persons/<int:id>', methods=['GET'])
 def get_delivery_person_by_id(id):
+    check_api_key()
     delivery_person = DeliveryPersons.query.get_or_404(id)
     return jsonify(delivery_person.as_dict())
 
 @delivery_persons_bp.route('/delivery_persons', methods=['POST'])
 def create_new_delivery_person():
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("name", "status", "created_by")):
         abort(400, 'Invalid data')
@@ -45,6 +44,7 @@ def create_new_delivery_person():
 
 @delivery_persons_bp.route('/delivery_persons/<int:id>', methods=['PUT'])
 def edit_delivery_person_by_id(id):
+    check_api_key()
     delivery_person = DeliveryPersons.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -60,6 +60,7 @@ def edit_delivery_person_by_id(id):
 
 @delivery_persons_bp.route('/delivery_persons/<int:id>', methods=['DELETE'])
 def delete_delivery_person(id):
+    check_api_key()
     delivery_person = DeliveryPersons.query.get_or_404(id)
     db.session.delete(delivery_person)
     db.session.commit()

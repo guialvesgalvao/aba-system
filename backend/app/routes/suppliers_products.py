@@ -49,10 +49,10 @@ def create_new_supplier_product():
     new_supplier_product = SuppliersProducts(
         validity_period=data['validity_period'],
         value=data['value'],
-        created_by=data['created_by'],
         product_id=data['product_id'],
         supplier_id=data['supplier_id'],
         modified_by=data.get('modified_by'),
+        created_by=data['created_by'],
         modified_at=datetime.now(),
         created_at=datetime.now()
     )

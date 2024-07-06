@@ -1,15 +1,12 @@
-import {
-  Table,
-  TableHeader,
-  TableHead,
-  TableRow,
-  TableBody,
-} from "../../ui/table";
-
 import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Product } from "@/shared/factories/products-factory";
-import { ProductRow } from "./products-row";
+import { columns } from "./products-columns";
+import { RenderTable } from "@/components/render-table/RenderTable";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { FormRequest } from "@/components/form-request/form-request";
+import { ProductsForm } from "../products-form/products-form";
+import ProductsService from "@/shared/services/products-service";
 
 export interface IProductsTableProps {
   data: Product[];
@@ -19,6 +16,7 @@ export interface IProductsTableProps {
 
 export function ProductsTable(props: IProductsTableProps) {
   const { data: products, isLoading, isFetching } = props;
+  const { getProductById } = new ProductsService();
 
   if (isLoading || isFetching)
     return (
@@ -28,40 +26,18 @@ export function ProductsTable(props: IProductsTableProps) {
     );
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="hidden w-[100px] sm:table-cell">
-            <span className="sr-only">Imagem</span>
-          </TableHead>
-          <TableHead>Nome</TableHead>
-          <TableHead>Descrição</TableHead>
+    <Dialog>
+      <RenderTable<Product> data={products} columns={columns} />
 
-          <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Criado em</TableHead>
-          <TableHead className="hidden md:table-cell">
-            Última modificação em
-          </TableHead>
-          <TableHead>
-            <span className="sr-only">Ações</span>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        {products.length === 0 && (
-          <TableRow>
-            <td colSpan={7} className="p-20 text-center">
-              <h2 className="text-xl">Nenhum produto encontrado</h2>
-            </td>
-          </TableRow>
-        )}
-
-        {products.length > 0 &&
-          products.map((product, index) => (
-            <ProductRow product={product} key={index} />
-          ))}
-      </TableBody>
-    </Table>
+      <DialogContent className="max-w-[900px]">
+        <FormRequest
+          id={0}
+          component={ProductsForm}
+          form="products"
+          request={getProductById}
+          loading="Carregando produto"
+        />
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,9 +1,6 @@
-import { ProductsForm } from "@/components/products/products-form/products-form";
 import { ComponentRequest } from "@/components/component-request/component-request";
 import { ProductsTable } from "@/components/products/products-table/products-table";
-import { SystemTray } from "@/components/system-tray/system-tray";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,16 +8,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
+import { Tabs } from "@/components/ui/tabs";
 import { TabsStatusEnum } from "@/shared/enums/data";
 
 import ProductsService from "@/shared/services/products-service";
 
 import { TabsContent } from "@radix-ui/react-tabs";
-import { CirclePlus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { Product } from "@/shared/factories/products-factory";
+import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
+import {
+  DashboardTabs,
+  TabValue,
+} from "@/components/dashboard-tabs/dashboard-tabs";
+
+const TABS: TabValue[] = [
+  { text: "Todos", value: TabsStatusEnum.All },
+  { text: "Ativos", value: TabsStatusEnum.Active },
+  { text: "Rascunhos", value: TabsStatusEnum.Draft },
+  { text: "Arquivados", value: TabsStatusEnum.Archived },
+];
 
 export function ProductsDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,13 +40,13 @@ export function ProductsDashboard() {
   }
 
   function handleTabChange(value: string) {
-    controlTabSearchParam(value as TabsStatusEnum);
+    addOrRemoveStatusFromSearchParam(value as TabsStatusEnum);
   }
 
-  function controlTabSearchParam(value: TabsStatusEnum) {
-    const hasSearchParam = searchParams.has("status");
+  function addOrRemoveStatusFromSearchParam(value: TabsStatusEnum) {
+    const searchStatusParam = searchParams.has("status");
 
-    if (hasSearchParam && value === TabsStatusEnum.All) {
+    if (searchStatusParam && value === TabsStatusEnum.All) {
       searchParams.delete("status");
     } else {
       searchParams.set("status", value);
@@ -55,27 +62,7 @@ export function ProductsDashboard() {
         className="w-full h-full flex flex-col gap-4"
         defaultValue={defaultTab}
       >
-        <div className="w-full flex justify-between">
-          <TabsList defaultValue="all">
-            <TabsTrigger value="all">Todos</TabsTrigger>
-            <TabsTrigger value="active">Ativos</TabsTrigger>
-            <TabsTrigger value="draft">Rascunhos</TabsTrigger>
-            <TabsTrigger value="archived">Arquivados</TabsTrigger>
-          </TabsList>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar novo produto
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="max-w-[1000px]">
-              <ProductsForm />
-            </DialogContent>
-          </Dialog>
-        </div>
+        <DashboardTabs tabs={TABS} />
 
         <Card className="h-full overflow-hidden">
           <TabsContent className="h-full" value="all">
@@ -91,7 +78,7 @@ export function ProductsDashboard() {
             <CardContent className="h-full overflow-y-auto">
               <ComponentRequest<Product>
                 storages={["products", "all"]}
-                request={getProducts}
+                request={() => createProductsMockBasedOnLength(10)}
                 component={ProductsTable}
               />
             </CardContent>

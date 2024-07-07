@@ -2,11 +2,7 @@ import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Product } from "@/shared/factories/products-factory";
 import { columns } from "./products-columns";
-import { RenderTable } from "@/components/render-table/RenderTable";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { FormRequest } from "@/components/form-request/form-request";
-import { ProductsForm } from "../products-form/products-form";
-import ProductsService from "@/shared/services/products-service";
+import { RenderTable } from "@/components/render-table/render-table";
 
 export interface IProductsTableProps {
   data: Product[];
@@ -16,7 +12,6 @@ export interface IProductsTableProps {
 
 export function ProductsTable(props: IProductsTableProps) {
   const { data: products, isLoading, isFetching } = props;
-  const { getProductById } = new ProductsService();
 
   if (isLoading || isFetching)
     return (
@@ -26,18 +21,27 @@ export function ProductsTable(props: IProductsTableProps) {
     );
 
   return (
-    <Dialog>
-      <RenderTable<Product> data={products} columns={columns} />
-
-      <DialogContent className="max-w-[900px]">
-        <FormRequest
-          id={0}
-          component={ProductsForm}
-          form="products"
-          request={getProductById}
-          loading="Carregando produto"
-        />
-      </DialogContent>
-    </Dialog>
+    <RenderTable<Product>
+      data={products}
+      columns={columns}
+      emptyMessage="Nenhum produto encontrado"
+      searchOptions={{
+        placeholder: "Filtrar produtos pelo nome...",
+        columnId: "name",
+      }}
+      columnChooser={{
+        text: "Colunas",
+      }}
+      defaultSorting={[
+        {
+          id: "modifiedDate",
+          desc: true,
+        },
+      ]}
+      defaultPagination={{
+        pageSize: 10,
+        pageIndex: 0,
+      }}
+    />
   );
 }

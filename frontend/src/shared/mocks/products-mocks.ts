@@ -7,11 +7,9 @@ export async function createProductsMockBasedOnLength(total: number) {
 
   for (let i = 0; i < total; i++) {
     const raw: ProductResponse = {
-      id: faker.number.int({
-        min: 1,
-        max: total,
-      }),
+      id: i,
       name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
       status: faker.helpers.arrayElement(["enabled", "draft", "archived"]),
       created_at: faker.date.recent().toISOString(),
       modified_at: faker.date.recent().toISOString(),

@@ -10,16 +10,16 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useFormContext } from "react-hook-form";
-import { ProductsFormValidationType } from "./products-form";
 
-export function SubmitDialog(props: {
+import { FieldValues, useFormContext } from "react-hook-form";
+
+export function SubmitDialog<T extends FieldValues>(props: {
   isEditMode: boolean;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: T) => Promise<T | void>;
 }) {
   const { isEditMode, onSubmit } = props;
 
-  const { formState, handleSubmit } = useFormContext();
+  const { formState, handleSubmit } = useFormContext<T>();
 
   const { isValid, isSubmitting, isSubmitSuccessful } = formState;
 

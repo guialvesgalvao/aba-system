@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { LoadingSpinner } from "../loading-spinner/loading-spinner";
+import { useSearchParams } from "react-router-dom";
 
 type FormResponse<I> = {
   item: I | undefined;
@@ -9,7 +10,6 @@ type FormResponse<I> = {
 };
 
 interface IFormRequestProps<M> {
-  id: number;
   form: string;
   request: (id: number) => Promise<M>;
   component: (props: FormResponse<M>) => JSX.Element;
@@ -17,7 +17,13 @@ interface IFormRequestProps<M> {
 }
 
 export function FormRequest<M>(props: IFormRequestProps<M>) {
-  const { id, form, request, component, loading } = props;
+  const [searchParams] = useSearchParams();
+
+  const id = searchParams.get("formId");
+
+  if (!id) return null;
+
+  const { form, request, component, loading } = props;
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [form, "form"],
@@ -27,7 +33,11 @@ export function FormRequest<M>(props: IFormRequestProps<M>) {
 
   async function middleware(): Promise<M> {
     try {
-      const item = await request(id);
+      if (!id) throw new Error("ID not found");
+
+      const idAsNumber = parseInt(id);
+
+      const item = await request(idAsNumber);
       return item;
     } catch (error) {
       throw new Error("Error fetching data from the server " + error);

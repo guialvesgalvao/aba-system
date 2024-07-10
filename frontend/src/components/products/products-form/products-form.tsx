@@ -30,6 +30,10 @@ import { ProductRequest } from "@/shared/types/products-types";
 
 import { SubmitDialog } from "./products-form-dialogs";
 import { RenderForm } from "@/components/render-form/render-form";
+import { FormResponse } from "@/components/form-request/form-request";
+import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
+import { ErrorMessage } from "@/components/error-message/error-message";
+import { AlertCircle, Frown } from "lucide-react";
 
 const ProductsFormCreateValidation = z.object({
   id: z
@@ -54,12 +58,32 @@ export type ProductsFormValidationType = z.infer<
   typeof ProductsFormCreateValidation
 >;
 
-interface IProductsFormProps {
-  item?: Product;
-}
+interface IProductsFormProps extends FormResponse<Product> {}
 
 export function ProductsForm(props: IProductsFormProps) {
-  const { item: product } = props;
+  const { item: product, isError, isFetching, isLoading, error } = props;
+
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Obtendo informações do produto"
+          className="w-12 h-12"
+        />
+      </div>
+    );
 
   const { createProduct, updateProduct, deleteProduct } = new ProductsService();
 

@@ -153,8 +153,9 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <DialogTrigger
+                className="w-full"
                 onClick={() => {
                   searchParams.set("formId", id.toString());
                   setSearchParams(searchParams);

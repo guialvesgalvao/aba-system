@@ -3,15 +3,31 @@ import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 import { Product } from "@/shared/factories/products-factory";
 import { columns } from "./products-columns";
 import { RenderTable } from "@/components/render-table/render-table";
+import { ComponentResponse } from "@/components/component-request/component-request";
+import { ErrorMessage } from "@/components/error-message/error-message";
+import { AlertCircle } from "lucide-react";
 
-export interface IProductsTableProps {
-  data: Product[];
-  isLoading?: boolean;
-  isFetching?: boolean;
-}
+export interface IProductsTableProps extends ComponentResponse<Product> {}
 
 export function ProductsTable(props: IProductsTableProps) {
-  const { data: products, isLoading, isFetching } = props;
+  const {
+    data: products,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  } = props;
+
+  if (isError) {
+    return (
+      <ErrorMessage
+        className="text-lg"
+        icon={<AlertCircle className="w-14 h-14" />}
+        error={error}
+      />
+    );
+  }
 
   if (isLoading || isFetching)
     return (
@@ -22,6 +38,8 @@ export function ProductsTable(props: IProductsTableProps) {
 
   return (
     <RenderTable<Product>
+      id="products-table"
+      refetch={refetch}
       data={products}
       columns={columns}
       emptyMessage="Nenhum produto encontrado"
@@ -30,7 +48,7 @@ export function ProductsTable(props: IProductsTableProps) {
         columnId: "name",
       }}
       columnChooser={{
-        text: "Colunas",
+        text: "Adicionar Colunas",
       }}
       defaultSorting={[
         {

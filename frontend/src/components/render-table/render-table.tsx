@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,17 +11,21 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+
 import { Table } from "../ui/table";
-import { useState } from "react";
 import { HeaderTable } from "./header-table";
 import { BodyTable } from "./body-table";
 import { PaginationController } from "./pagination-controller";
 
-import { SearchState, SearchTable } from "./search-table";
-import { ColumnChooser, ColumnChooserState } from "./column-chooser";
+import { SearchState } from "./search-table";
+import { ColumnChooserState } from "./column-chooser";
+import { TopTableCommands } from "./top-table-commands";
+import { BottomTableCommands } from "./bottom-table-commands";
 
 interface IRenderTableProps<T extends unknown> {
+  id: string;
   data: T[];
+  refetch: (() => Promise<void>) | undefined;
   columns: ColumnDef<T>[];
   emptyMessage?: string;
   columnChooser?: ColumnChooserState;
@@ -30,7 +36,9 @@ interface IRenderTableProps<T extends unknown> {
 
 export function RenderTable<T>(props: IRenderTableProps<T>) {
   const {
+    id,
     data,
+    refetch,
     columns,
     emptyMessage,
     searchOptions,
@@ -66,20 +74,22 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
   });
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-between mb-2">
-        {searchOptions && <SearchTable<T> table={table} {...searchOptions} />}
-        {columnChooser && <ColumnChooser<T> table={table} {...columnChooser} />}
-      </div>
-
+    <section id={id} className="h-full flex flex-col justify-between gap-2">
       <div className="flex flex-col gap-2">
+        <TopTableCommands<T>
+          table={table}
+          refetch={refetch}
+          searchOptions={searchOptions}
+          columnChooser={columnChooser}
+        />
+
         <Table>
           <HeaderTable<T> table={table} />
           <BodyTable<T> emptyMessage={emptyMessage} table={table} />
         </Table>
-
-        <PaginationController<T> table={table} />
       </div>
-    </div>
+
+      <BottomTableCommands<T> table={table} />
+    </section>
   );
 }

@@ -9,6 +9,7 @@ import { AppRoute } from "./components/nav/nav";
 import { Package, Home as HomeIcon } from "lucide-react";
 import { NotFound } from "./pages/not-found";
 import { SystemRoutes } from "./shared/enums/app";
+import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
 
 const SYSTEM_ROUTES: AppRoute[] = [
   {
@@ -29,17 +30,19 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <SystemSidebar routes={SYSTEM_ROUTES} />
+        <div className="w-full flex">
+          <SystemSidebar routes={SYSTEM_ROUTES} />
 
-        <div className="w-full h-screen flex flex-col">
-          <Routes>
-            <Route path={SystemRoutes.ALL} element={<NotFound />} />
-            <Route path={SystemRoutes.HOME} element={<Home />} />
-            <Route
-              path={SystemRoutes.PRODUCTS}
-              element={<ProductsDashboard />}
-            />
-          </Routes>
+          <AppCollapsedWrapper>
+            <Routes>
+              <Route path={SystemRoutes.ALL} element={<NotFound />} />
+              <Route path={SystemRoutes.HOME} element={<Home />} />
+              <Route
+                path={SystemRoutes.PRODUCTS}
+                element={<ProductsDashboard />}
+              />
+            </Routes>
+          </AppCollapsedWrapper>
         </div>
       </BrowserRouter>
     </QueryClientProvider>

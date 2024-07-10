@@ -9,7 +9,7 @@ export function PaginationController<T>(props: IPaginationControllerProps<T>) {
   const { table } = props;
 
   return (
-    <div className="flex items-center justify-end space-x-2 py-4">
+    <div className="flex items-center gap-2">
       <Button
         variant="outline"
         size="sm"

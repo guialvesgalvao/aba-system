@@ -3,17 +3,18 @@ import React from "react";
 import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 import { useSearchParams } from "react-router-dom";
 
-type FormResponse<I> = {
+export type FormResponse<I> = {
   item: I | undefined;
   isLoading: boolean;
   isFetching: boolean;
+  isError: boolean;
+  error: Error | null;
 };
 
 interface IFormRequestProps<M> {
   form: string;
   request: (id: number) => Promise<M>;
   component: (props: FormResponse<M>) => JSX.Element;
-  loading?: string;
 }
 
 export function FormRequest<M>(props: IFormRequestProps<M>) {
@@ -23,9 +24,9 @@ export function FormRequest<M>(props: IFormRequestProps<M>) {
 
   if (!id) return null;
 
-  const { form, request, component, loading } = props;
+  const { form, request, component } = props;
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, isError, error } = useQuery({
     queryKey: [form, "form"],
     queryFn: middleware,
     refetchOnWindowFocus: false,
@@ -44,16 +45,11 @@ export function FormRequest<M>(props: IFormRequestProps<M>) {
     }
   }
 
-  if (isLoading || isFetching)
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <LoadingSpinner text={loading} className="w-12 h-12" />
-      </div>
-    );
-
   return React.createElement(component, {
     item: data ?? undefined,
     isLoading,
     isFetching,
+    isError,
+    error,
   });
 }

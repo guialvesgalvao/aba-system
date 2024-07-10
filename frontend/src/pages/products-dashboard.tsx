@@ -73,48 +73,56 @@ export function ProductsDashboard() {
         className="w-full h-full flex flex-col gap-4"
         defaultValue={defaultTab}
       >
-        <div className="flex justify-between">
-          <DashboardTabs tabs={TABS} />
+        <Dialog>
+          <div className="flex justify-between">
+            <DashboardTabs tabs={TABS} />
 
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-2">
-              <RefreshCcw size={18} />
-              Atualizar
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="gap-2">
+                <RefreshCcw size={18} />
+                Atualizar
+              </Button>
 
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="sm" className="gap-2">
-                  <CirclePlus size={18} />
-                  Criar novo produto
-                </Button>
-              </DialogTrigger>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="gap-2">
+                    <CirclePlus size={18} />
+                    Criar novo produto
+                  </Button>
+                </DialogTrigger>
 
-              <DialogContent className="max-w-[1000px]">
-                <DialogTitle>Criar Produto</DialogTitle>
-                <ProductsForm />
-              </DialogContent>
-            </Dialog>
+                <DialogContent className="max-w-[1000px]">
+                  <DialogTitle>Criar Produto</DialogTitle>
+                  <ProductsForm
+                    item={undefined}
+                    isLoading={false}
+                    isFetching={false}
+                    isError={false}
+                    error={null}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
-        </div>
 
-        <Card className="h-full overflow-hidden">
-          <CardHeader>
-            <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-              Todos os Produtos
-            </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">
-              Lista de todos os produtos cadastrados no sistema
-            </CardDescription>
-          </CardHeader>
+          <Card className="h-full flex flex-col">
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
+                Todos os Produtos
+              </CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
+                Lista de todos os produtos cadastrados no sistema
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent className="h-full">
-            <Dialog>
-              <ComponentRequest<Product>
-                storages={["products", currentTab]}
-                request={getProducts}
-                component={ProductsTable}
-              />
+            <CardContent className="h-full">
+              <div className="h-full">
+                <ComponentRequest<Product>
+                  storages={["products", currentTab]}
+                  request={getProducts}
+                  component={ProductsTable}
+                />
+              </div>
 
               <DialogContent className="max-w-[1000px]">
                 <DialogTitle>Editar Produto</DialogTitle>
@@ -122,12 +130,11 @@ export function ProductsDashboard() {
                   component={ProductsForm}
                   form="products"
                   request={getProductById}
-                  loading="Carregando produto"
                 />
               </DialogContent>
-            </Dialog>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Dialog>
       </Tabs>
     </div>
   );

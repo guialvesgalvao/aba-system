@@ -10,6 +10,7 @@ import { Package, Home as HomeIcon } from "lucide-react";
 import { NotFound } from "./pages/not-found";
 import { SystemRoutes } from "./shared/enums/app";
 import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
+import { OriginsDashboard } from "./pages/origins-dashboard";
 
 const SYSTEM_ROUTES: AppRoute[] = [
   {
@@ -23,6 +24,12 @@ const SYSTEM_ROUTES: AppRoute[] = [
     to: "/products",
     text: "Produtos",
     tooltip: "Ir para páginas de produtos",
+  },
+  {
+    icon: <Package className="h-4 w-4" />,
+    to: "/origins",
+    text: "Origens",
+    tooltip: "Ir para páginas de origens",
   },
 ];
 
@@ -40,6 +47,10 @@ export default function App() {
               <Route
                 path={SystemRoutes.PRODUCTS}
                 element={<ProductsDashboard />}
+              />
+              <Route
+                path={SystemRoutes.ORIGINS}
+                element={<OriginsDashboard />}
               />
             </Routes>
           </AppCollapsedWrapper>

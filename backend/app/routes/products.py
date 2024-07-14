@@ -17,7 +17,21 @@ def before_request_func():
 
 @products_bp.route('/products', methods=['GET'])
 def get_products():
-    products = Products.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = Products.query
+    
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(Products.status == status)
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    products = query.all()
+    
     return jsonify([product.as_dict() for product in products])
 
 @products_bp.route('/products/<int:id>', methods=['GET'])

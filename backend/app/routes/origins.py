@@ -17,7 +17,21 @@ def before_request_func():
 
 @origins_bp.route('/origins', methods=['GET'])
 def get_origins():
-    origins = Origins.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = Origins.query
+        
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(Origins.status == status)
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    origins = query.all()
+    
     return jsonify([origin.as_dict() for origin in origins])
 
 @origins_bp.route('/origins/<int:id>', methods=['GET'])

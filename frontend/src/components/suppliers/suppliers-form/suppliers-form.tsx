@@ -26,7 +26,7 @@ import {
 
 import { Supplier } from "@/shared/factories/suppliers-factory";
 import SuppliersService from "@/shared/services/suppliers-service";
-import { OriginRequest } from "@/shared/types/origins-types";
+import { SupplierRequest } from "@/shared/types/suppliers-types";
 
 import { SubmitDialog } from "./suppliers-form-dialogs";
 import { RenderForm } from "@/components/render-form/render-form";
@@ -38,16 +38,16 @@ import { AlertCircle, Frown } from "lucide-react";
 const SuppliersFormCreateValidation = z.object({
   id: z
     .number()
-    .positive("O ID da origem deve ser um número positivo")
+    .positive("O ID do fornecedor deve ser um número positivo")
     .optional(),
   name: z
     .string({
-      required_error: "Adicione um nome a origem",
+      required_error: "Adicione um nome ao fornecedor",
     })
-    .min(1, "Adicione um nome a origem")
+    .min(1, "Adicione um nome ao fornecedor")
     .max(255, "Adicione no máximo 255 caracteres"),
   status: z.enum(["enabled", "draft", "archived"], {
-    required_error: "Selecione o status do origem",
+    required_error: "Selecione o status do fornecedor",
   }),
   created_by: z.string(),
 });
@@ -77,7 +77,7 @@ export function SuppliersForm(props: ISuppliersFormProps) {
     return (
       <div className="w-full h-96 flex items-center justify-center">
         <LoadingSpinner
-          text="Obtendo informações da origem"
+          text="Obtendo informações do fornecedor"
           className="w-12 h-12"
         />
       </div>
@@ -104,26 +104,26 @@ export function SuppliersForm(props: ISuppliersFormProps) {
     };
   }
 
-  function validateFormData(data: Origin) {
-    OriginsFormCreateValidation.parse(data);
+  function validateFormData(data: Supplier) {
+    SuppliersFormCreateValidation.parse(data);
   }
 
-  async function onSubmit(data: Origin) {
+  async function onSubmit(data: Supplier) {
     if (isEditMode) {
-      return await updateOrigin(data as OriginRequest);
+      return await updateSupplier(data as SupplierRequest);
     } else {
-      return await createOrigin(data as OriginRequest);
+      return await createSupplier(data as SupplierRequest);
     }
   }
 
   return (
-    <RenderForm<Origin>
-      resolver={OriginsFormCreateValidation}
+    <RenderForm<Supplier>
+      resolver={SuppliersFormCreateValidation}
       getDefaultValues={getDefaultValues}
       onValidate={validateFormData}
       onInvalid={(errors) => console.log(errors)}
       onSubmit={onSubmit}
-      onDelete={deleteOrigin}
+      onDelete={deleteSupplier}
       onRender={({ form, params: { onSubmit } }) => {
         return (
           <div className="flex flex-col gap-6">
@@ -131,7 +131,7 @@ export function SuppliersForm(props: ISuppliersFormProps) {
               <div className="grid items-start gap-4 lg:col-span-2 lg:gap-8">
                 <Card className="h-full">
                   <CardHeader>
-                    <CardTitle>Detalhes da Origem</CardTitle>
+                    <CardTitle>Detalhes da Fornecedores</CardTitle>
                   </CardHeader>
 
                   <CardContent className="flex flex-col gap-6">
@@ -145,7 +145,7 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Adicione o nome do origem"
+                              placeholder="Adicione o nome do fornecedor"
                               {...field}
                             />
                           </FormControl>
@@ -168,7 +168,7 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Selecione o status da origem" />
+                                <SelectValue placeholder="Selecione o status do fornecedor" />
                               </SelectTrigger>
                             </FormControl>
                             <FormMessage />
@@ -194,13 +194,13 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                 <Button
                   type="button"
                   variant="destructive"
-                  onClick={() => deleteOrigin(origin.id)}
+                  onClick={() => deleteSupplier(supplier.id)}
                 >
                   Excluir
                 </Button>
               )}
 
-              <SubmitDialog<Origin>
+              <SubmitDialog<Supplier>
                 isEditMode={isEditMode}
                 onSubmit={onSubmit}
               />

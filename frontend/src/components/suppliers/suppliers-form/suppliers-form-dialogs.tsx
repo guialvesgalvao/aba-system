@@ -30,7 +30,7 @@ export function SubmitDialog<T extends FieldValues>(props: {
           type="button"
           disabled={!isValid || isSubmitSuccessful || isSubmitting}
         >
-          {isEditMode ? "Salvar Origem" : "Criar origem"}
+          {isEditMode ? "Salvar Fornecedor" : "Criar Fornecedor"}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -12,6 +12,7 @@ import { SystemRoutes } from "./shared/enums/app";
 import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
 import { OriginsDashboard } from "./pages/origins-dashboard";
 import { DeliveryPersonsDashboard } from "./pages/delivery-persons-dashboard";
+import { SuppliersDashboard } from "./pages/suppliers-dashboard";
 
 const SYSTEM_ROUTES: AppRoute[] = [
   {
@@ -38,6 +39,12 @@ const SYSTEM_ROUTES: AppRoute[] = [
     text: "Tipos de Entrega",
     tooltip: "Ir para páginas de tipos de entrega",
   },
+  {
+    icon: <Package className="h-4 w-4" />,
+    to: "/suppliers",
+    text: "Fornecedores",
+    tooltip: "Ir para páginas de fornecedores",
+  },
 ];
 
 export default function App() {
@@ -62,6 +69,10 @@ export default function App() {
               <Route
                 path={SystemRoutes.DELIVERYPERSONS}
                 element={<DeliveryPersonsDashboard />}
+              />
+              <Route
+                path={SystemRoutes.SUPPLIERS}
+                element={<SuppliersDashboard />}
               />
             </Routes>
           </AppCollapsedWrapper>

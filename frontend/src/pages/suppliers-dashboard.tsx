@@ -1,5 +1,5 @@
 import { ComponentRequest } from "@/components/component-request/component-request";
-import { OriginsTable } from "@/components/origins/origins-table/origins-table";
+import { SuppliersTable } from "@/components/suppliers/suppliers-table/suppliers-table";
 
 import {
   Card,
@@ -11,11 +11,11 @@ import {
 import { Tabs } from "@/components/ui/tabs";
 import { TabsStatusEnum } from "@/shared/enums/data";
 
-import OriginsService from "@/shared/services/origins-service";
+import SuppliersService from "@/shared/services/suppliers-service";
 
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useSearchParams } from "react-router-dom";
-import { Origin } from "@/shared/factories/origins-factory";
+import { Supplier } from "@/shared/factories/suppliers-factory";
 import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 import {
   DashboardTabs,
@@ -28,7 +28,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FormRequest } from "@/components/form-request/form-request";
-import { OriginsForm } from "@/components/origins/origins-form/origins-form";
+import { SuppliersForm } from "@/components/suppliers/suppliers-form/suppliers-form";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, CirclePlus } from "lucide-react";
 
@@ -39,12 +39,12 @@ const TABS: TabValue[] = [
   { text: "Arquivados", value: TabsStatusEnum.Archived },
 ];
 
-export function OriginsDashboard() {
+export function SuppliersDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultTab = getDefaultTab();
   const currentTab = searchParams.get("status") as TabsStatusEnum;
 
-  const { getOrigins, getOriginById } = new OriginsService();
+  const { getSuppliers, getSupplierById } = new SuppliersService();
 
   function getDefaultTab(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
@@ -87,13 +87,13 @@ export function OriginsDashboard() {
                 <DialogTrigger asChild>
                   <Button size="sm" className="gap-2">
                     <CirclePlus size={18} />
-                    Criar nova origem
+                    Criar novo fornecedor
                   </Button>
                 </DialogTrigger>
 
                 <DialogContent className="max-w-[1000px]">
-                  <DialogTitle>Criar Origem</DialogTitle>
-                  <OriginsForm
+                  <DialogTitle>Criar Fornecedor</DialogTitle>
+                  <SuppliersForm
                     item={undefined}
                     isLoading={false}
                     isFetching={false}
@@ -108,28 +108,28 @@ export function OriginsDashboard() {
           <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Todos as Origens
+                Todos os Fornecedores
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground">
-                Lista de todas as origens cadastrados no sistema
+                Lista de todos os fornecedores cadastrados no sistema
               </CardDescription>
             </CardHeader>
 
             <CardContent className="h-full">
               <div className="h-full">
-                <ComponentRequest<Origin>
+                <ComponentRequest<Supplier>
                   storages={["origins", currentTab]}
-                  request={getOrigins}
-                  component={OriginsTable}
+                  request={getSuppliers}
+                  component={SuppliersTable}
                 />
               </div>
 
               <DialogContent className="max-w-[1000px]">
-                <DialogTitle>Editar Origem</DialogTitle>
+                <DialogTitle>Editar Fornecedor</DialogTitle>
                 <FormRequest
-                  component={OriginsForm}
-                  form="origins"
-                  request={getOriginById}
+                  component={SuppliersForm}
+                  form="suppliers"
+                  request={getSupplierById}
                 />
               </DialogContent>
             </CardContent>

@@ -19,7 +19,5 @@ export type OriginResponse = {
 export type OriginRequest = {
   id?: number;
   name: string;
-  image?: string;
-  description?: string;
   status: OriginStatus;
 };

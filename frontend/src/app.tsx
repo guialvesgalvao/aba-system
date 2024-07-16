@@ -11,6 +11,7 @@ import { NotFound } from "./pages/not-found";
 import { SystemRoutes } from "./shared/enums/app";
 import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
 import { OriginsDashboard } from "./pages/origins-dashboard";
+import { DeliveryPersonsDashboard } from "./pages/delivery-persons-dashboard";
 
 const SYSTEM_ROUTES: AppRoute[] = [
   {
@@ -30,6 +31,12 @@ const SYSTEM_ROUTES: AppRoute[] = [
     to: "/origins",
     text: "Origens",
     tooltip: "Ir para páginas de origens",
+  },
+  {
+    icon: <Package className="h-4 w-4" />,
+    to: "/delivery-persons",
+    text: "Tipos de Entrega",
+    tooltip: "Ir para páginas de tipos de entrega",
   },
 ];
 
@@ -51,6 +58,10 @@ export default function App() {
               <Route
                 path={SystemRoutes.ORIGINS}
                 element={<OriginsDashboard />}
+              />
+              <Route
+                path={SystemRoutes.DELIVERYPERSONS}
+                element={<DeliveryPersonsDashboard />}
               />
             </Routes>
           </AppCollapsedWrapper>

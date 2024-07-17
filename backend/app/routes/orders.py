@@ -11,12 +11,9 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@orders_bp.before_request
-def before_request_func():
-    check_api_key()
-
 @orders_bp.route('/orders', methods=['GET'])
 def get_orders():
+    check_api_key()
     # Capturando os parâmetros de consulta
     status = request.args.get('status')
     limit = request.args.get('limit', type=int)
@@ -36,11 +33,13 @@ def get_orders():
 
 @orders_bp.route('/orders/<int:id>', methods=['GET'])
 def get_order_by_id(id):
+    check_api_key()
     order = Orders.query.get_or_404(id)
     return jsonify(order.as_dict())
 
 @orders_bp.route('/orders', methods=['POST'])
 def create_new_order():
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("client_name", "status", "order_date", "created_by")):
         abort(400, 'Invalid data')
@@ -65,6 +64,7 @@ def create_new_order():
 
 @orders_bp.route('/orders/<int:id>', methods=['PUT'])
 def edit_order_by_id(id):
+    check_api_key()
     order = Orders.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -86,6 +86,7 @@ def edit_order_by_id(id):
 
 @orders_bp.route('/orders/<int:id>', methods=['DELETE'])
 def delete_order(id):
+    check_api_key()
     order = Orders.query.get_or_404(id)
     db.session.delete(order)
     db.session.commit()

@@ -12,14 +12,14 @@ class OrderItems(db.Model):
     status = db.Column(db.String(255), default=None)
     sale_value = db.Column(db.Float, default=None)
     delivery_date = db.Column(db.DateTime, default=None)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    created_by = db.Column(db.String(255), default=None)
-    modified_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
-    modified_by = db.Column(db.String(255), default=None)
     order_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('orders.id'), default=None)
     product_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('products.id'), default=None)
-    invoicing_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('suppliers.id'), default=None)
     delivery_person_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('delivery_persons.id'), default=None)
+    invoicing_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('suppliers.id'), default=None)
+    modified_by = db.Column(db.String(255), default=None)
+    modified_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_by = db.Column(db.String(255), default=None)
 
     def as_dict(self):
         return {
@@ -28,7 +28,7 @@ class OrderItems(db.Model):
             'quantity': self.quantity,
             'status': self.status,
             'sale_value': self.sale_value,
-            'delivery_date': self.delivery_date.isoformat() if self.delivery_date else None,
+            'delivery_date': self.delivery_date if self.delivery_date else None,
             'created_at': self.created_at.isoformat(),
             'created_by': self.created_by,
             'modified_at': self.modified_at.isoformat(),

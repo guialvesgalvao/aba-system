@@ -6,6 +6,7 @@ from .orders import orders_bp
 from .order_items import order_items_bp
 from .delivery_persons import delivery_persons_bp
 
+
 def register_blueprints(app):
     app.register_blueprint(suppliers_bp, url_prefix='/api')
     app.register_blueprint(suppliers_products_bp, url_prefix='/api')

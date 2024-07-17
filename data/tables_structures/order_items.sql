@@ -1,0 +1,26 @@
+CREATE TABLE
+  `order_items` (
+    `id` int unsigned NOT NULL AUTO_INCREMENT,
+    `cost_value` float DEFAULT NULL,
+    `quantity` float DEFAULT NULL,
+    `status` varchar(255) DEFAULT NULL,
+    `sale_value` float DEFAULT NULL,
+    `delivery_date` datetime DEFAULT NULL,
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_by` varchar(255) DEFAULT NULL,
+    `modified_at` datetime DEFAULT CURRENT_TIMESTAMP,
+    `modified_by` varchar(255) DEFAULT NULL,
+    `order_id` int unsigned DEFAULT NULL,
+    `product_id` int unsigned DEFAULT NULL,
+    `invoicing_id` int unsigned DEFAULT NULL,
+    `delivery_person_id` int unsigned DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `order_id` (`order_id`),
+    KEY `product_id` (`product_id`),
+    KEY `invoicing_id` (`invoicing_id`),
+    KEY `delivery_person_id` (`delivery_person_id`),
+    CONSTRAINT `delivery_person_id` FOREIGN KEY (`delivery_person_id`) REFERENCES `delivery_persons` (`id`),
+    CONSTRAINT `invoicing_id` FOREIGN KEY (`invoicing_id`) REFERENCES `suppliers` (`id`),
+    CONSTRAINT `order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+    CONSTRAINT `product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  ) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci

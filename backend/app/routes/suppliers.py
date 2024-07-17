@@ -11,12 +11,9 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@suppliers_bp.before_request
-def before_request_func():
-    check_api_key()
-
 @suppliers_bp.route('/suppliers', methods=['GET'])
 def get_suppliers():
+    check_api_key()
     # Capturando os parâmetros de consulta
     status = request.args.get('status')
     limit = request.args.get('limit', type=int)
@@ -36,11 +33,13 @@ def get_suppliers():
 
 @suppliers_bp.route('/suppliers/<int:id>', methods=['GET'])
 def get_supplier_by_id(id):
+    check_api_key()
     supplier = Suppliers.query.get_or_404(id)
     return jsonify(supplier.as_dict())
 
 @suppliers_bp.route('/suppliers/<int:id>', methods=['PUT'])
 def edit_supplier_by_id(id):
+    check_api_key()
     supplier = Suppliers.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -58,6 +57,7 @@ def edit_supplier_by_id(id):
 
 @suppliers_bp.route('/suppliers', methods=['POST'])
 def create_new_supplier():
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("name", "cnpj", "automatic_invoicing", "status", "created_by")):
         abort(400, 'Invalid data')
@@ -78,6 +78,7 @@ def create_new_supplier():
 
 @suppliers_bp.route('/suppliers/<int:id>', methods=['DELETE'])
 def delete_supplier(id):
+    check_api_key()
     supplier = Suppliers.query.get_or_404(id)
     db.session.delete(supplier)
     db.session.commit()

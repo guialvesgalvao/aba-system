@@ -11,12 +11,9 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@suppliers_products_bp.before_request
-def before_request_func():
-    check_api_key()
-
 @suppliers_products_bp.route('/suppliers_products', methods=['GET'])
 def get_suppliers_products():    
+    check_api_key()
     # Capturando os parâmetros de consulta
     limit = request.args.get('limit', type=int)
     
@@ -33,11 +30,13 @@ def get_suppliers_products():
 
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['GET'])
 def get_supplier_product_by_id(id):
+    check_api_key()
     supplier_product = SuppliersProducts.query.get_or_404(id)
     return jsonify(supplier_product.as_dict())
 
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['PUT'])
 def edit_supplier_product_by_id(id):
+    check_api_key()
     supplier_product = SuppliersProducts.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -53,6 +52,7 @@ def edit_supplier_product_by_id(id):
 
 @suppliers_products_bp.route('/suppliers_products', methods=['POST'])
 def create_new_supplier_product():
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("validity_period", "value", "created_by", "product_id", "supplier_id")):
         abort(400, 'Invalid data')
@@ -60,10 +60,10 @@ def create_new_supplier_product():
     new_supplier_product = SuppliersProducts(
         validity_period=data['validity_period'],
         value=data['value'],
-        created_by=data['created_by'],
         product_id=data['product_id'],
         supplier_id=data['supplier_id'],
         modified_by=data.get('modified_by'),
+        created_by=data['created_by'],
         modified_at=datetime.now(),
         created_at=datetime.now()
     )
@@ -73,6 +73,7 @@ def create_new_supplier_product():
 
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['DELETE'])
 def delete_supplier_product(id):
+    check_api_key()
     supplier_product = SuppliersProducts.query.get_or_404(id)
     db.session.delete(supplier_product)
     db.session.commit()

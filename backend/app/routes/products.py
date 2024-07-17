@@ -13,12 +13,9 @@ def check_api_key():
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-# @products_bp.before_request
-# def before_request_func():
-#     check_api_key()
-
 @products_bp.route('/products', methods=['GET'])
 def get_products():
+    check_api_key()
     # Capturando os parâmetros de consulta
     status = request.args.get('status')
     limit = request.args.get('limit', type=int)
@@ -38,11 +35,13 @@ def get_products():
 
 @products_bp.route('/products/<int:id>', methods=['GET'])
 def get_product_by_id(id):
+    check_api_key()
     product = Products.query.get_or_404(id)
     return jsonify(product.as_dict())
 
 @products_bp.route('/products/<int:id>', methods=['PUT'])
 def edit_product_by_id(id):
+    check_api_key()
     product = Products.query.get_or_404(id)
     data = request.get_json()
     if not data:
@@ -60,7 +59,7 @@ def edit_product_by_id(id):
 
 @products_bp.route('/products', methods=['POST'])
 def create_new_product():
-    print(request.get_json())
+    check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("name", "status", "created_by")):
         abort(400, 'Invalid data')
@@ -81,6 +80,7 @@ def create_new_product():
 
 @products_bp.route('/products/<int:id>', methods=['DELETE'])
 def delete_product(id):
+    check_api_key()
     product = Products.query.get_or_404(id)
     db.session.delete(product)
     db.session.commit()

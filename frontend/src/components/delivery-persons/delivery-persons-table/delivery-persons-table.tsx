@@ -59,6 +59,7 @@ export function DeliveryPersonsTable(props: IDeliveryPersonsTableProps) {
         pageSize: 10,
         pageIndex: 0,
       }}
+      defaultSizes={[5, 10, 20]}
     />
   );
 }

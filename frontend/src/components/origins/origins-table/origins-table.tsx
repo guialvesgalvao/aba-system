@@ -60,6 +60,7 @@ export function OriginsTable(props: IOriginsTableProps) {
         pageSize: 10,
         pageIndex: 0,
       }}
+      defaultSizes={[5, 10, 20]}
     />
   );
 }

@@ -60,6 +60,7 @@ export function SuppliersTable(props: ISuppliersTableProps) {
         pageSize: 10,
         pageIndex: 0,
       }}
+      defaultSizes={[5, 10, 20]}
     />
   );
 }

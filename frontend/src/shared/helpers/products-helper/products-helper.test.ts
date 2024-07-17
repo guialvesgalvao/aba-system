@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getProductTextByStatus } from "./products-helper";
 
-import { ProductStatusEnum } from "@/shared/models/products-model";
+import { ProductStatusEnum } from "@/shared/types/products-types";
 
 describe("products-helper-getStatusToText", () => {
   it('should return "Ativo" for "enabled"', () => {

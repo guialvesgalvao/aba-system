@@ -1,9 +1,6 @@
-import { ProductsForm } from "@/components/products/products-form/products-form";
-import { ProductsRequest } from "@/components/products/products-request/products-request";
-import { ProductsTable } from "@/components/products/products-table";
-import { SystemTray } from "@/components/system-tray/system-tray";
+import { ComponentRequest } from "@/components/component-request/component-request";
+import { ProductsTable } from "@/components/products/products-table/products-table";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,57 +8,103 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
+import { Tabs } from "@/components/ui/tabs";
+import { TabsStatusEnum } from "@/shared/enums/data";
+
+import ProductsService from "@/shared/services/products-service";
+
+import { useSearchParams } from "react-router-dom";
+import { Product } from "@/shared/factories/products-factory";
 import {
-  getActiveProducts,
-  getAllProducts,
-  getArchivedProducts,
-  getDraftProducts,
-} from "@/shared/services/products-service";
+  DashboardTabs,
+  TabValue,
+} from "@/components/dashboard-tabs/dashboard-tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { FormRequest } from "@/components/form-request/form-request";
+import { ProductsForm } from "@/components/products/products-form/products-form";
+import { Button } from "@/components/ui/button";
+import { RefreshCcw, CirclePlus } from "lucide-react";
+import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 
-import { TabsContent } from "@radix-ui/react-tabs";
-import { CirclePlus } from "lucide-react";
+const TABS: TabValue[] = [
+  { text: "Todos", value: TabsStatusEnum.All },
+  { text: "Ativos", value: TabsStatusEnum.Active },
+  { text: "Rascunhos", value: TabsStatusEnum.Draft },
+  { text: "Arquivados", value: TabsStatusEnum.Archived },
+];
 
-interface IProductsDashboardProps {
-  defaultTab?: "all" | "active" | "draft" | "archived";
-}
+export function ProductsDashboard() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultTab = getDefaultTab();
+  const currentTab = searchParams.get("status") as TabsStatusEnum;
 
-export function ProductsDashboard(props: IProductsDashboardProps) {
-  const { defaultTab = "all" } = props;
+  const { getProducts, getProductById } = new ProductsService();
+
+  function getDefaultTab(): TabsStatusEnum {
+    return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
+  }
+
+  function handleTabChange(value: string) {
+    addOrRemoveStatusFromSearchParam(value as TabsStatusEnum);
+  }
+
+  function addOrRemoveStatusFromSearchParam(value: TabsStatusEnum) {
+    const searchStatusParam = searchParams.has("status");
+
+    if (searchStatusParam && value === TabsStatusEnum.All) {
+      searchParams.delete("status");
+    } else {
+      searchParams.set("status", value);
+    }
+
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <SystemTray />
-
       <Tabs
-        onValueChange={(value) => console.log(value)}
+        onValueChange={handleTabChange}
         className="w-full h-full flex flex-col gap-4"
         defaultValue={defaultTab}
       >
-        <div className="w-full flex justify-between">
-          <TabsList defaultValue="all">
-            <TabsTrigger value="all">Todos</TabsTrigger>
-            <TabsTrigger value="active">Ativos</TabsTrigger>
-            <TabsTrigger value="draft">Rascunhos</TabsTrigger>
-            <TabsTrigger value="archived">Arquivados</TabsTrigger>
-          </TabsList>
+        <Dialog>
+          <div className="flex justify-between">
+            <DashboardTabs tabs={TABS} />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar novo produto
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="gap-2">
+                <RefreshCcw size={18} />
+                Atualizar
               </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-[1000px]">
-              <ProductsForm />
-            </DialogContent>
-          </Dialog>
-        </div>
 
-        <Card className="h-full overflow-hidden">
-          <TabsContent className="h-full" value="all">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="gap-2">
+                    <CirclePlus size={18} />
+                    Criar novo produto
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className="max-w-[1000px]">
+                  <DialogTitle>Criar Produto</DialogTitle>
+                  <ProductsForm
+                    item={undefined}
+                    isLoading={false}
+                    isFetching={false}
+                    isError={false}
+                    error={null}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
                 Todos os Produtos
@@ -71,72 +114,26 @@ export function ProductsDashboard(props: IProductsDashboardProps) {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "all"]}
-                request={getAllProducts}
-                component={ProductsTable}
-              />
+            <CardContent className="h-full">
+              <div className="h-full">
+                <ComponentRequest<Product>
+                  storages={["products", currentTab]}
+                  request={() => createProductsMockBasedOnLength(39)}
+                  component={ProductsTable}
+                />
+              </div>
+
+              <DialogContent className="max-w-[1000px]">
+                <DialogTitle>Editar Produto</DialogTitle>
+                <FormRequest
+                  component={ProductsForm}
+                  form="products"
+                  request={getProductById}
+                />
+              </DialogContent>
             </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="active">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos ativos
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos ativos no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "active"]}
-                request={getActiveProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="draft">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos em rascunho
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos em rascunho no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "draft"]}
-                request={getDraftProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent className="h-full" value="archived">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Produtos arquivados
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos produtos arquivados no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full overflow-y-auto">
-              <ProductsRequest
-                storages={["products", "archived"]}
-                request={getArchivedProducts}
-                component={ProductsTable}
-              />
-            </CardContent>
-          </TabsContent>
-        </Card>
+          </Card>
+        </Dialog>
       </Tabs>
     </div>
   );

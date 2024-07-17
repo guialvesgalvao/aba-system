@@ -1,23 +1,10 @@
-export enum ProductStatusEnum {
-  enabled = "enabled",
-  draft = "draft",
-  archived = "archived",
+import { Product } from "../factories/products-factory";
+import { ProductRequest } from "../types/products-types";
+
+export abstract class ProductsModel {
+  abstract getProducts(): Promise<Product[]>;
+  abstract getProductById(id: number): Promise<Product>;
+  abstract createProduct(product: ProductRequest): Promise<Product>;
+  abstract updateProduct(product: ProductRequest): Promise<Product>;
+  abstract deleteProduct(id: number): Promise<void>;
 }
-
-export type ProductStatus = keyof typeof ProductStatusEnum;
-
-export type ProductModel = {
-  image?: string;
-  id: number;
-  title: string;
-  description?: string;
-  active: ProductStatus;
-  created_at: string;
-  updated_at: string;
-};
-
-export type ProductFormRequestModel = {
-  title: string;
-  description?: string;
-  active: ProductStatus;
-};

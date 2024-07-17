@@ -19,7 +19,7 @@ export function SystemSidebar(props: ISystemSidebarProps) {
   return (
     <aside
       className={cn(
-        "bg-white w-full h-screen group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 border-r relative transition",
+        "bg-white w-full h-full group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 border-r fixed transition z-50",
         isCollapsed ? "max-w-20" : "max-w-52"
       )}
     >

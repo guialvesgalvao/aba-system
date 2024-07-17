@@ -14,7 +14,21 @@ def check_api_key():
 @suppliers_bp.route('/suppliers', methods=['GET'])
 def get_suppliers():
     check_api_key()
-    suppliers = Suppliers.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = Suppliers.query
+    
+        # Definindo filtros para consulta
+    if status:
+        query = query.filter(Suppliers.status == status)
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    suppliers = query.all()
+    
     return jsonify([supplier.as_dict() for supplier in suppliers])
 
 @suppliers_bp.route('/suppliers/<int:id>', methods=['GET'])

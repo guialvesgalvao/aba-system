@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, abort
+from flask_cors import cross_origin
 from ..extensions import db
 from ..models.products import Products
 from ..config import Config
@@ -8,13 +9,28 @@ products_bp = Blueprint('products', __name__)
 
 def check_api_key():
     api_key = request.headers.get('X-Api-Key')
+    print(request.headers)
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
 @products_bp.route('/products', methods=['GET'])
 def get_products():
     check_api_key()
-    products = Products.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = Products.query
+    
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(Products.status == status)
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    products = query.all()
+    
     return jsonify([product.as_dict() for product in products])
 
 @products_bp.route('/products/<int:id>', methods=['GET'])
@@ -32,6 +48,7 @@ def edit_product_by_id(id):
         abort(400, 'Invalid data')
 
     product.name = data.get('name', product.name)
+    product.description=data.get('description', product.description)	
     product.status = data.get('status', product.status)
     product.modified_by = data.get('modified_by', product.modified_by)
     product.modified_at = datetime.now()
@@ -48,6 +65,7 @@ def create_new_product():
 
     new_product = Products(
         name=data['name'],
+        description=data['description'],	
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),

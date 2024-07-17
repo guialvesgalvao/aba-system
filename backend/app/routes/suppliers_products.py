@@ -12,9 +12,20 @@ def check_api_key():
         abort(401, 'Unauthorized: Missing or invalid API key')
 
 @suppliers_products_bp.route('/suppliers_products', methods=['GET'])
-def get_suppliers_products():
+def get_suppliers_products():    
     check_api_key()
-    suppliers_products = SuppliersProducts.query.all()
+    # Capturando os parâmetros de consulta
+    limit = request.args.get('limit', type=int)
+    
+    query = SuppliersProducts.query
+    
+    # Definindo filtros para consulta
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    suppliers_products = query.all()
+    
     return jsonify([supplier_product.as_dict() for supplier_product in suppliers_products])
 
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['GET'])

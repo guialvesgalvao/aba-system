@@ -14,7 +14,21 @@ def check_api_key():
 @order_items_bp.route('/order_items', methods=['GET'])
 def get_order_items():
     check_api_key()
-    order_items = OrderItems.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = OrderItems.query
+    
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(OrderItems.status == status)
+    if limit:
+        query = query.limit(limit)
+    
+    # Executando a consulta
+    order_items = query.all()
+    
     return jsonify([item.as_dict() for item in order_items])
 
 @order_items_bp.route('/order_items/<int:id>', methods=['GET'])

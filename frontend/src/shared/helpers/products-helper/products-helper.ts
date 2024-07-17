@@ -1,4 +1,4 @@
-import { ProductStatus } from "../../models/products-model";
+import { ProductStatus } from "../../types/products-types";
 
 export function getProductTextByStatus(status: ProductStatus) {
   switch (status) {

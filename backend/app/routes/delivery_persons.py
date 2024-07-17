@@ -14,7 +14,21 @@ def check_api_key():
 @delivery_persons_bp.route('/delivery_persons', methods=['GET'])
 def get_delivery_persons():
     check_api_key()
-    delivery_persons = DeliveryPersons.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = DeliveryPersons.query
+    
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(DeliveryPersons.status == status)
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    delivery_persons = query.all()
+    
     return jsonify([person.as_dict() for person in delivery_persons])
 
 @delivery_persons_bp.route('/delivery_persons/<int:id>', methods=['GET'])

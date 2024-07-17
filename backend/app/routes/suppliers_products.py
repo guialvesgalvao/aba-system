@@ -16,8 +16,19 @@ def before_request_func():
     check_api_key()
 
 @suppliers_products_bp.route('/suppliers_products', methods=['GET'])
-def get_suppliers_products():
-    suppliers_products = SuppliersProducts.query.all()
+def get_suppliers_products():    
+    # Capturando os parâmetros de consulta
+    limit = request.args.get('limit', type=int)
+    
+    query = SuppliersProducts.query
+    
+    # Definindo filtros para consulta
+    if limit:
+        query = query.limit(limit)
+        
+    # Executando a consulta
+    suppliers_products = query.all()
+    
     return jsonify([supplier_product.as_dict() for supplier_product in suppliers_products])
 
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['GET'])

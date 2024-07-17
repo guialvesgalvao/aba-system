@@ -17,7 +17,21 @@ def before_request_func():
 
 @orders_bp.route('/orders', methods=['GET'])
 def get_orders():
-    orders = Orders.query.all()
+    # Capturando os parâmetros de consulta
+    status = request.args.get('status')
+    limit = request.args.get('limit', type=int)
+    
+    query = Orders.query
+    
+    # Definindo filtros para consulta
+    if status:
+        query = query.filter(Orders.status == status)
+    if limit:
+        query = query.limit(limit)
+
+    # Executando a consulta
+    orders = query.all()
+    
     return jsonify([order.as_dict() for order in orders])
 
 @orders_bp.route('/orders/<int:id>', methods=['GET'])

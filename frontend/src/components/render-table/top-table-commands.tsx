@@ -14,11 +14,10 @@ export function TopTableCommands<T>(props: ITopCommandsProps<T>) {
   const { table, refetch, columnChooser, searchOptions } = props;
 
   return (
-    <div className="flex justify-between mb-2">
+    <div className="flex items-center flex-wrap justify-between mb-2 gap-2">
       {searchOptions && <SearchTable<T> table={table} {...searchOptions} />}
 
       <div className="flex items-center gap-2">
-        {/* {refetch && <RefetchButton refetch={refetch} />} */}
         {columnChooser && <ColumnChooser<T> table={table} {...columnChooser} />}
       </div>
     </div>

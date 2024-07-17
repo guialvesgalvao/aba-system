@@ -24,6 +24,7 @@ export function ComponentRequest<M>(props: IComponentRequestProps<M>) {
     queryKey: storages,
     queryFn: request,
     retry: false,
+    refetchOnWindowFocus: false,
   });
 
   async function handleRefresh() {

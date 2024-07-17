@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, abort
+from flask_cors import cross_origin
 from ..extensions import db
 from ..models.products import Products
 from ..config import Config
@@ -8,12 +9,13 @@ products_bp = Blueprint('products', __name__)
 
 def check_api_key():
     api_key = request.headers.get('X-Api-Key')
+    print(request.headers)
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@products_bp.before_request
-def before_request_func():
-    check_api_key()
+# @products_bp.before_request
+# def before_request_func():
+#     check_api_key()
 
 @products_bp.route('/products', methods=['GET'])
 def get_products():
@@ -47,6 +49,7 @@ def edit_product_by_id(id):
         abort(400, 'Invalid data')
 
     product.name = data.get('name', product.name)
+    product.description=data.get('description', product.description)	
     product.status = data.get('status', product.status)
     product.description = data.get ('description', product.description)
     product.modified_by = data.get('modified_by', product.modified_by)
@@ -57,12 +60,14 @@ def edit_product_by_id(id):
 
 @products_bp.route('/products', methods=['POST'])
 def create_new_product():
+    print(request.get_json())
     data = request.get_json()
     if not data or not all(k in data for k in ("name", "status", "created_by")):
         abort(400, 'Invalid data')
 
     new_product = Products(
         name=data['name'],
+        description=data['description'],	
         status=data['status'],
         description=data['description'],
         created_by=data['created_by'],

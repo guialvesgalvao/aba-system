@@ -13,10 +13,8 @@ import { TabsStatusEnum } from "@/shared/enums/data";
 
 import ProductsService from "@/shared/services/products-service";
 
-import { TabsContent } from "@radix-ui/react-tabs";
 import { useSearchParams } from "react-router-dom";
 import { Product } from "@/shared/factories/products-factory";
-import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 import {
   DashboardTabs,
   TabValue,
@@ -31,6 +29,7 @@ import { FormRequest } from "@/components/form-request/form-request";
 import { ProductsForm } from "@/components/products/products-form/products-form";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, CirclePlus } from "lucide-react";
+import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 
 const TABS: TabValue[] = [
   { text: "Todos", value: TabsStatusEnum.All },
@@ -119,7 +118,7 @@ export function ProductsDashboard() {
               <div className="h-full">
                 <ComponentRequest<Product>
                   storages={["products", currentTab]}
-                  request={getProducts}
+                  request={() => createProductsMockBasedOnLength(39)}
                   component={ProductsTable}
                 />
               </div>

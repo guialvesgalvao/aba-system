@@ -2,7 +2,7 @@ import axios from "axios";
 import { DeliveryPersonRequest, DeliveryPersonResponse } from "../types/delivery-persons-types";
 
 export class DeliveryPersonsRepo {
-  private _API_URL = "http://localhost:5000/api/delivery-persons";
+  private _API_URL = "http://localhost:5000/api/delivery_persons";
   private _API_KEY = "ABA";
 
   async getAllDeliveryPersons(): Promise<DeliveryPersonResponse[]> {

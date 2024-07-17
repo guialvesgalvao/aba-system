@@ -50,7 +50,6 @@ def edit_product_by_id(id):
     product.name = data.get('name', product.name)
     product.description=data.get('description', product.description)	
     product.status = data.get('status', product.status)
-    product.description = data.get ('description', product.description)
     product.modified_by = data.get('modified_by', product.modified_by)
     product.modified_at = datetime.now()
 
@@ -68,7 +67,6 @@ def create_new_product():
         name=data['name'],
         description=data['description'],	
         status=data['status'],
-        description=data['description'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
         modified_at=datetime.now(),

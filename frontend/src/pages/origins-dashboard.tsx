@@ -108,7 +108,7 @@ export function OriginsDashboard() {
           <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Todos as Origens
+                Todas as Origens
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground">
                 Lista de todas as origens cadastrados no sistema

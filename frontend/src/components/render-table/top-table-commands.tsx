@@ -1,7 +1,6 @@
 import { Table } from "@tanstack/react-table";
 import { ColumnChooser, ColumnChooserState } from "./column-chooser";
 import { SearchState, SearchTable } from "./search-table";
-import { RefetchButton } from "./refetch-button";
 
 interface ITopCommandsProps<T> {
   table: Table<T>;
@@ -11,7 +10,9 @@ interface ITopCommandsProps<T> {
 }
 
 export function TopTableCommands<T>(props: ITopCommandsProps<T>) {
-  const { table, refetch, columnChooser, searchOptions } = props;
+  // Revisão Lucas Pedro, verificar 'refetch inutilizado'
+  // const { table, refetch, columnChooser, searchOptions } = props;
+  const { table, columnChooser, searchOptions } = props;
 
   return (
     <div className="flex items-center flex-wrap justify-between mb-2 gap-2">

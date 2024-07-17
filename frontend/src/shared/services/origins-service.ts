@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { Origin } from "../factories/origins-factory";
 import { OriginsModel } from "../models/origins-model";
 import { OriginsRepo } from "../repositories/origins-repo";
-import { OriginRequest, OriginResponse } from "../types/origins-types";
+import { OriginRequest } from "../types/origins-types";
 
 export default class OriginsService implements OriginsModel {
   private _repository: OriginsRepo;

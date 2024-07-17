@@ -12,8 +12,6 @@ import { Button } from "../../ui/button";
 
 import { Input } from "../../ui/input";
 
-import { Textarea } from "../../ui/textarea";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
@@ -33,7 +31,7 @@ import { RenderForm } from "@/components/render-form/render-form";
 import { FormResponse } from "@/components/form-request/form-request";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
-import { AlertCircle, Frown } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 const SuppliersFormCreateValidation = z.object({
   id: z

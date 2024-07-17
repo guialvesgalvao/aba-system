@@ -32,9 +32,10 @@ export function RenderForm<T extends FieldValues>(props: IRenderFormProps<T>) {
     onValidate,
     onInvalid,
     onSubmit,
-    onCreate,
-    onUpdate,
-    onDelete,
+    // Revisão Lucas Pedro
+    // onCreate,
+    // onUpdate,
+    // onDelete,
     onRender,
   } = props;
 
@@ -55,16 +56,17 @@ export function RenderForm<T extends FieldValues>(props: IRenderFormProps<T>) {
   async function handleInvalid(errors: FieldErrors<T>) {
     onInvalid(errors);
   }
-
-  async function handleCreate() {
-    if (!onCreate) return;
-    await onCreate(form.getValues());
-  }
-
-  async function handleUpdate() {
-    if (!onUpdate) return;
-    await onUpdate(form.getValues());
-  }
+  // Revisão Lucas Pedro
+  // async function handleCreate() {
+  //   if (!onCreate) return;
+  //   await onCreate(form.getValues());
+  // }
+  
+  // Revisão Lucas Pedro
+  // async function handleUpdate() {
+  //   if (!onUpdate) return;
+  //   await onUpdate(form.getValues());
+  // }
 
   return (
     <Form {...form}>

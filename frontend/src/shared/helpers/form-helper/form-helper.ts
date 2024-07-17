@@ -5,5 +5,8 @@ type FormWindowParams = {
 };
 
 export function setFormIDOnParam(params: FormWindowParams) {
-  const { id, mode, form } = params;
+  // Revisão Lucas Pedro
+  // const { id, mode, form } = params;
+  const teste = params;
+  console.log(teste, 'pendente de validação')
 }

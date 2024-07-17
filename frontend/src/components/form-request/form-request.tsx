@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 import { useSearchParams } from "react-router-dom";
 
 export type FormResponse<I> = {

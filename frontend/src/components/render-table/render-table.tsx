@@ -15,7 +15,6 @@ import {
 import { Table } from "../ui/table";
 import { HeaderTable } from "./header-table";
 import { BodyTable } from "./body-table";
-import { PaginationController } from "./pagination-controller/pagination-controller";
 
 import { SearchState } from "./search-table";
 import { ColumnChooserState } from "./column-chooser";

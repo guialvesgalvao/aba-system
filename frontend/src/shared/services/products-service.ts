@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { Product } from "../factories/products-factory";
 import { ProductsModel } from "../models/products-model";
 import { ProductsRepo } from "../repositories/products-repo";
-import { ProductRequest, ProductResponse } from "../types/products-types";
+import { ProductRequest } from "../types/products-types";
 
 export default class ProductsService implements ProductsModel {
   private _repository: ProductsRepo;

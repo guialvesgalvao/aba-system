@@ -1,4 +1,4 @@
-import { flexRender, Table } from "@tanstack/react-table";
+import { Table } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,

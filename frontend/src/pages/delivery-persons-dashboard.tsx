@@ -13,10 +13,8 @@ import { TabsStatusEnum } from "@/shared/enums/data";
 
 import DeliveryPersonsService from "@/shared/services/delivery-persons-service";
 
-import { TabsContent } from "@radix-ui/react-tabs";
 import { useSearchParams } from "react-router-dom";
 import { DeliveryPerson } from "@/shared/factories/delivery-persons-factory";
-import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 import {
   DashboardTabs,
   TabValue,

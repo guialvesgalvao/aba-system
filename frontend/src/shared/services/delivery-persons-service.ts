@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { DeliveryPerson } from "../factories/delivery-persons-factory";
 import { DeliveryPersonsModel } from "../models/delivery-persons-model";
 import { DeliveryPersonsRepo } from "../repositories/delivery-persons-repo";
-import { DeliveryPersonRequest, DeliveryPersonResponse } from "../types/delivery-persons-types";
+import { DeliveryPersonRequest } from "../types/delivery-persons-types";
 
 export default class DeliveryPersonsService implements DeliveryPersonsModel {
   private _repository: DeliveryPersonsRepo;

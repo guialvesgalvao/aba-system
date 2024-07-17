@@ -1,7 +1,3 @@
-import { RefreshCcw, CirclePlus } from "lucide-react";
-import { ProductsForm } from "../products/products-form/products-form";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { TabsList, TabsTrigger } from "../ui/tabs";
 
 export type TabValue = {

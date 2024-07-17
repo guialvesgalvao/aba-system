@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { Frown } from "lucide-react";
 
 interface IErrorMessageProps {
   className?: string;

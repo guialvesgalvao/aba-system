@@ -3,14 +3,10 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationPrevious,
   PaginationLink,
-  PaginationEllipsis,
-  PaginationNext,
 } from "@/components/ui/pagination";
 import { generatePaginationPages } from "@/shared/helpers/table-helper/table-helper";
 import { Table } from "@tanstack/react-table";
-import { useMemo } from "react";
 
 interface IPaginationButtonsProps<T> {
   table: Table<T>;

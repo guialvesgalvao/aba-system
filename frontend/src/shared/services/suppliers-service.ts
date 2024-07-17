@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { Supplier } from "../factories/suppliers-factory";
 import { SuppliersModel } from "../models/suppliers-model";
 import { SuppliersRepo } from "../repositories/suppliers-repo";
-import { SupplierRequest, SupplierResponse } from "../types/suppliers-types";
+import { SupplierRequest } from "../types/suppliers-types";
 
 export default class SuppliersService implements SuppliersModel {
   private _repository: SuppliersRepo;

@@ -43,7 +43,7 @@ export function ProductsDashboard() {
   const defaultTab = getDefaultTab();
   const currentTab = searchParams.get("status") as TabsStatusEnum;
 
-  const { getProducts, getProductById } = new ProductsService();
+  const { getProductById } = new ProductsService();
 
   function getDefaultTab(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;

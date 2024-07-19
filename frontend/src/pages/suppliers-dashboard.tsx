@@ -116,7 +116,7 @@ export function SuppliersDashboard() {
             <CardContent className="h-full">
               <div className="h-full">
                 <ComponentRequest<Supplier>
-                  storages={["origins", currentTab]}
+                  storages={["suppliers", currentTab]}
                   request={getSuppliers}
                   component={SuppliersTable}
                 />

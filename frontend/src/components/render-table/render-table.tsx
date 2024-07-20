@@ -4,10 +4,12 @@ import {
   ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
+  Row,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -21,20 +23,23 @@ import { ColumnChooserState } from "./column-chooser";
 import { TopTableCommands } from "./top-table-commands";
 import { BottomTableCommands } from "./bottom-table-commands";
 
-interface IRenderTableProps<T extends unknown> {
+interface IRenderTableProps<TData> {
   id: string;
-  data: T[];
+  data: TData[];
   refetch: (() => Promise<void>) | undefined;
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<TData>[];
   emptyMessage?: string;
   columnChooser?: ColumnChooserState;
   searchOptions?: SearchState;
   defaultSorting?: SortingState;
   defaultPagination?: PaginationState;
   defaultSizes?: number[];
+
+  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
+  getRowCanExpand?: (row: Row<TData>) => boolean;
 }
 
-export function RenderTable<T>(props: IRenderTableProps<T>) {
+export function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
   const {
     id,
     data,
@@ -49,6 +54,8 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
       pageIndex: 0,
     },
     defaultSizes = [5, 10, 20],
+    renderSubComponent,
+    getRowCanExpand,
   } = props;
 
   const [sorting, setSorting] = useState<SortingState>(defaultSorting ?? []);
@@ -67,6 +74,8 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
     rowCount: data.length,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand,
     state: {
       sorting,
       pagination,
@@ -86,7 +95,11 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
 
         <Table>
           <HeaderTable<T> table={table} />
-          <BodyTable<T> emptyMessage={emptyMessage} table={table} />
+          <BodyTable<T>
+            emptyMessage={emptyMessage}
+            table={table}
+            renderSubComponent={renderSubComponent}
+          />
         </Table>
       </div>
 

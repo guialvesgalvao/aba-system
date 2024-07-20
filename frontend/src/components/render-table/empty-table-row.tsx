@@ -5,7 +5,7 @@ interface IEmptyTableRowProps {
   message: string;
 }
 
-export function EmptyTableRow(props: IEmptyTableRowProps) {
+export function EmptyTableRow(props: Readonly<IEmptyTableRowProps>) {
   const { columnsLength, message } = props;
 
   return (

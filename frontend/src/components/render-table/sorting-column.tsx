@@ -6,24 +6,29 @@ interface ISortingColumnProps<T> {
   text: string;
 }
 
-export function SortingColumn<T>(props: ISortingColumnProps<T>) {
+export function SortingColumn<T>(props: Readonly<ISortingColumnProps<T>>) {
   const { column, text } = props;
 
   const isAsc = column.getIsSorted() === "asc";
 
   return (
-    <div
-      className="flex items-center cursor-pointer gap"
+    <button
+      type="button"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      className="flex items-center cursor-pointer gap"
     >
       {text}
 
       {column.getIsSorted() ? <SortingIcon isAsc={isAsc} /> : null}
-    </div>
+    </button>
   );
 }
 
-function SortingIcon(props: { isAsc: boolean }) {
+interface ISortingIconProps {
+  isAsc: boolean;
+}
+
+function SortingIcon(props: Readonly<ISortingIconProps>) {
   const { isAsc } = props;
 
   if (isAsc) {

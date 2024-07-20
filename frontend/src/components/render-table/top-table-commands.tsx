@@ -9,7 +9,7 @@ interface ITopCommandsProps<T> {
   searchOptions?: SearchState;
 }
 
-export function TopTableCommands<T>(props: ITopCommandsProps<T>) {
+export function TopTableCommands<T>(props: Readonly<ITopCommandsProps<T>>) {
   // Revisão Lucas Pedro, verificar 'refetch inutilizado'
   // const { table, refetch, columnChooser, searchOptions } = props;
   const { table, columnChooser, searchOptions } = props;

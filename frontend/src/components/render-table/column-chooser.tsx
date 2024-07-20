@@ -17,8 +17,12 @@ interface IColumnChooserProps<T> {
 export interface ColumnChooserState
   extends Omit<IColumnChooserProps<unknown>, "table"> {}
 
-export function ColumnChooser<T>(props: IColumnChooserProps<T>) {
+export function ColumnChooser<T>(props: Readonly<IColumnChooserProps<T>>) {
   const { table, text } = props;
+
+  const columnsWithCanHide = table
+    .getAllColumns()
+    .filter((column) => column.getCanHide());
 
   return (
     <DropdownMenu>
@@ -28,21 +32,18 @@ export function ColumnChooser<T>(props: IColumnChooserProps<T>) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {table
-          .getAllColumns()
-          .filter((column) => column.getCanHide())
-          .map((column) => {
-            return (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize"
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {getHeaderName<T>(column)}
-              </DropdownMenuCheckboxItem>
-            );
-          })}
+        {columnsWithCanHide.map((column) => {
+          return (
+            <DropdownMenuCheckboxItem
+              key={column.id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {getHeaderName<T>(column)}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

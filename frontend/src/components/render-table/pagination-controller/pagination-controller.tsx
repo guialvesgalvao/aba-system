@@ -9,7 +9,9 @@ interface IPaginationControllerProps<T> {
   sizes: number[];
 }
 
-export function PaginationController<T>(props: IPaginationControllerProps<T>) {
+export function PaginationController<T>(
+  props: Readonly<IPaginationControllerProps<T>>
+) {
   const { table, sizes } = props;
 
   return (

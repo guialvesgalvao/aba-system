@@ -29,6 +29,7 @@ import { FormRequest } from "@/components/form-request/form-request";
 import { SuppliersForm } from "@/components/suppliers/suppliers-form/suppliers-form";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, CirclePlus } from "lucide-react";
+import { createSuppliersMockBasedOnLength } from "@/shared/mocks/suppliers-mocks";
 
 const TABS: TabValue[] = [
   { text: "Todos", value: TabsStatusEnum.All },
@@ -42,7 +43,7 @@ export function SuppliersDashboard() {
   const defaultTab = getDefaultTab();
   const currentTab = searchParams.get("status") as TabsStatusEnum;
 
-  const { getSuppliers, getSupplierById } = new SuppliersService();
+  const { getSupplierById } = new SuppliersService();
 
   function getDefaultTab(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
@@ -117,7 +118,7 @@ export function SuppliersDashboard() {
               <div className="h-full">
                 <ComponentRequest<Supplier>
                   storages={["suppliers", currentTab]}
-                  request={getSuppliers}
+                  request={() => createSuppliersMockBasedOnLength(100)}
                   component={SuppliersTable}
                 />
               </div>

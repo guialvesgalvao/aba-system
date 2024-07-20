@@ -12,7 +12,9 @@ interface IPaginationButtonsProps<T> {
   table: Table<T>;
 }
 
-export function PaginationButtons<T>(props: IPaginationButtonsProps<T>) {
+export function PaginationButtons<T>(
+  props: Readonly<IPaginationButtonsProps<T>>
+) {
   const { table } = props;
 
   const rowCount = table.getRowCount();

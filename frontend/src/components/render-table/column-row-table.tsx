@@ -5,7 +5,7 @@ interface IColumnTableProps<T> {
   headerGroup: HeaderGroup<T>;
 }
 
-export function ColumnRowTable<T>(props: IColumnTableProps<T>) {
+export function ColumnRowTable<T>(props: Readonly<IColumnTableProps<T>>) {
   const { headerGroup } = props;
 
   return (

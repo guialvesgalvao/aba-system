@@ -9,7 +9,7 @@ import { AlertCircle } from "lucide-react";
 
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}
 
-export function SuppliersTable(props: ISuppliersTableProps) {
+export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
   const {
     data: suppliers,
     isLoading,
@@ -32,7 +32,10 @@ export function SuppliersTable(props: ISuppliersTableProps) {
   if (isLoading || isFetching)
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <LoadingSpinner text="Buscando todos fornecedores" className="w-12 h-12" />
+        <LoadingSpinner
+          text="Buscando todos fornecedores"
+          className="w-12 h-12"
+        />
       </div>
     );
 
@@ -61,6 +64,14 @@ export function SuppliersTable(props: ISuppliersTableProps) {
         pageIndex: 0,
       }}
       defaultSizes={[5, 10, 20]}
+      getRowCanExpand={() => true}
+      renderSubComponent={({ row }) => {
+        return (
+          <pre style={{ fontSize: "10px" }}>
+            <code>{JSON.stringify(row.original, null, 2)}</code>
+          </pre>
+        );
+      }}
     />
   );
 }

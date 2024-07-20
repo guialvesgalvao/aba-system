@@ -10,7 +10,7 @@ export interface ISearchTableProps<T> {
 export interface SearchState
   extends Omit<ISearchTableProps<unknown>, "table"> {}
 
-export function SearchTable<T>(props: ISearchTableProps<T>) {
+export function SearchTable<T>(props: Readonly<ISearchTableProps<T>>) {
   const { table, columnId, placeholder } = props;
 
   return (

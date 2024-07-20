@@ -29,8 +29,6 @@ import { FormRequest } from "@/components/form-request/form-request";
 import { ProductsForm } from "@/components/products/products-form/products-form";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, CirclePlus } from "lucide-react";
-import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
-
 const TABS: TabValue[] = [
   { text: "Todos", value: TabsStatusEnum.All },
   { text: "Ativos", value: TabsStatusEnum.Active },
@@ -43,7 +41,7 @@ export function ProductsDashboard() {
   const defaultTab = getDefaultTab();
   const currentTab = searchParams.get("status") as TabsStatusEnum;
 
-  const { getProductById } = new ProductsService();
+  const { getProducts, getProductById } = new ProductsService();
 
   function getDefaultTab(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
@@ -118,7 +116,7 @@ export function ProductsDashboard() {
               <div className="h-full">
                 <ComponentRequest<Product>
                   storages={["products", currentTab]}
-                  request={() => createProductsMockBasedOnLength(39)}
+                  request={getProducts}
                   component={ProductsTable}
                 />
               </div>

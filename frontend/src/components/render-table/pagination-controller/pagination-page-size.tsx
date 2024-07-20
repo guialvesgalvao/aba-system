@@ -6,7 +6,7 @@ interface IPaginationPageSizeProps {
   setPageSize: (pageSize: number) => void;
 }
 
-export function PaginationPageSize(props: IPaginationPageSizeProps) {
+export function PaginationPageSize(props: Readonly<IPaginationPageSizeProps>) {
   const { sizes, currentPageSize, setPageSize } = props;
 
   function handlePageSizeChange(size: number) {

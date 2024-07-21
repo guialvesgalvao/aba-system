@@ -1,6 +1,7 @@
 export class CNPJ {
   static readonly LENGTH = 12;
-  static readonly FORMAT = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/;
+  static readonly RAW_FORMAT = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/;
+  static readonly FORMAT = /^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})-(\d{2})$/;
   static readonly WEIGHTS_FIRST_DIGIT = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   static readonly WEIGHTS_SECOND_DIGIT = [
     6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2,
@@ -19,7 +20,7 @@ export class CNPJ {
   }
 
   formatCNPJ(): string {
-    return this.value.replace(CNPJ.FORMAT, "$1.$2.$3/$4-$5");
+    return this.value.replace(CNPJ.RAW_FORMAT, "$1.$2.$3/$4-$5");
   }
 
   isValidCNPJ(cnpj: string): boolean {

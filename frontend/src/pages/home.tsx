@@ -9,7 +9,7 @@ function Home() {
       Home Page
       <Tiles />
     </div>
-  )
+  );
 }
 
 export default Home;

@@ -1,7 +1,7 @@
 import { Origin } from "../factories/origins-factory";
 import { OriginsModel } from "../models/origins-model";
 import { OriginsRepo } from "../repositories/origins-repo";
-import { OriginRequest } from "../types/origins-types";
+import { OriginRequest, OriginStatus } from "../types/origins-types";
 
 export default class OriginsService implements OriginsModel {
   private _repository: OriginsRepo;
@@ -9,15 +9,23 @@ export default class OriginsService implements OriginsModel {
   constructor() {
     this._repository = new OriginsRepo();
 
-    this.getOrigins = this.getOrigins.bind(this);
+    this.getAllOrigins = this.getAllOrigins.bind(this);
+    this.getOriginsByStatus = this.getOriginsByStatus.bind(this);
     this.getOriginById = this.getOriginById.bind(this);
     this.createOrigin = this.createOrigin.bind(this);
     this.updateOrigin = this.updateOrigin.bind(this);
     this.deleteOrigin = this.deleteOrigin.bind(this);
   }
 
-  async getOrigins(): Promise<Origin[]> {
+  async getAllOrigins(): Promise<Origin[]> {
     const originsFromRepo = await this._repository.getAllOrigins();
+    const origins = originsFromRepo.map((origin) => new Origin(origin));
+
+    return origins;
+  }
+
+  async getOriginsByStatus(status: OriginStatus): Promise<Origin[]> {
+    const originsFromRepo = await this._repository.getOriginsByStatus(status);
     const origins = originsFromRepo.map((origin) => new Origin(origin));
 
     return origins;

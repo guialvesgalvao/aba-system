@@ -15,21 +15,28 @@ interface IComponentRequestProps<M> {
   storages: string[];
   request: () => Promise<M[]>;
   component: (props: ComponentResponse<M>) => JSX.Element;
+  enabled?: boolean;
+  strings?: {
+    loadingText?: string;
+  };
 }
 
-export function ComponentRequest<M>(props: IComponentRequestProps<M>) {
-  const { storages, request, component } = props;
+export function ComponentRequest<M>(
+  props: Readonly<IComponentRequestProps<M>>
+) {
+  const { storages, request, component, enabled = true } = props;
 
   const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
     queryKey: storages,
     queryFn: request,
     retry: false,
+    enabled,
     refetchOnWindowFocus: false,
   });
 
   async function handleRefresh() {
     try {
-      refetch();
+      await refetch();
     } catch (error) {
       console.error(error);
     }

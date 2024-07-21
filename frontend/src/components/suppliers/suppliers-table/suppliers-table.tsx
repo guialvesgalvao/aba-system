@@ -2,7 +2,7 @@ import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Supplier } from "@/shared/factories/suppliers-factory";
 import { columns } from "./suppliers-columns";
-import { RenderTable } from "@/components/render-table/render-table";
+import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";

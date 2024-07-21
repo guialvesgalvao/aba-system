@@ -1,85 +1,43 @@
-import { ComponentRequest } from "@/components/component-request/component-request";
 import { OriginsTable } from "@/components/origins/origins-table/origins-table";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs } from "@/components/ui/tabs";
-import { TabsStatusEnum } from "@/shared/enums/data";
 
 import OriginsService from "@/shared/services/origins-service";
 
-import { useSearchParams } from "react-router-dom";
 import { Origin } from "@/shared/factories/origins-factory";
-import {
-  DashboardTabs,
-  TabValue,
-} from "@/components/dashboard-tabs/dashboard-tabs";
+import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormRequest } from "@/components/form-request/form-request";
 import { OriginsForm } from "@/components/origins/origins-form/origins-form";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, CirclePlus } from "lucide-react";
-
-const TABS: TabValue[] = [
-  { text: "Todos", value: TabsStatusEnum.All },
-  { text: "Ativos", value: TabsStatusEnum.Active },
-  { text: "Rascunhos", value: TabsStatusEnum.Draft },
-  { text: "Arquivados", value: TabsStatusEnum.Archived },
-];
+import { CirclePlus } from "lucide-react";
+import { useStatusParam } from "@/shared/hooks/use-status-param";
+import { RefreshButton } from "@/components/utilities/refresh-button";
+import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
+import { CardData } from "@/components/card-data/card-data";
+import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 
 export function OriginsDashboard() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const defaultTab = getDefaultTab();
-  const currentTab = searchParams.get("status") as TabsStatusEnum;
+  const { getCurrentStatus } = useStatusParam();
+  const { getAllOrigins, getOriginsByStatus, getOriginById } =
+    new OriginsService();
 
-  const { getOrigins, getOriginById } = new OriginsService();
-
-  function getDefaultTab(): TabsStatusEnum {
-    return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
-  }
-
-  function handleTabChange(value: string) {
-    addOrRemoveStatusFromSearchParam(value as TabsStatusEnum);
-  }
-
-  function addOrRemoveStatusFromSearchParam(value: TabsStatusEnum) {
-    const searchStatusParam = searchParams.has("status");
-
-    if (searchStatusParam && value === TabsStatusEnum.All) {
-      searchParams.delete("status");
-    } else {
-      searchParams.set("status", value);
-    }
-
-    setSearchParams(searchParams);
+  async function refreshPage() {
+    const status = getCurrentStatus();
+    await fetchAppQuery<Origin[]>(["origins", status]);
   }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <Tabs
-        onValueChange={handleTabChange}
-        className="w-full h-full flex flex-col gap-4"
-        defaultValue={defaultTab}
-      >
+      <div className="w-full h-full flex flex-col gap-4">
         <Dialog>
-          <div className="flex justify-between">
-            <DashboardTabs tabs={TABS} />
+          <div className="flex justify-between flex-wrap gap-2">
+            <StatusTabsChooser />
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <RefreshCcw size={18} />
-                Atualizar
-              </Button>
+              <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
               <Dialog>
                 <DialogTrigger asChild>
@@ -90,7 +48,7 @@ export function OriginsDashboard() {
                 </DialogTrigger>
 
                 <DialogContent className="max-w-[1000px]">
-                  <DialogTitle>Criar Origem</DialogTitle>
+                  <DialogTitle>Criar origem</DialogTitle>
                   <OriginsForm
                     item={undefined}
                     isLoading={false}
@@ -103,37 +61,76 @@ export function OriginsDashboard() {
             </div>
           </div>
 
-          <Card className="h-full flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Todas as Origens
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todas as origens cadastrados no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full">
-              <div className="h-full">
-                <ComponentRequest<Origin>
-                  storages={["origins", currentTab]}
-                  request={getOrigins}
-                  component={OriginsTable}
+          <TabRenderBasedStatus
+            tabs={{
+              all: (
+                <CardData<Origin>
+                  title="Todas as Origens"
+                  description="Lista de todas as origens no sistema"
+                  table={{
+                    storage: ["origins", "all"],
+                    request: getAllOrigins,
+                    component: OriginsTable,
+                  }}
+                  form={{
+                    name: "origins",
+                    request: getOriginById,
+                    component: OriginsForm,
+                  }}
                 />
-              </div>
-
-              <DialogContent className="max-w-[1000px]">
-                <DialogTitle>Editar Origem</DialogTitle>
-                <FormRequest
-                  component={OriginsForm}
-                  form="origins"
-                  request={getOriginById}
+              ),
+              enabled: (
+                <CardData<Origin>
+                  title="Origens Ativos"
+                  description="Lista de origens ativos no sistema"
+                  table={{
+                    storage: ["origins", "enabled"],
+                    request: () => getOriginsByStatus("enabled"),
+                    component: OriginsTable,
+                  }}
+                  form={{
+                    name: "origins",
+                    request: getOriginById,
+                    component: OriginsForm,
+                  }}
                 />
-              </DialogContent>
-            </CardContent>
-          </Card>
+              ),
+              archived: (
+                <CardData<Origin>
+                  title="Origens Arquivados"
+                  description="Lista de origens arquivados no sistema"
+                  table={{
+                    storage: ["origins", "archived"],
+                    request: () => getOriginsByStatus("archived"),
+                    component: OriginsTable,
+                  }}
+                  form={{
+                    name: "origins",
+                    request: getOriginById,
+                    component: OriginsForm,
+                  }}
+                />
+              ),
+              draft: (
+                <CardData<Origin>
+                  title="Origens em Rascunho"
+                  description="Lista de origens em rascunho no sistema"
+                  table={{
+                    storage: ["origins", "draft"],
+                    request: () => getOriginsByStatus("draft"),
+                    component: OriginsTable,
+                  }}
+                  form={{
+                    name: "origins",
+                    request: getOriginById,
+                    component: OriginsForm,
+                  }}
+                />
+              ),
+            }}
+          />
         </Dialog>
-      </Tabs>
+      </div>
     </div>
   );
 }

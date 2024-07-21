@@ -15,6 +15,19 @@ export class SuppliersRepo {
     return response.data;
   }
 
+  async getSuppliersByStatus(status: string): Promise<SupplierResponse[]> {
+    const response = await axios.get<SupplierResponse[]>(
+      `${this._API_URL}?status=${status}`,
+      {
+        headers: {
+          "X-API-KEY": this._API_KEY,
+        },
+      }
+    );
+
+    return response.data;
+  }
+
   async getById(id: number): Promise<SupplierResponse> {
     const response = await axios.get<SupplierResponse>(
       `${this._API_URL}/${id}`,
@@ -43,11 +56,15 @@ export class SuppliersRepo {
   }
 
   async addSupplier(supplier: SupplierRequest): Promise<SupplierResponse> {
-    const response = await axios.post<SupplierResponse>(this._API_URL, supplier, {
-      headers: {
-        "X-API-KEY": this._API_KEY,
-      },
-    });
+    const response = await axios.post<SupplierResponse>(
+      this._API_URL,
+      supplier,
+      {
+        headers: {
+          "X-API-KEY": this._API_KEY,
+        },
+      }
+    );
 
     return response.data;
   }

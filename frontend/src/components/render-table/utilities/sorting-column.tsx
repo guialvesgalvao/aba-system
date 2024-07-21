@@ -15,7 +15,7 @@ export function SortingColumn<T>(props: Readonly<ISortingColumnProps<T>>) {
     <button
       type="button"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="flex items-center cursor-pointer gap"
+      className="flex items-center cursor-pointer gap min-w-max"
     >
       {text}
 

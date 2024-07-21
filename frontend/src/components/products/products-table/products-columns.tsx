@@ -1,4 +1,4 @@
-import { SortingColumn } from "@/components/render-table/sorting-column";
+import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";

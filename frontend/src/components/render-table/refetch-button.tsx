@@ -5,7 +5,7 @@ interface IRefetchButtonProps {
   refetch: () => Promise<void>;
 }
 
-export function RefetchButton(props: IRefetchButtonProps) {
+export function RefetchButton(props: Readonly<IRefetchButtonProps>) {
   const { refetch } = props;
 
   return (

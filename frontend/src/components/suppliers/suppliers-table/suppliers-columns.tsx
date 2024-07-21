@@ -1,4 +1,5 @@
 import { SortingColumn } from "@/components/render-table/sorting-column";
+import { SubComponentButton } from "@/components/render-table/utilities/sub-component-button";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
@@ -27,10 +28,26 @@ import {
 import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
 import { SupplierStatus } from "@/shared/types/suppliers-types";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
 export const columns: ColumnDef<Supplier>[] = [
+  {
+    id: "expander",
+    header: () => null,
+    cell: ({ row }) => {
+      const isExpanded = row.getIsExpanded();
+
+      return row.getCanExpand() ? (
+        <SubComponentButton
+          isExpanded={isExpanded}
+          onClick={row.getToggleExpandedHandler()}
+        >
+          {isExpanded ? <ChevronDown /> : <ChevronRight />}
+        </SubComponentButton>
+      ) : null;
+    },
+  },
   {
     header: ({ column }) => (
       <SortingColumn<Supplier> column={column} text="ID" />

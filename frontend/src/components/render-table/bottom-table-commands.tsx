@@ -6,7 +6,7 @@ interface IBottomCommandsProps<T> {
   sizes: number[];
 }
 
-export function BottomTableCommands<T>(props: IBottomCommandsProps<T>) {
+export function BottomTableCommands<T>(props: Readonly<IBottomCommandsProps<T>>) {
   const { table, sizes } = props;
 
   return (

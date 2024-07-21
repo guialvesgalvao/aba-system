@@ -4,6 +4,7 @@ export class Supplier {
   private _id: number;
   private _name: string;
   private _automatic_invoicing: boolean;
+  private _supplier_products: string;
   private _cnpj: string;
   private _status: SupplierStatus;
   private _createdDate: Date;
@@ -17,6 +18,7 @@ export class Supplier {
     this._status = data.status;
     this._cnpj = data.cnpj;
     this._automatic_invoicing = data.automatic_invoicing;
+    this._supplier_products = data.supplier_products;
 
     // If the data is not provided, the date will be undefined
     this._createdDate = new Date(data.created_at);
@@ -40,6 +42,10 @@ export class Supplier {
 
   public get cnpj(): string {
     return this._cnpj;
+  }
+
+  public get supplier_products(): string {
+    return this._supplier_products;
   }
 
   public get automatic_invoicing(): boolean {

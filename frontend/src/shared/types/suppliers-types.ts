@@ -12,6 +12,7 @@ export type SupplierResponse = {
   status: SupplierStatus;
   cnpj: string;
   automatic_invoicing: boolean;
+  supplier_products: string;
   created_at: string;
   created_by: string;
   modified_by: string;

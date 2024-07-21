@@ -1,4 +1,4 @@
-import { SortingColumn } from "@/components/render-table/sorting-column";
+import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
 import { SubComponentButton } from "@/components/render-table/utilities/sub-component-button";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Supplier } from "@/shared/factories/suppliers-factory";
+import { CNPJ } from "@/shared/helpers/cnpj-helper/cnpj-helper";
 import {
   getFormattedDynamicText,
   getFullFormattedDate,
@@ -25,7 +26,7 @@ import {
   getBadgeColorBasedOnStatus,
   getSupplierDescriptionByStatus,
 } from "@/shared/helpers/suppliers-helper/suppliers-helper";
-import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
+
 import { SupplierStatus } from "@/shared/types/suppliers-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
@@ -61,19 +62,20 @@ export const columns: ColumnDef<Supplier>[] = [
     accessorKey: "name",
   },
   {
-    header: "Descrição",
-    accessorKey: "description",
-    enableSorting: false,
+    header: ({ column }) => (
+      <SortingColumn<Supplier> column={column} text="CNPJ" />
+    ),
+    accessorKey: "cnpj",
+    enableSorting: true,
     enableResizing: true,
     cell({ row }) {
-      const description: string | undefined = row.getValue("description");
+      const value: string = row.getValue("cnpj");
+      const cnpj = new CNPJ(value).formatCNPJ();
 
       return (
         <Tooltip delayDuration={400}>
-          <TooltipTrigger>{getShortedText(30, description)}</TooltipTrigger>
-          <TooltipContent className="max-w-80">
-            {description ?? ""}
-          </TooltipContent>
+          <TooltipTrigger>{cnpj}</TooltipTrigger>
+          <TooltipContent className="max-w-80">{cnpj ?? ""}</TooltipContent>
         </Tooltip>
       );
     },

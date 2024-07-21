@@ -1,7 +1,7 @@
 import { Supplier } from "../factories/suppliers-factory";
 import { SuppliersModel } from "../models/suppliers-model";
 import { SuppliersRepo } from "../repositories/suppliers-repo";
-import { SupplierRequest } from "../types/suppliers-types";
+import { SupplierRequest, SupplierStatus } from "../types/suppliers-types";
 
 export default class SuppliersService implements SuppliersModel {
   private _repository: SuppliersRepo;
@@ -9,16 +9,30 @@ export default class SuppliersService implements SuppliersModel {
   constructor() {
     this._repository = new SuppliersRepo();
 
-    this.getSuppliers = this.getSuppliers.bind(this);
+    this.getAllSuppliers = this.getAllSuppliers.bind(this);
+    this.getSuppliersByStatus = this.getSuppliersByStatus.bind(this);
     this.getSupplierById = this.getSupplierById.bind(this);
     this.createSupplier = this.createSupplier.bind(this);
     this.updateSupplier = this.updateSupplier.bind(this);
     this.deleteSupplier = this.deleteSupplier.bind(this);
   }
 
-  async getSuppliers(): Promise<Supplier[]> {
+  async getAllSuppliers(): Promise<Supplier[]> {
     const suppliersFromRepo = await this._repository.getAllSuppliers();
-    const suppliers = suppliersFromRepo.map((supplier) => new Supplier(supplier));
+    const suppliers = suppliersFromRepo.map(
+      (supplier) => new Supplier(supplier)
+    );
+
+    return suppliers;
+  }
+
+  async getSuppliersByStatus(status: SupplierStatus): Promise<Supplier[]> {
+    const suppliersFromRepo = await this._repository.getSuppliersByStatus(
+      status
+    );
+    const suppliers = suppliersFromRepo.map(
+      (supplier) => new Supplier(supplier)
+    );
 
     return suppliers;
   }

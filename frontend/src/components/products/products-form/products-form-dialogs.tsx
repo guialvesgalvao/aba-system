@@ -13,10 +13,14 @@ import { Button } from "@/components/ui/button";
 
 import { FieldValues, useFormContext } from "react-hook-form";
 
-export function SubmitDialog<T extends FieldValues>(props: {
+interface ISubmitDialogProps<T extends FieldValues> {
   isEditMode: boolean;
   onSubmit: (data: T) => Promise<T | void>;
-}) {
+}
+
+export function SubmitDialog<T extends FieldValues>(
+  props: Readonly<ISubmitDialogProps<T>>
+) {
   const { isEditMode, onSubmit } = props;
 
   const { formState, handleSubmit } = useFormContext<T>();
@@ -33,7 +37,7 @@ export function SubmitDialog<T extends FieldValues>(props: {
           {isEditMode ? "Salvar produto" : "Criar produto"}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent aria-describedby="products-submit-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>Você tem certeza disso?</AlertDialogTitle>
           <AlertDialogDescription>

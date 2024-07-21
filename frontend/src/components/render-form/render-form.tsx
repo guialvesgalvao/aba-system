@@ -19,23 +19,23 @@ interface IRenderFormProps<T extends FieldValues> {
   onCreate?: (data: T) => Promise<T | void>;
   onUpdate?: (data: T) => Promise<T | void>;
   onDelete: (id: number) => Promise<void>;
-  onRender: (options: {
-    form: UseFormReturn<T, any, undefined>;
-    params: IRenderFormProps<T>;
-  }) => React.ReactNode;
+  onRender: (options: OnRenderProps<T>) => React.ReactNode;
 }
 
-export function RenderForm<T extends FieldValues>(props: IRenderFormProps<T>) {
+export type OnRenderProps<T extends FieldValues> = {
+  form: UseFormReturn<T, any, undefined>;
+  params: IRenderFormProps<T>;
+};
+
+export function RenderForm<T extends FieldValues>(
+  props: Readonly<IRenderFormProps<T>>
+) {
   const {
     resolver,
     getDefaultValues,
     onValidate,
     onInvalid,
     onSubmit,
-    // Revisão Lucas Pedro
-    // onCreate,
-    // onUpdate,
-    // onDelete,
     onRender,
   } = props;
 
@@ -47,7 +47,7 @@ export function RenderForm<T extends FieldValues>(props: IRenderFormProps<T>) {
   const { handleSubmit } = form;
 
   async function handleWhichAction(data: T) {
-    await onValidate(data);
+    onValidate(data);
 
     const response = await onSubmit(data);
     return response;
@@ -56,17 +56,6 @@ export function RenderForm<T extends FieldValues>(props: IRenderFormProps<T>) {
   async function handleInvalid(errors: FieldErrors<T>) {
     onInvalid(errors);
   }
-  // Revisão Lucas Pedro
-  // async function handleCreate() {
-  //   if (!onCreate) return;
-  //   await onCreate(form.getValues());
-  // }
-  
-  // Revisão Lucas Pedro
-  // async function handleUpdate() {
-  //   if (!onUpdate) return;
-  //   await onUpdate(form.getValues());
-  // }
 
   return (
     <Form {...form}>

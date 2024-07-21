@@ -1,6 +1,6 @@
 export enum TabsStatusEnum {
   All = "all",
-  Active = "active",
+  Active = "enabled",
   Draft = "draft",
   Archived = "archived",
 }

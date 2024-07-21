@@ -39,7 +39,7 @@ interface IRenderTableProps<TData> {
   getRowCanExpand?: (row: Row<TData>) => boolean;
 }
 
-export function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
+export default function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
   const {
     id,
     data,

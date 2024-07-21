@@ -12,7 +12,7 @@ interface ISystemSidebarProps {
   routes: AppRoute[];
 }
 
-export function SystemSidebar(props: ISystemSidebarProps) {
+export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
   const { routes } = props;
   const { isCollapsed } = useSidebar();
 

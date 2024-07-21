@@ -6,7 +6,13 @@ import { queryClient } from "./shared/helpers/use-query-helper";
 import { SystemSidebar } from "./pages/system-sidebar";
 import { ProductsDashboard } from "./pages/products-dashboard";
 import { AppRoute } from "./components/nav/nav";
-import { Truck, MapPin, Factory, Package, Home as HomeIcon } from "lucide-react";
+import {
+  Truck,
+  MapPin,
+  Factory,
+  Package,
+  Home as HomeIcon,
+} from "lucide-react";
 import { NotFound } from "./pages/not-found";
 import { SystemRoutes } from "./shared/enums/app";
 import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
@@ -44,7 +50,7 @@ const SYSTEM_ROUTES: AppRoute[] = [
     to: "/delivery-persons",
     text: "Tipos de Entrega",
     tooltip: "Ir para páginas de tipos de entrega",
-  }
+  },
 ];
 
 export default function App() {

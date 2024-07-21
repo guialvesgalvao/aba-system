@@ -12,7 +12,7 @@ import { BrowserRouter } from "react-router-dom";
 
 describe("component-request-products", () => {
   it("should render Products All successfully", async () => {
-    const { getProducts } = new ProductsService();
+    const { getAllProducts } = new ProductsService();
 
     render(
       <BrowserRouter>
@@ -20,7 +20,7 @@ describe("component-request-products", () => {
           <TooltipProvider>
             <ComponentRequest<Product>
               storages={["products", "all"]}
-              request={getProducts}
+              request={getAllProducts}
               component={ProductsTable}
             />
           </TooltipProvider>
@@ -50,7 +50,7 @@ describe("component-request-products", () => {
   });
 
   it("should render error message when request fails", async () => {
-    const { getProducts } = new ProductsService();
+    const { getAllProducts } = new ProductsService();
 
     render(
       <CreateQueryProviderWrapper>
@@ -58,7 +58,7 @@ describe("component-request-products", () => {
           storages={["products", "all"]}
           request={() => {
             throw new Error("Error fetching products");
-            return getProducts();
+            return getAllProducts();
           }}
           component={ProductsTable}
         />

@@ -5,12 +5,13 @@ describe("CNPJ", () => {
   it("should generate a valid CNPJ", () => {
     const cnpj = new CNPJ();
     const formattedCNPJ = cnpj.formatCNPJ();
+    
     expect(cnpj.isValidCNPJ(cnpj.value)).toBe(true);
     expect(formattedCNPJ).toMatch(CNPJ.FORMAT);
   });
 
   it("should accept a valid CNPJ and format it correctly", () => {
-    const validCNPJ = "12.345.678/9012-34";
+    const validCNPJ = "12.345.678/9012-30";
     const cnpj = new CNPJ(validCNPJ);
     expect(cnpj.value).toBe(validCNPJ.replace(/[^\d]/g, ""));
     expect(cnpj.formatCNPJ()).toBe(validCNPJ);
@@ -22,7 +23,7 @@ describe("CNPJ", () => {
   });
 
   it("should correctly identify a valid CNPJ", () => {
-    const validCNPJ = "12.345.678/9012-34";
+    const validCNPJ = "12.345.6789012-30";
     const cnpj = new CNPJ(validCNPJ);
     expect(cnpj.isValidCNPJ(cnpj.value)).toBe(true);
   });
@@ -34,9 +35,9 @@ describe("CNPJ", () => {
   });
 
   it("should format a CNPJ correctly", () => {
-    const rawCNPJ = "12345678901234";
+    const rawCNPJ = "12345678901230";
     const cnpj = new CNPJ(rawCNPJ);
-    expect(cnpj.formatCNPJ()).toBe("12.345.678/9012-34");
+    expect(cnpj.formatCNPJ()).toBe("12.345.678/9012-30");
   });
 
   it("should generate different CNPJs", () => {

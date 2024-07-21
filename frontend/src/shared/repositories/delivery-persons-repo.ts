@@ -1,5 +1,8 @@
 import axios from "axios";
-import { DeliveryPersonRequest, DeliveryPersonResponse } from "../types/delivery-persons-types";
+import {
+  DeliveryPersonRequest,
+  DeliveryPersonResponse,
+} from "../types/delivery-persons-types";
 
 export class DeliveryPersonsRepo {
   private _API_URL = "http://localhost:5000/api/delivery_persons";
@@ -11,6 +14,21 @@ export class DeliveryPersonsRepo {
         "X-API-KEY": this._API_KEY,
       },
     });
+
+    return response.data;
+  }
+
+  async getDeliveryPersonsByStatus(
+    status: string
+  ): Promise<DeliveryPersonResponse[]> {
+    const response = await axios.get<DeliveryPersonResponse[]>(
+      `${this._API_URL}?status=${status}`,
+      {
+        headers: {
+          "X-API-KEY": this._API_KEY,
+        },
+      }
+    );
 
     return response.data;
   }
@@ -28,7 +46,9 @@ export class DeliveryPersonsRepo {
     return response.data;
   }
 
-  async updateDeliveryPerson(deliveryPerson: DeliveryPersonRequest): Promise<DeliveryPersonResponse> {
+  async updateDeliveryPerson(
+    deliveryPerson: DeliveryPersonRequest
+  ): Promise<DeliveryPersonResponse> {
     const response = await axios.put<DeliveryPersonResponse>(
       `${this._API_URL}/${deliveryPerson.id}`,
       deliveryPerson,
@@ -42,12 +62,18 @@ export class DeliveryPersonsRepo {
     return response.data;
   }
 
-  async addDeliveryPerson(deliveryPerson: DeliveryPersonRequest): Promise<DeliveryPersonResponse> {
-    const response = await axios.post<DeliveryPersonResponse>(this._API_URL, deliveryPerson, {
-      headers: {
-        "X-API-KEY": this._API_KEY,
-      },
-    });
+  async addDeliveryPerson(
+    deliveryPerson: DeliveryPersonRequest
+  ): Promise<DeliveryPersonResponse> {
+    const response = await axios.post<DeliveryPersonResponse>(
+      this._API_URL,
+      deliveryPerson,
+      {
+        headers: {
+          "X-API-KEY": this._API_KEY,
+        },
+      }
+    );
 
     return response.data;
   }

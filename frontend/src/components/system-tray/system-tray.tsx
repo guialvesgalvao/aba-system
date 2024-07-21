@@ -9,7 +9,6 @@ import {
 
 export function SystemTray() {
   const location = useLocation();
-  console.log("SystemTray", location);
 
   function generateBreadCrumbItems(pathname: string) {
     const parts = pathname.split("/");

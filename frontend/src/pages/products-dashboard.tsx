@@ -1,138 +1,136 @@
-import { ComponentRequest } from "@/components/component-request/component-request";
 import { ProductsTable } from "@/components/products/products-table/products-table";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs } from "@/components/ui/tabs";
-import { TabsStatusEnum } from "@/shared/enums/data";
 
 import ProductsService from "@/shared/services/products-service";
 
-import { useSearchParams } from "react-router-dom";
 import { Product } from "@/shared/factories/products-factory";
-import {
-  DashboardTabs,
-  TabValue,
-} from "@/components/dashboard-tabs/dashboard-tabs";
+import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormRequest } from "@/components/form-request/form-request";
+
 import { ProductsForm } from "@/components/products/products-form/products-form";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, CirclePlus } from "lucide-react";
-const TABS: TabValue[] = [
-  { text: "Todos", value: TabsStatusEnum.All },
-  { text: "Ativos", value: TabsStatusEnum.Active },
-  { text: "Rascunhos", value: TabsStatusEnum.Draft },
-  { text: "Arquivados", value: TabsStatusEnum.Archived },
-];
+import { CirclePlus } from "lucide-react";
+
+import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
+import { RefreshButton } from "@/components/utilities/refresh-button";
+import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
+import { CardData } from "@/components/card-data/card-data";
+import { useStatusParam } from "@/shared/hooks/use-status-param";
 
 export function ProductsDashboard() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const defaultTab = getDefaultTab();
-  const currentTab = searchParams.get("status") as TabsStatusEnum;
+  const { getCurrentStatus } = useStatusParam();
+  const { getAllProducts, getProductsByStatus, getProductById } =
+    new ProductsService();
 
-  const { getProducts, getProductById } = new ProductsService();
-
-  function getDefaultTab(): TabsStatusEnum {
-    return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
-  }
-
-  function handleTabChange(value: string) {
-    addOrRemoveStatusFromSearchParam(value as TabsStatusEnum);
-  }
-
-  function addOrRemoveStatusFromSearchParam(value: TabsStatusEnum) {
-    const searchStatusParam = searchParams.has("status");
-
-    if (searchStatusParam && value === TabsStatusEnum.All) {
-      searchParams.delete("status");
-    } else {
-      searchParams.set("status", value);
-    }
-
-    setSearchParams(searchParams);
+  async function refreshPage() {
+    const status = getCurrentStatus();
+    await fetchAppQuery<Product[]>(["products", status]);
   }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <Tabs
-        onValueChange={handleTabChange}
-        className="w-full h-full flex flex-col gap-4"
-        defaultValue={defaultTab}
-      >
-        <Dialog>
-          <div className="flex justify-between">
-            <DashboardTabs tabs={TABS} />
+      <Dialog>
+        <div className="flex justify-between flex-wrap gap-2">
+          <StatusTabsChooser />
 
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <RefreshCcw size={18} />
-                Atualizar
-              </Button>
+          <div className="flex items-center gap-2">
+            <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="gap-2">
-                    <CirclePlus size={18} />
-                    Criar novo produto
-                  </Button>
-                </DialogTrigger>
-
-                <DialogContent className="max-w-[1000px]">
-                  <DialogTitle>Criar Produto</DialogTitle>
-                  <ProductsForm
-                    item={undefined}
-                    isLoading={false}
-                    isFetching={false}
-                    isError={false}
-                    error={null}
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-
-          <Card className="h-full flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
-                Todos os Produtos
-              </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
-                Lista de todos os produtos cadastrados no sistema
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="h-full">
-              <div className="h-full">
-                <ComponentRequest<Product>
-                  storages={["products", currentTab]}
-                  request={getProducts}
-                  component={ProductsTable}
-                />
-              </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" className="gap-2">
+                  <CirclePlus size={18} />
+                  Criar novo produto
+                </Button>
+              </DialogTrigger>
 
               <DialogContent className="max-w-[1000px]">
-                <DialogTitle>Editar Produto</DialogTitle>
-                <FormRequest
-                  component={ProductsForm}
-                  form="products"
-                  request={getProductById}
+                <DialogTitle>Criar Produto</DialogTitle>
+                <ProductsForm
+                  item={undefined}
+                  isLoading={false}
+                  isFetching={false}
+                  isError={false}
+                  error={null}
                 />
               </DialogContent>
-            </CardContent>
-          </Card>
-        </Dialog>
-      </Tabs>
+            </Dialog>
+          </div>
+        </div>
+
+        <TabRenderBasedStatus
+          tabs={{
+            all: (
+              <CardData<Product>
+                title="Todos os Produtos"
+                description="Lista com todos os produtos cadastrados no sistema"
+                table={{
+                  storage: ["products", "all"],
+                  request: getAllProducts,
+                  component: ProductsTable,
+                }}
+                form={{
+                  name: "products",
+                  request: getProductById,
+                  component: ProductsForm,
+                }}
+              />
+            ),
+            enabled: (
+              <CardData<Product>
+                title="Produtos Ativos"
+                description="Lista de produtos ativos no sistema"
+                table={{
+                  storage: ["products", "enabled"],
+                  request: () => getProductsByStatus("enabled"),
+                  component: ProductsTable,
+                }}
+                form={{
+                  name: "products",
+                  request: getProductById,
+                  component: ProductsForm,
+                }}
+              />
+            ),
+            archived: (
+              <CardData<Product>
+                title="Produtos Arquivados"
+                description="Lista de produtos arquivados no sistema"
+                table={{
+                  storage: ["products", "archived"],
+                  request: () => getProductsByStatus("archived"),
+                  component: ProductsTable,
+                }}
+                form={{
+                  name: "products",
+                  request: getProductById,
+                  component: ProductsForm,
+                }}
+              />
+            ),
+            draft: (
+              <CardData<Product>
+                title="Produtos em Rascunho"
+                description="Lista de produtos em rascunho no sistema"
+                table={{
+                  storage: ["products", "draft"],
+                  request: () => getProductsByStatus("draft"),
+                  component: ProductsTable,
+                }}
+                form={{
+                  name: "products",
+                  request: getProductById,
+                  component: ProductsForm,
+                }}
+              />
+            ),
+          }}
+        />
+      </Dialog>
     </div>
   );
 }

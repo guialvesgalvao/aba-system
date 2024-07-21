@@ -1,9 +1,8 @@
 import { ProductResponse, ProductStatus } from "../types/products-types";
 export class Product {
-  private _image?: string;
   private _id: number;
   private _name: string;
-  private _description?: string;
+  private _description?: string | null;
   private _status: ProductStatus;
   private _createdDate: Date;
   private _createdBy: string;
@@ -11,7 +10,6 @@ export class Product {
   private _modifiedBy: string;
 
   constructor(data: ProductResponse) {
-    this._image = data.image;
     this._id = data.id;
     this._name = data.name;
     this._description = data.description;
@@ -24,10 +22,6 @@ export class Product {
     this._modifiedBy = data.modified_by;
   }
 
-  public get image(): string | undefined {
-    return this._image;
-  }
-
   public get id(): number {
     return this._id;
   }
@@ -36,7 +30,7 @@ export class Product {
     return this._name;
   }
 
-  public get description(): string | undefined {
+  public get description(): string | undefined | null {
     return this._description;
   }
 

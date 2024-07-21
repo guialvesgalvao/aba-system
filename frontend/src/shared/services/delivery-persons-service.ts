@@ -1,7 +1,10 @@
 import { DeliveryPerson } from "../factories/delivery-persons-factory";
 import { DeliveryPersonsModel } from "../models/delivery-persons-model";
 import { DeliveryPersonsRepo } from "../repositories/delivery-persons-repo";
-import { DeliveryPersonRequest } from "../types/delivery-persons-types";
+import {
+  DeliveryPersonRequest,
+  DeliveryPersonStatus,
+} from "../types/delivery-persons-types";
 
 export default class DeliveryPersonsService implements DeliveryPersonsModel {
   private _repository: DeliveryPersonsRepo;
@@ -9,16 +12,33 @@ export default class DeliveryPersonsService implements DeliveryPersonsModel {
   constructor() {
     this._repository = new DeliveryPersonsRepo();
 
-    this.getDeliveryPersons = this.getDeliveryPersons.bind(this);
+    this.getAllDeliveryPersons = this.getAllDeliveryPersons.bind(this);
+    this.getDeliveryPersonsByStatus =
+      this.getDeliveryPersonsByStatus.bind(this);
     this.getDeliveryPersonById = this.getDeliveryPersonById.bind(this);
     this.createDeliveryPerson = this.createDeliveryPerson.bind(this);
     this.updateDeliveryPerson = this.updateDeliveryPerson.bind(this);
     this.deleteDeliveryPerson = this.deleteDeliveryPerson.bind(this);
   }
 
-  async getDeliveryPersons(): Promise<DeliveryPerson[]> {
-    const deliveryPersonsFromRepo = await this._repository.getAllDeliveryPersons();
-    const deliveryPersons = deliveryPersonsFromRepo.map((deliveryPerson) => new DeliveryPerson(deliveryPerson));
+  async getAllDeliveryPersons(): Promise<DeliveryPerson[]> {
+    const deliveryPersonsFromRepo =
+      await this._repository.getAllDeliveryPersons();
+    const deliveryPersons = deliveryPersonsFromRepo.map(
+      (deliveryPerson) => new DeliveryPerson(deliveryPerson)
+    );
+
+    return deliveryPersons;
+  }
+
+  async getDeliveryPersonsByStatus(
+    status: DeliveryPersonStatus
+  ): Promise<DeliveryPerson[]> {
+    const deliveryPersonsFromRepo =
+      await this._repository.getDeliveryPersonsByStatus(status);
+    const deliveryPersons = deliveryPersonsFromRepo.map(
+      (deliveryPerson) => new DeliveryPerson(deliveryPerson)
+    );
 
     return deliveryPersons;
   }
@@ -30,20 +50,28 @@ export default class DeliveryPersonsService implements DeliveryPersonsModel {
     return deliveryPerson;
   }
 
-  async createDeliveryPerson(deliveryPerson: DeliveryPersonRequest): Promise<DeliveryPerson> {
+  async createDeliveryPerson(
+    deliveryPerson: DeliveryPersonRequest
+  ): Promise<DeliveryPerson> {
     try {
-      const newDeliveryPerson = await this._repository.addDeliveryPerson(deliveryPerson);
+      const newDeliveryPerson = await this._repository.addDeliveryPerson(
+        deliveryPerson
+      );
       return new DeliveryPerson(newDeliveryPerson);
     } catch (error) {
       throw new Error("Error adding delivery person");
     }
   }
 
-  async updateDeliveryPerson(deliveryPerson: DeliveryPersonRequest): Promise<DeliveryPerson> {
+  async updateDeliveryPerson(
+    deliveryPerson: DeliveryPersonRequest
+  ): Promise<DeliveryPerson> {
     if (!deliveryPerson.id) throw new Error("Delivery Person ID is required");
 
     try {
-      const updatedDeliveryPerson = await this._repository.updateDeliveryPerson(deliveryPerson);
+      const updatedDeliveryPerson = await this._repository.updateDeliveryPerson(
+        deliveryPerson
+      );
       return new DeliveryPerson(updatedDeliveryPerson);
     } catch (error) {
       throw new Error("Error updating delivery person");

@@ -2,7 +2,7 @@ import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Origin } from "@/shared/factories/origins-factory";
 import { columns } from "./origins-columns";
-import { RenderTable } from "@/components/render-table/render-table";
+import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
@@ -32,7 +32,7 @@ export function OriginsTable(props: IOriginsTableProps) {
   if (isLoading || isFetching)
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <LoadingSpinner text="Buscando todos produtos" className="w-12 h-12" />
+        <LoadingSpinner text="Buscando todas as origens" className="w-12 h-12" />
       </div>
     );
 

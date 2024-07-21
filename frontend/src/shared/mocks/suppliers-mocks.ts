@@ -11,7 +11,7 @@ export async function createSuppliersMockBasedOnLength(total: number) {
     const raw: SupplierResponse = {
       id: i,
       name: faker.company.name(),
-      cnpj: new CNPJ().formatCNPJ(),
+      cnpj: new CNPJ().value,
       automatic_invoicing: faker.datatype.boolean(),
       status: faker.helpers.arrayElement(["enabled", "draft", "archived"]),
       created_at: faker.date.recent().toISOString(),

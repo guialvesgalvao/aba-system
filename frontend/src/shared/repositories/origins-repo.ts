@@ -15,15 +15,25 @@ export class OriginsRepo {
     return response.data;
   }
 
-  async getById(id: number): Promise<OriginResponse> {
-    const response = await axios.get<OriginResponse>(
-      `${this._API_URL}/${id}`,
+  async getOriginsByStatus(status: string): Promise<OriginResponse[]> {
+    const response = await axios.get<OriginResponse[]>(
+      `${this._API_URL}?status=${status}`,
       {
         headers: {
           "X-API-KEY": this._API_KEY,
         },
       }
     );
+
+    return response.data;
+  }
+
+  async getById(id: number): Promise<OriginResponse> {
+    const response = await axios.get<OriginResponse>(`${this._API_URL}/${id}`, {
+      headers: {
+        "X-API-KEY": this._API_KEY,
+      },
+    });
 
     return response.data;
   }

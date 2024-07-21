@@ -19,10 +19,12 @@ export function BodyTable<T>(props: Readonly<IBodyTableProps<T>>) {
   // Se não houver linhas, exibe a mensagem de tabela vazia
   if (!table.getRowModel().rows?.length)
     return (
-      <EmptyTableRow
-        columnsLength={table.getAllColumns().length}
-        message={emptyMessage}
-      />
+      <TableBody>
+        <EmptyTableRow
+          columnsLength={table.getAllColumns().length}
+          message={emptyMessage}
+        />
+      </TableBody>
     );
 
   return (

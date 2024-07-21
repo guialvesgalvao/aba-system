@@ -1,7 +1,7 @@
 import { Product } from "../factories/products-factory";
 import { ProductsModel } from "../models/products-model";
 import { ProductsRepo } from "../repositories/products-repo";
-import { ProductRequest } from "../types/products-types";
+import { ProductRequest, ProductStatus } from "../types/products-types";
 
 export default class ProductsService implements ProductsModel {
   private _repository: ProductsRepo;
@@ -9,15 +9,23 @@ export default class ProductsService implements ProductsModel {
   constructor() {
     this._repository = new ProductsRepo();
 
-    this.getProducts = this.getProducts.bind(this);
+    this.getAllProducts = this.getAllProducts.bind(this);
+    this.getProductsByStatus = this.getProductsByStatus.bind(this);
     this.getProductById = this.getProductById.bind(this);
     this.createProduct = this.createProduct.bind(this);
     this.updateProduct = this.updateProduct.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this);
   }
 
-  async getProducts(): Promise<Product[]> {
+  async getAllProducts(): Promise<Product[]> {
     const productsFromRepo = await this._repository.getAllProducts();
+    const products = productsFromRepo.map((product) => new Product(product));
+
+    return products;
+  }
+
+  async getProductsByStatus(status: ProductStatus): Promise<Product[]> {
+    const productsFromRepo = await this._repository.getProductsByStatus(status);
     const products = productsFromRepo.map((product) => new Product(product));
 
     return products;

@@ -68,7 +68,9 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
       renderSubComponent={({ row }) => {
         return (
           <pre style={{ fontSize: "10px" }}>
-            <code>{JSON.stringify(row.original, null, 2)}</code>
+            <code>
+              {JSON.stringify(row.original.supplier_products, null, 2)}
+            </code>
           </pre>
         );
       }}

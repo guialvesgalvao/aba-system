@@ -1,13 +1,20 @@
 import { Supplier } from "../factories/suppliers-factory";
 import { SuppliersModel } from "../models/suppliers-model";
 import { SuppliersRepo } from "../repositories/suppliers-repo";
+import { SuppliersProductsRepo } from "../repositories/suppliers-products-repo";
 import { SupplierRequest, SupplierStatus } from "../types/suppliers-types";
+import { ProductsRepo } from "../repositories/products-repo";
+import { aggregateSuppliersData } from "../helpers/suppliers-helper/combine-suppliers-products";
 
 export default class SuppliersService implements SuppliersModel {
   private _repository: SuppliersRepo;
+  private _repositorySuppliersProducts: SuppliersProductsRepo;
+  private _repositoryProducts: ProductsRepo;
 
   constructor() {
     this._repository = new SuppliersRepo();
+    this._repositorySuppliersProducts = new SuppliersProductsRepo();
+    this._repositoryProducts = new ProductsRepo();
 
     this.getAllSuppliers = this.getAllSuppliers.bind(this);
     this.getSuppliersByStatus = this.getSuppliersByStatus.bind(this);
@@ -19,9 +26,17 @@ export default class SuppliersService implements SuppliersModel {
 
   async getAllSuppliers(): Promise<Supplier[]> {
     const suppliersFromRepo = await this._repository.getAllSuppliers();
-    const suppliers = suppliersFromRepo.map(
-      (supplier) => new Supplier(supplier)
+    const suppliersProductsFromRepo =
+      await this._repositorySuppliersProducts.getAllSuppliersProducts();
+    const productsFromRepo = await this._repositoryProducts.getAllProducts();
+
+    const integrateData = aggregateSuppliersData(
+      suppliersFromRepo,
+      suppliersProductsFromRepo,
+      productsFromRepo
     );
+
+    const suppliers = integrateData.map((supplier) => new Supplier(supplier));
 
     return suppliers;
   }

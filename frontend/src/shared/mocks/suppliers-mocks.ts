@@ -18,18 +18,6 @@ export async function createSuppliersMockBasedOnLength(total: number) {
       modified_at: faker.date.recent().toISOString(),
       created_by: faker.person.fullName(),
       modified_by: faker.person.fullName(),
-      supplier_products: faker.person.fullName()
-      // supplier_products: {
-      //   id: i,
-      //   validity_period: faker.number.int(),
-      //   value: faker.finance.amount(),
-      //   created_at: faker.date.recent().toISOString(),
-      //   created_by: faker.person.fullName(),
-      //   modified_at: faker.date.recent().toISOString(),
-      //   modified_by: faker.person.fullName(),
-      //   product_id: faker.number.int(),
-      //   supplier_id: faker.number.int(),
-      // },
     };
 
     const supplier = new Supplier(raw);

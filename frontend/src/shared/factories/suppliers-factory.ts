@@ -1,10 +1,12 @@
-import { SupplierResponse, SupplierStatus } from "../types/suppliers-types";
+import { SupplierStatus } from "../types/suppliers-types";
+import { SupplierIntregratedResponse } from "../types/suppliers-types";
+import { SupplierProductResponse } from "../types/suppliers-products-types";
 
 export class Supplier {
   private _id: number;
   private _name: string;
   private _automatic_invoicing: boolean;
-  private _supplier_products: string;
+  private _supplier_products: SupplierProductResponse[] | undefined;
   private _cnpj: string;
   private _status: SupplierStatus;
   private _createdDate: Date;
@@ -12,7 +14,7 @@ export class Supplier {
   private _modifiedDate: Date;
   private _modifiedBy: string;
 
-  constructor(data: SupplierResponse) {
+  constructor(data: SupplierIntregratedResponse) {
     this._id = data.id;
     this._name = data.name;
     this._status = data.status;
@@ -20,13 +22,12 @@ export class Supplier {
     this._automatic_invoicing = data.automatic_invoicing;
     this._supplier_products = data.supplier_products;
 
-    // If the data is not provided, the date will be undefined
+    // Se os dados não forem fornecidos, a data será undefined
     this._createdDate = new Date(data.created_at);
     this._createdBy = data.created_by;
     this._modifiedDate = new Date(data.modified_at);
     this._modifiedBy = data.modified_by;
   }
-
 
   public get id(): number {
     return this._id;
@@ -44,8 +45,8 @@ export class Supplier {
     return this._cnpj;
   }
 
-  public get supplier_products(): string {
-    return this._supplier_products;
+  public get supplier_products(): SupplierProductResponse[] {
+    return this._supplier_products || [];
   }
 
   public get automatic_invoicing(): boolean {

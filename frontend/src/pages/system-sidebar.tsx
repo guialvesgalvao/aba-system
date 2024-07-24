@@ -19,7 +19,7 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
   return (
     <aside
       className={cn(
-        "bg-white w-full h-full group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 border-r fixed transition z-50",
+        "bg-white w-full h-full group flex flex-col gap-4 data-[collapsed=true]:py-2 border-r fixed transition z-50",
         isCollapsed ? "max-w-20" : "max-w-52"
       )}
     >
@@ -28,7 +28,7 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         <Separator className="mb-2" />
         <Nav routes={routes} />
 
-        <div className="flex items-center justify-center mt-auto">
+        <div className="flex items-center justify-center mt-auto py-2">
           <UserAvatar />
         </div>
       </div>

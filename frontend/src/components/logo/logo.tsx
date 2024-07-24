@@ -4,11 +4,11 @@ interface ILogoProps {
   to: string;
 }
 
-export function Logo(props: ILogoProps) {
+export function Logo(props: Readonly<ILogoProps>) {
   const { icon, to } = props;
 
   return (
-    <div className="h-16 flex items-center justify-center">
+    <div className="h-20 flex items-center justify-center">
       <Link to={to} className="flex items-center justify-center h-14">
         {icon}
       </Link>

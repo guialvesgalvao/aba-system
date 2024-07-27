@@ -10,6 +10,9 @@ import {
 import { ArrowUpRight, DollarSign, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarChartRender } from "@/components/charts/bar-chart-render";
+import { OrdersStaticTable } from "@/components/orders/orders-static-table/orders-static-table";
+import { ComponentRequest } from "@/components/component-request/component-request";
+import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 
 function Home() {
   const tiles: TileElement[] = [
@@ -69,12 +72,16 @@ function Home() {
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
             </CardHeader>
-            <CardContent></CardContent>
+            <CardContent className="h-[576px] overflow-auto">
+              <ComponentRequest
+                storages={["products"]}
+                component={OrdersStaticTable}
+                request={() => createProductsMockBasedOnLength(100)}
+              />
+            </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <BarChartRender />
-            <BarChartRender />
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <BarChartRender />
             <BarChartRender />
           </div>

@@ -7,6 +7,12 @@ import { useSidebar } from "@/shared/hooks/use-sidebar";
 export function CollapseButton() {
   const { isCollapsed, toggleSidebar } = useSidebar();
 
+  const icon = isCollapsed ? (
+    <ArrowRightIcon className="w-4 h-4" />
+  ) : (
+    <ArrowLeftIcon className="w-4 h-4" />
+  );
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -14,17 +20,13 @@ export function CollapseButton() {
           type="button"
           variant="outline"
           size="icon"
-          className="w-6 h-6"
+          className="w-6 h-6 text-muted-foreground transition-all hover:text-primary"
           onClick={toggleSidebar}
         >
-          {isCollapsed ? (
-            <ArrowRightIcon className="w-4 h-4" />
-          ) : (
-            <ArrowLeftIcon className="w-4 h-4" />
-          )}
+          {icon}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side="top">
         {isCollapsed ? "Expandir" : "Colapsar"}
       </TooltipContent>
     </Tooltip>

@@ -1,6 +1,13 @@
 import { StaticColumn } from "@/components/static-table/static-table";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/status-badge/status-badge";
+
 import { Product } from "@/shared/factories/products-factory";
+import {
+  getBadgeColorBasedOnStatus,
+  getOrderDescriptionByStatus,
+  getOrderTextByStatus,
+} from "@/shared/helpers/orders-helper/orders-helper";
+import { OrderStatus } from "@/shared/types/orders-types";
 
 export const columns: StaticColumn<Product>[] = [
   {
@@ -21,7 +28,15 @@ export const columns: StaticColumn<Product>[] = [
     id: "status",
     header: "Status",
     cell(row) {
-      return <Badge variant="outline">{row.status}</Badge>;
+      const status: OrderStatus = row.status;
+
+      return (
+        <StatusBadge
+          text={getOrderTextByStatus(status)}
+          className={getBadgeColorBasedOnStatus(status)}
+          description={getOrderDescriptionByStatus(status)}
+        />
+      );
     },
   },
 ];

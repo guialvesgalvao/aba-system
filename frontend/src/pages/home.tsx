@@ -50,9 +50,8 @@ function Home() {
   return (
     <div className="w-full h-full flex flex-col px-6 md:px-8">
       <div className="h-20 flex flex-col justify-center">
-        <h1 className="text-lg font-medium">Aba System</h1>
-        <h4 className="text-gray-600 font-normal">
-          Página inicial do sistema do Aba
+        <h4 className="text-center md:text-start text-gray-600 font-medium">
+          Página inicial do sistema do <SignatureText>Aba</SignatureText>
         </h4>
       </div>
 
@@ -64,8 +63,8 @@ function Home() {
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
                 <CardTitle>Últimos Pedidos</CardTitle>
-                <CardDescription className="flex gap-1">
-                  Os últimos 10 pedidos feitos no
+                <CardDescription>
+                  Os últimos 10 pedidos feitos no{" "}
                   <SignatureText>Aba.</SignatureText>
                 </CardDescription>
               </div>
@@ -78,7 +77,7 @@ function Home() {
               <ComponentRequest
                 storages={["products"]}
                 component={OrdersStaticTable}
-                request={() => createProductsMockBasedOnLength(100)}
+                request={() => createProductsMockBasedOnLength(10)}
               />
             </CardContent>
           </Card>

@@ -6,8 +6,8 @@ export function SignatureText(props: Readonly<ISignatureTextProps>) {
   const { children } = props;
 
   return (
-    <p>
+    <span>
       <strong className="text-primary font-medium">{children}</strong>
-    </p>
+    </span>
   );
 }

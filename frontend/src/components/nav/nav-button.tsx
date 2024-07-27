@@ -2,57 +2,51 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useSidebar } from "@/shared/hooks/use-sidebar";
+import { cn } from "@/lib/utils";
+import { NavCollapsedButton } from "./nav-collapsed-button";
+import { createElement } from "react";
 
-interface INavButtonProps {
+export interface INavButtonProps {
   currentPath: string;
-  icon: JSX.Element;
+  icon: React.ComponentType<{ className?: string }>;
   to: string;
   text: string;
   tooltip?: string;
 }
 
-export function NavButton(props: INavButtonProps) {
+export function NavButton(props: Readonly<INavButtonProps>) {
   const { currentPath, text, icon, to, tooltip } = props;
 
   const { isCollapsed } = useSidebar();
 
+  const isPathSelect = currentPath === to;
+
   // Se o menu estiver colapsado, não exibe o texto do botão
   if (isCollapsed) {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="w-full flex items-center justify-center">
-            <Link to={to}>
-              <Button
-                type="button"
-                variant={currentPath === to ? "default" : "outline"}
-                size="icon"
-                className="w-10 h-10 rounded-md"
-              >
-                {icon}
-              </Button>
-            </Link>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="right">{tooltip}</TooltipContent>
-      </Tooltip>
-    );
+    return <NavCollapsedButton {...props} isPathSelect={isPathSelect} />;
   }
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Link className="w-full" to={to}>
+        <Link className="h-10 md:w-full" to={to}>
           <Button
             type="button"
-            variant={currentPath === to ? "default" : "outline"}
-            className="w-full h-10 flex items-center justify-start gap-2 rounded-md"
+            variant={isPathSelect ? "default" : "ghost"}
+            className={cn(
+              "md:w-full h-10 flex items-center justify-start gap-3 rounded-md px-3 py-2",
+              !isPathSelect &&
+                "text-muted-foreground transition-all hover:text-primary"
+            )}
           >
-            {icon} <span>{text}</span>
+            {createElement(icon, { className: "h-4 w-4" })}
+            <span className="hidden md:flex">{text}</span>
           </Button>
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="right">{tooltip}</TooltipContent>
+      <TooltipContent className="hidden md:flex" side="right">
+        {tooltip}
+      </TooltipContent>
     </Tooltip>
   );
 }

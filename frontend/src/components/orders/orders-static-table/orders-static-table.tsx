@@ -31,7 +31,7 @@ export function OrdersStaticTable(props: Readonly<IOrdersStaticTableProps>) {
 
   return (
     <StaticTable<Product>
-      caption="Pedidos Recentes"
+      caption="Todos os últimos pedidos feitos no sistema"
       headers={columns}
       data={orders}
     />

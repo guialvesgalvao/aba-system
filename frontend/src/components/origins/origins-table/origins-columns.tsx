@@ -32,9 +32,7 @@ import { useSearchParams } from "react-router-dom";
 
 export const columns: ColumnDef<Origin>[] = [
   {
-    header: ({ column }) => (
-      <SortingColumn<Origin> column={column} text="ID" />
-    ),
+    header: ({ column }) => <SortingColumn<Origin> column={column} text="ID" />,
     accessorKey: "id",
   },
   {
@@ -76,6 +74,9 @@ export const columns: ColumnDef<Origin>[] = [
           description={getOriginDescriptionByStatus(status)}
         />
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

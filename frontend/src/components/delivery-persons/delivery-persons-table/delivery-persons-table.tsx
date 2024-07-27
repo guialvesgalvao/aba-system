@@ -5,6 +5,7 @@ import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { STATUS_OPTIONS } from "@/shared/constants";
 
 export interface IDeliveryPersonsTableProps
   extends ComponentResponse<DeliveryPerson> {}
@@ -50,8 +51,14 @@ export function DeliveryPersonsTable(props: IDeliveryPersonsTableProps) {
         placeholder: "Filtrar tipos de entrega pelo nome...",
         columnId: "name",
       }}
-      columnChooser={{
-        text: "Adicionar Colunas",
+      columnFilter={{
+        columns: [
+          {
+            id: "status",
+            title: "Status",
+            options: STATUS_OPTIONS,
+          },
+        ],
       }}
       defaultSorting={[
         {

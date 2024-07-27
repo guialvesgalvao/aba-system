@@ -77,6 +77,9 @@ export const columns: ColumnDef<Product>[] = [
         />
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     header: ({ column }) => (

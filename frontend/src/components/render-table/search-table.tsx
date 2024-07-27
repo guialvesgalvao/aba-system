@@ -21,7 +21,7 @@ export function SearchTable<T>(props: Readonly<ISearchTableProps<T>>) {
         onChange={(event) =>
           table.getColumn(columnId)?.setFilterValue(event.target.value)
         }
-        className="max-w-sm"
+        className="h-8 w-[150px] lg:w-[250px]"
       />
     </div>
   );

@@ -5,6 +5,8 @@ import {
   ColumnFiltersState,
   getCoreRowModel,
   getExpandedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -12,6 +14,7 @@ import {
   Row,
   SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import { Table } from "../ui/table";
@@ -20,8 +23,9 @@ import { BodyTable } from "./body-table";
 
 import { SearchState } from "./search-table";
 import { ColumnChooserState } from "./column-chooser";
-import { TopTableCommands } from "./top-table-commands";
+import { ToolbarTableCommands } from "./toolbar-table-commands";
 import { BottomTableCommands } from "./bottom-table-commands";
+import { ColumnFilterState } from "./column-filter-controller/column-filter-controller";
 
 interface IRenderTableProps<TData> {
   id: string;
@@ -30,6 +34,8 @@ interface IRenderTableProps<TData> {
   columns: ColumnDef<TData>[];
   emptyMessage?: string;
   columnChooser?: ColumnChooserState;
+  columnFilter?: ColumnFilterState;
+
   searchOptions?: SearchState;
   defaultSorting?: SortingState;
   defaultPagination?: PaginationState;
@@ -47,7 +53,12 @@ export default function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
     columns,
     emptyMessage,
     searchOptions,
-    columnChooser,
+    columnChooser = {
+      text: "Colunas",
+    },
+    columnFilter = {
+      columns: [],
+    },
     defaultSorting,
     defaultPagination = {
       pageSize: 10,
@@ -62,22 +73,35 @@ export default function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
   const [pagination, setPagination] =
     useState<PaginationState>(defaultPagination);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
     columns,
+    rowCount: data.length,
+
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+
     onSortingChange: setSorting,
+
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    rowCount: data.length,
+
+    onColumnVisibilityChange: setColumnVisibility,
+
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand,
+
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+
     state: {
       sorting,
+      columnVisibility,
       pagination,
       columnFilters,
     },
@@ -86,11 +110,12 @@ export default function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
   return (
     <section id={id} className="h-full flex flex-col justify-between gap-4">
       <div className="flex flex-col gap-2">
-        <TopTableCommands<T>
+        <ToolbarTableCommands<T>
           table={table}
           refetch={refetch}
           searchOptions={searchOptions}
           columnChooser={columnChooser}
+          columnFilter={columnFilter}
         />
 
         <Table>

@@ -6,8 +6,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { ChevronDownIcon } from "lucide-react";
+
 import { getHeaderName } from "@/shared/helpers/table-helper/table-helper";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 
 interface IColumnChooserProps<T> {
   table: Table<T>;
@@ -22,20 +23,29 @@ export function ColumnChooser<T>(props: Readonly<IColumnChooserProps<T>>) {
 
   const columnsWithCanHide = table
     .getAllColumns()
-    .filter((column) => column.getCanHide());
+    .filter(
+      (column) =>
+        typeof column.accessorFn !== "undefined" && column.getCanHide()
+    );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto">
-          {text} <ChevronDownIcon className="ml-2 h-4 w-4" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
+          <MixerHorizontalIcon className="mr-2 h-4 w-4" />
+          {text}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-[150px]">
         {columnsWithCanHide.map((column) => {
           return (
             <DropdownMenuCheckboxItem
               key={column.id}
+              className="capitalize"
               checked={column.getIsVisible()}
               onCheckedChange={(value) => column.toggleVisibility(!!value)}
             >

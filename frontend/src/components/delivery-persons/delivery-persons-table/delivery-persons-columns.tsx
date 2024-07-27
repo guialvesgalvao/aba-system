@@ -77,6 +77,9 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
         />
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     header: ({ column }) => (
@@ -105,7 +108,10 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
   },
   {
     header: ({ column }) => (
-      <SortingColumn<DeliveryPerson> column={column} text="Última modificação em" />
+      <SortingColumn<DeliveryPerson>
+        column={column}
+        text="Última modificação em"
+      />
     ),
     accessorKey: "modifiedDate",
     meta: {

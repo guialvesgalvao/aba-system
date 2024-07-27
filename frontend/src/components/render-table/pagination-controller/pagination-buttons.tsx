@@ -40,7 +40,7 @@ export function PaginationButtons<T>(
     return pages.map((page) => {
       return (
         <Tooltip key={"page-button-selector" + page}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               type="button"
               variant={pageIndex === page - 1 ? "outline" : "ghost"}
@@ -61,7 +61,7 @@ export function PaginationButtons<T>(
     <Pagination className="w-fit">
       <PaginationContent className="flex items-center flex-wrap">
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               type="button"
               variant="ghost"
@@ -76,7 +76,7 @@ export function PaginationButtons<T>(
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               type="button"
               variant="ghost"
@@ -93,7 +93,7 @@ export function PaginationButtons<T>(
         {createPageButtons(pageIndex)}
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               type="button"
               variant="ghost"
@@ -108,7 +108,7 @@ export function PaginationButtons<T>(
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               type="button"
               variant="ghost"

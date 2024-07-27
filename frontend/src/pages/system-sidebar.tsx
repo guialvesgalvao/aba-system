@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { CollapseButton } from "@/components/collapse-button/collapse-button";
 import { UserAvatar } from "@/components/user-avatar/user-avatar";
 
+import { NavMenu } from "@/components/nav-menu/nav-menu";
+
 interface ISystemSidebarProps {
   routes: AppRoute[];
 }
@@ -21,7 +23,15 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         isCollapsed ? "md:max-w-20" : "md:max-w-52"
       )}
     >
-      <div className="w-full h-full flex md:flex-col gap-4">
+      <div className="w-full h-full flex items-center justify-between md:hidden px-6">
+        <NavMenu routes={routes} />
+
+        <div className="flex items-center justify-center py-2">
+          <UserAvatar />
+        </div>
+      </div>
+
+      <div className="w-full h-full hidden md:flex md:flex-col gap-4">
         <Logo to="/" />
 
         <Nav routes={routes} />

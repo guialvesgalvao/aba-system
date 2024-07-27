@@ -1,6 +1,5 @@
 import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 import { Card, CardContent, CardTitle, CardHeader } from "../ui/card";
-import { Package } from "lucide-react";
 
 export type TileElement = {
   title: string;

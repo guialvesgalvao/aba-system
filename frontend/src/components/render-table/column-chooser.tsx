@@ -32,6 +32,7 @@ export function ColumnChooser<T>(props: Readonly<IColumnChooserProps<T>>) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
+          type="button"
           variant="outline"
           size="sm"
           className="ml-auto hidden h-8 lg:flex"

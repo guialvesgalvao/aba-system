@@ -39,9 +39,10 @@ export function PaginationButtons<T>(
 
     return pages.map((page) => {
       return (
-        <Tooltip>
+        <Tooltip key={"page-button-selector" + page}>
           <TooltipTrigger>
             <Button
+              type="button"
               variant={pageIndex === page - 1 ? "outline" : "ghost"}
               key={"page-button" + page.toString()}
               onClick={() => table.setPageIndex(page - 1)}
@@ -62,6 +63,7 @@ export function PaginationButtons<T>(
         <Tooltip>
           <TooltipTrigger>
             <Button
+              type="button"
               variant="ghost"
               className="h-8 w-8 p-0"
               onClick={() => table.setPageIndex(0)}
@@ -76,6 +78,7 @@ export function PaginationButtons<T>(
         <Tooltip>
           <TooltipTrigger>
             <Button
+              type="button"
               variant="ghost"
               className="h-8 w-8 p-0"
               disabled={!table.getCanPreviousPage()}
@@ -92,6 +95,7 @@ export function PaginationButtons<T>(
         <Tooltip>
           <TooltipTrigger>
             <Button
+              type="button"
               variant="ghost"
               className="h-8 w-8 p-0"
               disabled={!table.getCanNextPage()}
@@ -106,6 +110,7 @@ export function PaginationButtons<T>(
         <Tooltip>
           <TooltipTrigger>
             <Button
+              type="button"
               variant="ghost"
               className="h-8 w-8 p-0"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}

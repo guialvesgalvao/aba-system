@@ -9,7 +9,7 @@ export function RefetchButton(props: Readonly<IRefetchButtonProps>) {
   const { refetch } = props;
 
   return (
-    <Button variant="outline" onClick={() => refetch()}>
+    <Button type="button" variant="outline" onClick={() => refetch()}>
       <RefreshCcw className="w-5 h-5" />
     </Button>
   );

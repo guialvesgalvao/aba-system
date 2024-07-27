@@ -24,6 +24,7 @@ export function NavButton(props: INavButtonProps) {
           <div className="w-full flex items-center justify-center">
             <Link to={to}>
               <Button
+                type="button"
                 variant={currentPath === to ? "default" : "outline"}
                 size="icon"
                 className="w-10 h-10 rounded-md"
@@ -43,6 +44,7 @@ export function NavButton(props: INavButtonProps) {
       <TooltipTrigger asChild>
         <Link className="w-full" to={to}>
           <Button
+            type="button"
             variant={currentPath === to ? "default" : "outline"}
             className="w-full h-10 flex items-center justify-start gap-2 rounded-md"
           >

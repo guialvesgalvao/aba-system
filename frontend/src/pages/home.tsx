@@ -13,6 +13,7 @@ import { BarChartRender } from "@/components/charts/bar-chart-render";
 import { OrdersStaticTable } from "@/components/orders/orders-static-table/orders-static-table";
 import { ComponentRequest } from "@/components/component-request/component-request";
 import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
+import { SignatureText } from "@/components/signature-text/signature-text";
 
 function Home() {
   const tiles: TileElement[] = [
@@ -63,11 +64,12 @@ function Home() {
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
                 <CardTitle>Últimos Pedidos</CardTitle>
-                <CardDescription>
-                  Os últimos pedidos feitos na sua loja.
+                <CardDescription className="flex gap-1">
+                  Os últimos 10 pedidos feitos no
+                  <SignatureText>Aba.</SignatureText>
                 </CardDescription>
               </div>
-              <Button size="sm" className="ml-auto gap-1">
+              <Button type="button" size="sm" className="ml-auto gap-1">
                 Ver pedidos
                 <ArrowUpRight className="h-4 w-4" />
               </Button>

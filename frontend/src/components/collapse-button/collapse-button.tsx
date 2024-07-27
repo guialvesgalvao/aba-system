@@ -11,6 +11,7 @@ export function CollapseButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          type="button"
           variant="outline"
           size="icon"
           className="w-6 h-6"

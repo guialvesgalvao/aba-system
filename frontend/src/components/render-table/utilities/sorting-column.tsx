@@ -29,6 +29,7 @@ export function SortingColumn<T>(props: Readonly<ISortingColumnProps<T>>) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
+            type="button"
             variant="ghost"
             size="sm"
             className="-ml-3 h-8 data-[state=open]:bg-accent"

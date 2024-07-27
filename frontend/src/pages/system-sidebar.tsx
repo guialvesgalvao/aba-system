@@ -31,7 +31,7 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         </div>
       </div>
 
-      <div className="w-full h-full hidden md:flex md:flex-col gap-4">
+      <div className="w-full h-full hidden md:flex md:flex-col gap-2">
         <Logo to="/" />
 
         <Nav routes={routes} />

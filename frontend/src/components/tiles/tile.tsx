@@ -24,7 +24,7 @@ export function Tile(props: Readonly<ITileProps>) {
         </CardTitle>
         {icon}
       </CardHeader>
-      <CardContent>
+      <CardContent className="hover:">
         {isLoading ? (
           <div className="h-20 flex items-center justify-center">
             <LoadingSpinner className="w-10 h-10" />

@@ -14,6 +14,9 @@ import { OrdersStaticTable } from "@/components/orders/orders-static-table/order
 import { ComponentRequest } from "@/components/component-request/component-request";
 import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 import { SignatureText } from "@/components/signature-text/signature-text";
+import { RefreshButton } from "@/components/utilities/refresh-button";
+import { DateRangePicker } from "@/components/inputs/date-range-picker/date-range-picker";
+import { subDays } from "date-fns";
 
 function Home() {
   const tiles: TileElement[] = [
@@ -49,10 +52,21 @@ function Home() {
 
   return (
     <div className="w-full h-full flex flex-col px-6 md:px-8">
-      <div className="h-20 flex flex-col justify-center">
-        <h4 className="text-center md:text-start text-gray-600 font-medium">
-          Página inicial do sistema do <SignatureText>Aba</SignatureText>
-        </h4>
+      <div className="py-6 flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
+        <h4 className="text-2xl font-bold tracking-tight">Página inicial</h4>
+
+        <div className="flex flex-wrap md:flex-nowrap gap-2">
+          <DateRangePicker
+            fromDate={subDays(new Date(), 30)}
+            toDate={new Date()}
+          />
+
+          <RefreshButton
+            variant="default"
+            text="Atualizar"
+            onClick={async () => {}}
+          />
+        </div>
       </div>
 
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
@@ -60,7 +74,7 @@ function Home() {
 
         <div className="h-full grid pb-6 gap-4 md:gap-8 lg:grid-cols-2">
           <Card>
-            <CardHeader className="flex flex-row items-center">
+            <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
               <div className="grid gap-2">
                 <CardTitle>Últimos Pedidos</CardTitle>
                 <CardDescription>
@@ -68,12 +82,12 @@ function Home() {
                   <SignatureText>Aba.</SignatureText>
                 </CardDescription>
               </div>
-              <Button type="button" size="sm" className="ml-auto gap-1">
+              <Button type="button" size="sm" className="gap-1">
                 Ver pedidos
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
             </CardHeader>
-            <CardContent className="h-[576px] overflow-auto">
+            <CardContent className="h-[576px] overflow-auto mr-6">
               <ComponentRequest
                 storages={["products"]}
                 component={OrdersStaticTable}

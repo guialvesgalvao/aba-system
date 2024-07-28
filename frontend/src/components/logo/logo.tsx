@@ -14,8 +14,8 @@ export function Logo(props: Readonly<ILogoProps>) {
   return (
     <div
       className={cn(
-        "flex md:h-14 items-center border-b-0 border-r md:border-b md:border-r-0 px-4 lg:h-[60px] lg:px-6",
-        isCollapsed && "text-primary justify-center"
+        "flex md:h-14 items-center border-b-0 border-r md:border-b md:border-r-0 px-4 lg:h-[60px] lg:px-6 transition-all",
+        isCollapsed && "justify-center"
       )}
     >
       <Link to={to} className="flex items-center gap-2 font-semibold">

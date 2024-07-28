@@ -27,7 +27,13 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         <NavMenu routes={routes} />
 
         <div className="flex items-center justify-center py-2">
-          <UserAvatar />
+          <UserAvatar
+            image=""
+            fallback={{
+              delay: 300,
+              initials: "ADM",
+            }}
+          />
         </div>
       </div>
 
@@ -37,7 +43,17 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         <Nav routes={routes} />
 
         <div className="hidden md:flex items-center justify-center mt-auto py-2">
-          <UserAvatar />
+          <UserAvatar
+            image=""
+            name={{
+              text: "Admin",
+              enabled: !isCollapsed,
+            }}
+            fallback={{
+              delay: 300,
+              initials: "ADM",
+            }}
+          />
         </div>
       </div>
 

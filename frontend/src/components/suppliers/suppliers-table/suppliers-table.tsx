@@ -6,6 +6,8 @@ import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+
+
 import { STATUS_OPTIONS } from "@/shared/constants";
 
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}

@@ -6,9 +6,7 @@ import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
-import SuppliersService from "@/shared/services/suppliers-service";
-import { useEffect, useState } from "react";
-import { SupplierProductExtendedResponse } from "@/shared/types/suppliers-products-types";
+import { SuppliersProducts } from "./suppliers-products";
 
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}
 
@@ -21,11 +19,6 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
     isFetching,
     refetch,
   } = props;
-
-  const [supplierData, setSupplierData] = useState<Supplier[]>(suppliers);
-  const [expandedRowData, setExpandedRowData] = useState<{
-    [key: number]: SupplierProductExtendedResponse[] | null;
-  }>({});
 
   if (isError) {
     return (
@@ -47,21 +40,11 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
       </div>
     );
 
-    const fetchSupplierExtendedData = async (supplier: Supplier) => {
-      const { getSupplierExtendendData } = new SuppliersService();
-      const data = await getSupplierExtendendData(supplier);
-      console.log(data)
-      setExpandedRowData((prev) => ({
-        ...prev,
-        [supplier.id]: data as unknown as SupplierProductExtendedResponse[] | null,
-      }));
-    };
-
   return (
     <RenderTable<Supplier>
       id="suppliers-table"
       refetch={refetch}
-      data={supplierData}
+      data={suppliers}
       columns={columns}
       emptyMessage="Nenhum fornecedor encontrado"
       searchOptions={{
@@ -83,32 +66,9 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
       }}
       defaultSizes={[5, 10, 20]}
       getRowCanExpand={() => true}
-      renderSubComponent={ ({ row }) => {
-        
-        const supplier = row.original;
-        const supplierProducts = expandedRowData[supplier.id];
-
-        useEffect(() => {
-          if (!supplierProducts) {
-            fetchSupplierExtendedData(supplier);
-          }
-        }, [supplierProducts, supplier]);
-
-        if (!supplierProducts) {
-          return (
-            <div className="w-full h-full flex items-center justify-center">
-              <LoadingSpinner text="Carregando produtos do fornecedor..." className="w-12 h-12" />
-            </div>
-          );
-        }
-        return (
-          <pre style={{ fontSize: "10px" }}>
-            <code>
-              {JSON.stringify(row.original.supplier_products, null, 2)}
-            </code>
-          </pre>
-        );
-      }}
+      renderSubComponent={({ row }) => (
+        <SuppliersProducts supplier={row.original} />
+      )}
     />
   );
 }

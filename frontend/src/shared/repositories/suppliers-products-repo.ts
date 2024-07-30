@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   SupplierProductRequest,
   SupplierProductResponse,
-  SupplierProductExtendedResponse
+  SupplierProductExtendedResponse,
 } from "../types/suppliers-products-types";
 
 export class SuppliersProductsRepo {
@@ -19,7 +19,9 @@ export class SuppliersProductsRepo {
     return response.data;
   }
 
-  async getSuppliersProductsExtendend(id: number): Promise<Array<SupplierProductExtendedResponse>> {
+  async getSuppliersProductsExtended(
+    id: number
+  ): Promise<Array<SupplierProductExtendedResponse>> {
     const response = await axios.get<Array<SupplierProductExtendedResponse>>(
       `${this._API_URL}_by_supplier/${id}`,
       {

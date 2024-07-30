@@ -70,15 +70,23 @@ export const columns: ColumnDef<Supplier>[] = [
     enableResizing: true,
     cell({ row }) {
       const value: string = row.getValue("cnpj");
-      // const cnpj = new CNPJ(value).formatCNPJ();
-      const cnpj = value;
 
-      return (
-        <Tooltip delayDuration={400}>
-          <TooltipTrigger>{cnpj}</TooltipTrigger>
-          <TooltipContent className="max-w-80">{cnpj ?? ""}</TooltipContent>
-        </Tooltip>
-      );
+      try {
+        const cnpj = new CNPJ(value).formatCNPJ();
+
+        return (
+          <Tooltip delayDuration={400}>
+            <TooltipTrigger>{cnpj}</TooltipTrigger>
+            <TooltipContent className="max-w-80">{cnpj ?? ""}</TooltipContent>
+          </Tooltip>
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          return <p className="text-red-500 font-medium">{error.message}</p>;
+        }
+
+        return <p>Unexpected Error</p>;
+      }
     },
   },
   {

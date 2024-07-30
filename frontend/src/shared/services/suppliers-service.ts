@@ -23,15 +23,18 @@ export default class SuppliersService implements SuppliersModel {
   async getAllSuppliers(): Promise<Supplier[]> {
     const suppliersFromRepo = await this._repository.getAllSuppliers();
 
-    const suppliers = suppliersFromRepo.map((supplier) => new Supplier(supplier));
+    const suppliers = suppliersFromRepo.map(
+      (supplier) => new Supplier(supplier)
+    );
 
     return suppliers;
   }
 
-  async getSupplierExtendendData(data: Supplier): Promise<Supplier> {
-    
-     const suppliersProductsFromRepo =
-      await this._repositorySuppliersProducts.getSuppliersProductsExtendend(data.id);
+  async getSupplierExtendedData(data: Supplier): Promise<Supplier> {
+    const suppliersProductsFromRepo =
+      await this._repositorySuppliersProducts.getSuppliersProductsExtended(
+        data.id
+      );
 
     const suppliersProducts = new Supplier(data, suppliersProductsFromRepo);
 

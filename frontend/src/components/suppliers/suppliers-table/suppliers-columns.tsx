@@ -167,7 +167,12 @@ export const columns: ColumnDef<Supplier>[] = [
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button type="button" aria-haspopup="true" size="icon" variant="ghost">
+            <Button
+              type="button"
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+            >
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>

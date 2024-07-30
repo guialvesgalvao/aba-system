@@ -7,7 +7,7 @@ import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { AlertCircle } from "lucide-react";
 import { Product } from "@/shared/factories/products-factory";
 
-export interface IOrdersStaticTableProps extends ComponentResponse<any> {}
+export interface IOrdersStaticTableProps extends ComponentResponse<Product> {}
 
 export function OrdersStaticTable(props: Readonly<IOrdersStaticTableProps>) {
   const { data: orders, isLoading, isError, error, isFetching } = props;

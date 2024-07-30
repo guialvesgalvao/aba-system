@@ -10,6 +10,8 @@ import {
 
 import { Button } from "../../ui/button";
 
+import { Switch } from "@/components/ui/switch";
+
 import { Input } from "../../ui/input";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +34,7 @@ import { FormResponse } from "@/components/form-request/form-request";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 const SuppliersFormCreateValidation = z.object({
   id: z
@@ -47,6 +50,7 @@ const SuppliersFormCreateValidation = z.object({
   status: z.enum(["enabled", "draft", "archived"], {
     required_error: "Selecione o status do fornecedor",
   }),
+  cnpj: z.string().optional(),
   created_by: z.string(),
 });
 
@@ -81,7 +85,8 @@ export function SuppliersForm(props: ISuppliersFormProps) {
       </div>
     );
 
-  const { createSupplier, updateSupplier, deleteSupplier } = new SuppliersService();
+  const { createSupplier, updateSupplier, deleteSupplier } =
+    new SuppliersService();
 
   const isEditMode = !!supplier;
 
@@ -146,6 +151,42 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                               placeholder="Adicione o nome do fornecedor"
                               {...field}
                             />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cnpj"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel htmlFor="cnpj">
+                            CNPJ (Opcional)
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Adicione o CNPJ fornecedor"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}                        
+                      name="automatic_invoicing"
+                      render={({ field }) => (
+                        <FormItem>
+                            <Label htmlFor="automatic_invoicing">Faturamento Automático</Label>
+                          <FormControl>
+                            <Switch 
+                            id="automatic_invoicing" 
+                            value={field.name}
+                            defaultChecked={false}/>    
                           </FormControl>
                           <FormMessage />
                         </FormItem>

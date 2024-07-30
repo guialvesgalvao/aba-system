@@ -97,7 +97,7 @@ export function SuppliersDashboard() {
             ),
             archived: (
               <CardData<Supplier>
-                title="Forncedores Arquivados"
+                title="Fornecedores Arquivados"
                 description="Lista de fornecedores arquivados no sistema"
                 table={{
                   storage: ["suppliers", "archived"],
@@ -113,7 +113,7 @@ export function SuppliersDashboard() {
             ),
             draft: (
               <CardData<Supplier>
-                title="Forncedores Rascunho"
+                title="Fornecedores Rascunho"
                 description="Lista de fornecedores em rascunho no sistema"
                 table={{
                   storage: ["suppliers", "draft"],

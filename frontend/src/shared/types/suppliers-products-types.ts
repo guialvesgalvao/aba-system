@@ -1,3 +1,5 @@
+import { ProductResponse } from "./products-types";
+
 export type SupplierProductResponse = {
   id: number;
   validity_period: number;
@@ -16,4 +18,8 @@ export type SupplierProductRequest = {
   value: number;
   product_id: number;
   supplier_id: number;
+};
+
+export type SupplierProductExtendedResponse = SupplierProductResponse & {
+  product_info: ProductResponse;
 };

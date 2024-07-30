@@ -70,7 +70,8 @@ export const columns: ColumnDef<Supplier>[] = [
     enableResizing: true,
     cell({ row }) {
       const value: string = row.getValue("cnpj");
-      const cnpj = new CNPJ(value).formatCNPJ();
+      // const cnpj = new CNPJ(value).formatCNPJ();
+      const cnpj = value;
 
       return (
         <Tooltip delayDuration={400}>

@@ -41,7 +41,7 @@ export function SuppliersDashboard() {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm" className="gap-2">
+                <Button type="button" size="sm" className="gap-2">
                   <CirclePlus size={18} />
                   Criar novo fornecedor
                 </Button>

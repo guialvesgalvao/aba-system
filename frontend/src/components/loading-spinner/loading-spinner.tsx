@@ -5,7 +5,7 @@ interface ILoadingSpinnerProps {
   className?: string;
 }
 
-export function LoadingSpinner(props: ILoadingSpinnerProps) {
+export function LoadingSpinner(props: Readonly<ILoadingSpinnerProps>) {
   const { text, className } = props;
 
   return (

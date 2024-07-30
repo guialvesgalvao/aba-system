@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { Pagination, PaginationContent } from "@/components/ui/pagination";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { generatePaginationPages } from "@/shared/helpers/table-helper/table-helper";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
 interface IPaginationButtonsProps<T> {
@@ -33,16 +39,20 @@ export function PaginationButtons<T>(
 
     return pages.map((page) => {
       return (
-        <PaginationItem key={page}>
-          <PaginationLink
-            onClick={() => table.setPageIndex(page - 1)}
-            size="sm"
-            className="gap-1 cursor-pointer"
-            isActive={pageIndex === page - 1}
-          >
-            {page}
-          </PaginationLink>
-        </PaginationItem>
+        <Tooltip key={"page-button-selector" + page}>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant={pageIndex === page - 1 ? "outline" : "ghost"}
+              key={"page-button" + page.toString()}
+              onClick={() => table.setPageIndex(page - 1)}
+              className="h-8 w-8 p-0 cursor-pointer"
+            >
+              {page}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Ir para página {page}</TooltipContent>
+        </Tooltip>
       );
     });
   }
@@ -50,27 +60,67 @@ export function PaginationButtons<T>(
   return (
     <Pagination className="w-fit">
       <PaginationContent className="flex items-center flex-wrap">
-        <PaginationItem>
-          <Button
-            variant="ghost"
-            disabled={!table.getCanPreviousPage()}
-            onClick={table.previousPage}
-          >
-            Anterior
-          </Button>
-        </PaginationItem>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <DoubleArrowLeftIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Voltar para primeira página</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              disabled={!table.getCanPreviousPage()}
+              onClick={table.previousPage}
+            >
+              <ChevronLeftIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Página anterior</TooltipContent>
+        </Tooltip>
 
         {createPageButtons(pageIndex)}
 
-        <PaginationItem>
-          <Button
-            variant="ghost"
-            disabled={!table.getCanNextPage()}
-            onClick={table.nextPage}
-          >
-            Próximo
-          </Button>
-        </PaginationItem>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              disabled={!table.getCanNextPage()}
+              onClick={table.nextPage}
+            >
+              <ChevronRightIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Próxima página</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <DoubleArrowRightIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Ir para última página</TooltipContent>
+        </Tooltip>
       </PaginationContent>
     </Pagination>
   );

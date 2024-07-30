@@ -77,6 +77,9 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
         />
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     header: ({ column }) => (
@@ -105,7 +108,10 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
   },
   {
     header: ({ column }) => (
-      <SortingColumn<DeliveryPerson> column={column} text="Última modificação em" />
+      <SortingColumn<DeliveryPerson>
+        column={column}
+        text="Última modificação em"
+      />
     ),
     accessorKey: "modifiedDate",
     meta: {
@@ -145,7 +151,12 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
+            <Button
+              type="button"
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+            >
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>

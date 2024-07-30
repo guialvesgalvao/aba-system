@@ -8,6 +8,9 @@ import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
 import { SuppliersProducts } from "./suppliers-products";
 
+
+import { STATUS_OPTIONS } from "@/shared/constants";
+
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}
 
 export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
@@ -51,8 +54,14 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
         placeholder: "Filtrar fornecedores pelo nome...",
         columnId: "name",
       }}
-      columnChooser={{
-        text: "Adicionar Colunas",
+      columnFilter={{
+        columns: [
+          {
+            id: "status",
+            title: "Status",
+            options: STATUS_OPTIONS,
+          },
+        ],
       }}
       defaultSorting={[
         {

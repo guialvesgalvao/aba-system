@@ -33,6 +33,7 @@ export function SubComponentButton(props: Readonly<ISubComponentButtonProps>) {
       <Tooltip delayDuration={400} disableHoverableContent>
         <TooltipTrigger>
           <Button
+            type="button"
             aria-expanded={isExpanded?.valueOf()}
             variant="ghost"
             size="icon"

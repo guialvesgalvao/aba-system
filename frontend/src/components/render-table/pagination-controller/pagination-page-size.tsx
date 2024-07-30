@@ -1,4 +1,10 @@
-import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface IPaginationPageSizeProps {
   sizes: number[];
@@ -14,17 +20,23 @@ export function PaginationPageSize(props: Readonly<IPaginationPageSizeProps>) {
   }
 
   return (
-    <div className="flex items-center gap-1">
-      {sizes.map((size) => (
-        <Button
-          key={size}
-          onClick={() => handlePageSizeChange(size)}
-          size="sm"
-          variant={currentPageSize === size ? "outline" : "ghost"}
-        >
-          {size}
-        </Button>
-      ))}
+    <div className="flex items-center space-x-2">
+      <p className="text-sm font-medium">Linhas por página</p>
+      <Select
+        value={`${currentPageSize}`}
+        onValueChange={(value) => handlePageSizeChange(Number(value))}
+      >
+        <SelectTrigger className="h-8 w-[70px]">
+          <SelectValue placeholder={currentPageSize} />
+        </SelectTrigger>
+        <SelectContent side="top">
+          {sizes.map((pageSize) => (
+            <SelectItem key={pageSize} value={`${pageSize}`}>
+              {pageSize}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

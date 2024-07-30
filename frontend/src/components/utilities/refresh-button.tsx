@@ -1,16 +1,23 @@
 import { RefreshCcw } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button, ButtonProps } from "../ui/button";
 
-interface IRefreshButtonProps {
+interface IRefreshButtonProps extends ButtonProps {
   text: string;
   onClick: () => Promise<void>;
 }
 
 export function RefreshButton(props: Readonly<IRefreshButtonProps>) {
-  const { text, onClick } = props;
+  const { text, onClick, ...rest } = props;
 
   return (
-    <Button variant="outline" size="sm" className="gap-2" onClick={onClick}>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      className="gap-2"
+      onClick={onClick}
+      {...rest}
+    >
       <RefreshCcw size={18} />
       {text}
     </Button>

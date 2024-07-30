@@ -1,26 +1,49 @@
-import { Card, CardContent, CardTitle,CardHeader } from "../ui/card"
-import { Package } from 'lucide-react'; // substitua LucideIconName pelo nome do ícone desejado
+import { LoadingSpinner } from "../loading-spinner/loading-spinner";
+import { Card, CardContent, CardTitle, CardHeader } from "../ui/card";
 
-interface ITileProps {
-    title: string;
-    value: string;
-    percentage: string;
-    description: string;
+export type TileElement = {
+  title: string;
+  icon: React.ReactNode;
+  value: string;
+  percentage: string;
+  description: string;
+};
+
+interface ITileProps extends TileElement {}
+
+export function Tile(props: Readonly<ITileProps>) {
+  const { title, icon, value, percentage, description } = props;
+
+  const isLoading = false;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium text-gray-600">
+          {title}
+        </CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent className="hover:">
+        {isLoading ? (
+          <div className="h-20 flex items-center justify-center">
+            <LoadingSpinner className="w-10 h-10" />
+          </div>
+        ) : (
+          <>
+            <div className="text-xl font-bold">{value}</div>
+            <p
+              title={percentage + " " + description}
+              className="text-xs flex gap-1 text-muted-foreground"
+            >
+              <strong className="text-green-500 font-medium">
+                {percentage}
+              </strong>
+              {description}
+            </p>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
 }
-
-export function Tile ({title, value, percentage, description}:Readonly<ITileProps>  ) {
-
-    return(
-        <Card className="w-full p-4 shadow-lg rounded-lg border border-gray-200">
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
-          <Package className="w-6 h-6 text-gray-400" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{value}</div>
-          <div className="text-sm text-green-500">{percentage}</div>
-          <div className="text-xs text-gray-500">{description}</div>
-        </CardContent>
-      </Card>
-    )
-} 

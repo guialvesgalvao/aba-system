@@ -1,30 +1,37 @@
-import { SupplierResponse, SupplierStatus } from "../types/suppliers-types";
+import { SupplierStatus, SupplierResponse } from "../types/suppliers-types";
+import { SupplierProductExtendedResponse } from "../types/suppliers-products-types";
 
 export class Supplier {
   private _id: number;
   private _name: string;
   private _automatic_invoicing: boolean;
+  private _supplier_products: SupplierProductExtendedResponse[] | undefined;
   private _cnpj: string;
   private _status: SupplierStatus;
-  private _createdDate: Date;
-  private _createdBy: string;
-  private _modifiedDate: Date;
-  private _modifiedBy: string;
+  private _createdDate: Date | null;
+  private _createdBy: string | null;
+  private _modifiedDate: Date | null;
+  private _modifiedBy: string | null;
 
-  constructor(data: SupplierResponse) {
+  constructor(
+    data: SupplierResponse | Supplier,
+    supplier_product?: Array<SupplierProductExtendedResponse> | undefined
+  ) {
     this._id = data.id;
     this._name = data.name;
     this._status = data.status;
     this._cnpj = data.cnpj;
     this._automatic_invoicing = data.automatic_invoicing;
+    this._supplier_products = supplier_product ?? undefined;
 
-    // If the data is not provided, the date will be undefined
-    this._createdDate = new Date(data.created_at);
-    this._createdBy = data.created_by;
-    this._modifiedDate = new Date(data.modified_at);
-    this._modifiedBy = data.modified_by;
+    // Se os dados não forem fornecidos, a data será undefined
+    // Verifique a existência dos campos antes de atribuí-los
+    this._createdDate = "created_at" in data ? new Date(data.created_at) : null;
+    this._createdBy = "created_by" in data ? data.created_by : null;
+    this._modifiedDate =
+      "modified_at" in data ? new Date(data.modified_at) : null;
+    this._modifiedBy = "modified_by" in data ? data.modified_by : null;
   }
-
 
   public get id(): number {
     return this._id;
@@ -42,23 +49,31 @@ export class Supplier {
     return this._cnpj;
   }
 
+  public get supplier_products(): SupplierProductExtendedResponse[] {
+    if (this._supplier_products && this._supplier_products.length > 0) {
+      return this._supplier_products;
+    }
+
+    return [];
+  }
+
   public get automatic_invoicing(): boolean {
     return this._automatic_invoicing;
   }
 
-  public get createdDate(): Date {
+  public get createdDate(): Date | null {
     return this._createdDate;
   }
 
-  public get createdBy(): string {
+  public get createdBy(): string | null {
     return this._createdBy;
   }
 
-  public get modifiedDate(): Date {
+  public get modifiedDate(): Date | null {
     return this._modifiedDate;
   }
 
-  public get modifiedBy(): string {
+  public get modifiedBy(): string | null {
     return this._modifiedBy;
   }
 }

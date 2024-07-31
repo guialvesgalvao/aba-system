@@ -16,7 +16,7 @@ interface IFormRequestProps<M> {
   component: (props: FormResponse<M>) => JSX.Element;
 }
 
-export function FormRequest<M>(props: IFormRequestProps<M>) {
+export function FormRequest<M>(props: Readonly<IFormRequestProps<M>>) {
   const [searchParams] = useSearchParams();
 
   const id = searchParams.get("formId");

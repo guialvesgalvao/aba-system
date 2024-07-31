@@ -1,4 +1,5 @@
-import { SortingColumn } from "@/components/render-table/sorting-column";
+import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
+import { SubComponentButton } from "@/components/render-table/utilities/sub-component-button";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
@@ -15,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Supplier } from "@/shared/factories/suppliers-factory";
+import { CNPJ } from "@/shared/helpers/cnpj-helper/cnpj-helper";
 import {
   getFormattedDynamicText,
   getFullFormattedDate,
@@ -24,13 +26,29 @@ import {
   getBadgeColorBasedOnStatus,
   getSupplierDescriptionByStatus,
 } from "@/shared/helpers/suppliers-helper/suppliers-helper";
-import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
+
 import { SupplierStatus } from "@/shared/types/suppliers-types";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
 export const columns: ColumnDef<Supplier>[] = [
+  {
+    id: "expander",
+    header: () => null,
+    cell: ({ row }) => {
+      const isExpanded = row.getIsExpanded();
+
+      return row.getCanExpand() ? (
+        <SubComponentButton
+          isExpanded={isExpanded}
+          onClick={row.getToggleExpandedHandler()}
+        >
+          {isExpanded ? <ChevronDown /> : <ChevronRight />}
+        </SubComponentButton>
+      ) : null;
+    },
+  },
   {
     header: ({ column }) => (
       <SortingColumn<Supplier> column={column} text="ID" />
@@ -44,21 +62,31 @@ export const columns: ColumnDef<Supplier>[] = [
     accessorKey: "name",
   },
   {
-    header: "Descrição",
-    accessorKey: "description",
-    enableSorting: false,
+    header: ({ column }) => (
+      <SortingColumn<Supplier> column={column} text="CNPJ" />
+    ),
+    accessorKey: "cnpj",
+    enableSorting: true,
     enableResizing: true,
     cell({ row }) {
-      const description: string | undefined = row.getValue("description");
+      const value: string = row.getValue("cnpj");
 
-      return (
-        <Tooltip delayDuration={400}>
-          <TooltipTrigger>{getShortedText(30, description)}</TooltipTrigger>
-          <TooltipContent className="max-w-80">
-            {description ?? ""}
-          </TooltipContent>
-        </Tooltip>
-      );
+      try {
+        const cnpj = new CNPJ(value).formatCNPJ();
+
+        return (
+          <Tooltip delayDuration={400}>
+            <TooltipTrigger>{cnpj}</TooltipTrigger>
+            <TooltipContent className="max-w-80">{cnpj ?? ""}</TooltipContent>
+          </Tooltip>
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          return <p className="text-red-500 font-medium">{error.message}</p>;
+        }
+
+        return <p>Unexpected Error</p>;
+      }
     },
   },
   {
@@ -76,6 +104,9 @@ export const columns: ColumnDef<Supplier>[] = [
           description={getSupplierDescriptionByStatus(status)}
         />
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -145,7 +176,12 @@ export const columns: ColumnDef<Supplier>[] = [
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
+            <Button
+              type="button"
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+            >
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>

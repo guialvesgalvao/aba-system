@@ -10,7 +10,7 @@ export interface ISearchTableProps<T> {
 export interface SearchState
   extends Omit<ISearchTableProps<unknown>, "table"> {}
 
-export function SearchTable<T>(props: ISearchTableProps<T>) {
+export function SearchTable<T>(props: Readonly<ISearchTableProps<T>>) {
   const { table, columnId, placeholder } = props;
 
   return (
@@ -21,7 +21,7 @@ export function SearchTable<T>(props: ISearchTableProps<T>) {
         onChange={(event) =>
           table.getColumn(columnId)?.setFilterValue(event.target.value)
         }
-        className="max-w-sm"
+        className="h-8 w-[150px] lg:w-[250px]"
       />
     </div>
   );

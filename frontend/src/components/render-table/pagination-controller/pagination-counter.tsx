@@ -8,7 +8,7 @@ interface IPaginationCounterProps {
   rowCount: number;
 }
 
-export function PaginationCounter(props: IPaginationCounterProps) {
+export function PaginationCounter(props: Readonly<IPaginationCounterProps>) {
   const {
     strings = {
       page: "Página {pageIndex} de {pageCount}",

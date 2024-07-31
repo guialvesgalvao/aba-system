@@ -2,14 +2,18 @@ import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
 import { Supplier } from "@/shared/factories/suppliers-factory";
 import { columns } from "./suppliers-columns";
-import { RenderTable } from "@/components/render-table/render-table";
+import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { SuppliersProducts } from "./suppliers-products";
+
+
+import { STATUS_OPTIONS } from "@/shared/constants";
 
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}
 
-export function SuppliersTable(props: ISuppliersTableProps) {
+export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
   const {
     data: suppliers,
     isLoading,
@@ -32,7 +36,10 @@ export function SuppliersTable(props: ISuppliersTableProps) {
   if (isLoading || isFetching)
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <LoadingSpinner text="Buscando todos fornecedores" className="w-12 h-12" />
+        <LoadingSpinner
+          text="Buscando todos fornecedores"
+          className="w-12 h-12"
+        />
       </div>
     );
 
@@ -47,8 +54,14 @@ export function SuppliersTable(props: ISuppliersTableProps) {
         placeholder: "Filtrar fornecedores pelo nome...",
         columnId: "name",
       }}
-      columnChooser={{
-        text: "Adicionar Colunas",
+      columnFilter={{
+        columns: [
+          {
+            id: "status",
+            title: "Status",
+            options: STATUS_OPTIONS,
+          },
+        ],
       }}
       defaultSorting={[
         {
@@ -61,6 +74,10 @@ export function SuppliersTable(props: ISuppliersTableProps) {
         pageIndex: 0,
       }}
       defaultSizes={[5, 10, 20]}
+      getRowCanExpand={() => true}
+      renderSubComponent={({ row }) => (
+        <SuppliersProducts supplier={row.original} />
+      )}
     />
   );
 }

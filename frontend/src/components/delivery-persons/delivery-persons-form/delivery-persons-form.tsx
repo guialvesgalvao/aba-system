@@ -56,7 +56,9 @@ export type DeliveryPersonsFormValidationType = z.infer<
 
 interface IDeliveryPersonsFormProps extends FormResponse<DeliveryPerson> {}
 
-export function DeliveryPersonsForm(props: IDeliveryPersonsFormProps) {
+export function DeliveryPersonsForm(
+  props: Readonly<IDeliveryPersonsFormProps>
+) {
   const { item: deliveryPerson, isError, isFetching, isLoading, error } = props;
 
   if (isError) {
@@ -81,7 +83,8 @@ export function DeliveryPersonsForm(props: IDeliveryPersonsFormProps) {
       </div>
     );
 
-  const { createDeliveryPerson, updateDeliveryPerson, deleteDeliveryPerson } = new DeliveryPersonsService();
+  const { createDeliveryPerson, updateDeliveryPerson, deleteDeliveryPerson } =
+    new DeliveryPersonsService();
 
   const isEditMode = !!deliveryPerson;
 

@@ -1,4 +1,4 @@
-import { SortingColumn } from "@/components/render-table/sorting-column";
+import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
@@ -77,6 +77,9 @@ export const columns: ColumnDef<Product>[] = [
         />
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     header: ({ column }) => (
@@ -145,7 +148,7 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
+            <Button type="button" aria-haspopup="true" size="icon" variant="ghost">
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>

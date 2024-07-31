@@ -46,11 +46,10 @@ const ProductsFormCreateValidation = z.object({
     })
     .min(1, "Adicione um nome ao produto")
     .max(255, "Adicione no máximo 255 caracteres"),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   status: z.enum(["enabled", "draft", "archived"], {
     required_error: "Selecione o status do produto",
   }),
-  image: z.any(),
   created_by: z.string(),
 });
 
@@ -60,7 +59,7 @@ export type ProductsFormValidationType = z.infer<
 
 interface IProductsFormProps extends FormResponse<Product> {}
 
-export function ProductsForm(props: IProductsFormProps) {
+export function ProductsForm(props: Readonly<IProductsFormProps>) {
   const { item: product, isError, isFetching, isLoading, error } = props;
 
   if (isError) {
@@ -89,20 +88,22 @@ export function ProductsForm(props: IProductsFormProps) {
 
   const isEditMode = !!product;
 
-  function getDefaultValues() {
+  function getDefaultValues(): ProductsFormValidationType {
     if (product) {
       return {
         id: product.id,
         name: product.name,
-        description: product.description,
+        description: product?.description ?? "",
         status: product.status,
-        image: product.image,
         created_by: "admin",
       };
     }
 
     return {
+      name: "",
+      description: "",
       created_by: "admin",
+      status: "enabled",
     };
   }
 
@@ -199,6 +200,7 @@ export function ProductsForm(props: IProductsFormProps) {
                               placeholder="Diga um pouco sobre o produto"
                               rows={6}
                               {...field}
+                              value={field?.value ?? ""}
                             />
                           </FormControl>
                           <FormMessage />

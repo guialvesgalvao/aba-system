@@ -34,6 +34,26 @@ def get_supplier_product_by_id(id):
     supplier_product = SuppliersProducts.query.get_or_404(id)
     return jsonify(supplier_product.as_dict())
 
+@suppliers_products_bp.route('/suppliers_products_by_supplier/<int:supplier_id>', methods=['GET'])
+def get_products_by_supplier(supplier_id):
+    check_api_key()
+    
+    # Obtendo os itens de suppliers_products relacionados ao supplier_id fornecido
+    supplier_products = SuppliersProducts.query.filter_by(supplier_id=supplier_id).all()
+    
+    if not supplier_products:
+        abort(404, 'No products found for the given supplier ID')
+    
+    # Incluindo as informações dos produtos associados
+    products_info = []
+    for sp in supplier_products:
+        product = sp.product  # Assumindo que há um relacionamento definido no modelo SuppliersProducts para acessar o produto
+        sp_dict = sp.as_dict()
+        sp_dict['product_info'] = product.as_dict()  # Assumindo que o modelo Product tem um método as_dict()
+        products_info.append(sp_dict)
+    
+    return jsonify(products_info)
+
 @suppliers_products_bp.route('/suppliers_products/<int:id>', methods=['PUT'])
 def edit_supplier_product_by_id(id):
     check_api_key()

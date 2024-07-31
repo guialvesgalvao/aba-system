@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { NavButton } from "./nav-button";
 
 export type AppRoute = {
-  icon: JSX.Element;
+  icon: React.ComponentType<{ className?: string }>;
   to: string;
   text: string;
   tooltip?: string;
@@ -13,15 +13,15 @@ interface INavProps {
   routes: AppRoute[];
 }
 
-export function Nav(props: INavProps) {
+export function Nav(props: Readonly<INavProps>) {
   const { routes } = props;
 
   const { pathname } = useLocation();
 
   return (
-    <nav className="w-full flex flex-col items-center gap-3 px-2 sm:py-5">
-      {routes?.map((button, index) => (
-        <NavButton key={index} currentPath={pathname} {...button} />
+    <nav className="w-full flex md:flex-col items-center px-2 gap-3 sm:py-5 transition-all">
+      {routes?.map((button) => (
+        <NavButton key={button.to} currentPath={pathname} {...button} />
       ))}
     </nav>
   );

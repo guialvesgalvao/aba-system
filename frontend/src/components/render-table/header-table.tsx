@@ -6,7 +6,7 @@ interface IHeaderTableProps<T> {
   table: Table<T>;
 }
 
-export function HeaderTable<T>(props: IHeaderTableProps<T>) {
+export function HeaderTable<T>(props: Readonly<IHeaderTableProps<T>>) {
   const { table } = props;
 
   return (

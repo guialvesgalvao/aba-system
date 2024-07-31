@@ -16,6 +16,8 @@ class SuppliersProducts(db.Model):
     product_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('products.id'), default=None)
     supplier_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('suppliers.id'), default=None)
 
+    product = db.relationship('Products', backref='suppliers_products')
+    
     def as_dict(self):
         return {
             'id': self.id,

@@ -4,12 +4,17 @@ import {
   ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
+  getExpandedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
+  Row,
   SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import { Table } from "../ui/table";
@@ -18,23 +23,29 @@ import { BodyTable } from "./body-table";
 
 import { SearchState } from "./search-table";
 import { ColumnChooserState } from "./column-chooser";
-import { TopTableCommands } from "./top-table-commands";
+import { ToolbarTableCommands } from "./toolbar-table-commands";
 import { BottomTableCommands } from "./bottom-table-commands";
+import { ColumnFilterState } from "./column-filter-controller/column-filter-controller";
 
-interface IRenderTableProps<T extends unknown> {
+interface IRenderTableProps<TData> {
   id: string;
-  data: T[];
+  data: TData[];
   refetch: (() => Promise<void>) | undefined;
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<TData>[];
   emptyMessage?: string;
   columnChooser?: ColumnChooserState;
+  columnFilter?: ColumnFilterState;
+
   searchOptions?: SearchState;
   defaultSorting?: SortingState;
   defaultPagination?: PaginationState;
   defaultSizes?: number[];
+
+  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
+  getRowCanExpand?: (row: Row<TData>) => boolean;
 }
 
-export function RenderTable<T>(props: IRenderTableProps<T>) {
+export default function RenderTable<T>(props: Readonly<IRenderTableProps<T>>) {
   const {
     id,
     data,
@@ -42,33 +53,55 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
     columns,
     emptyMessage,
     searchOptions,
-    columnChooser,
+    columnChooser = {
+      text: "Colunas",
+    },
+    columnFilter = {
+      columns: [],
+    },
     defaultSorting,
     defaultPagination = {
       pageSize: 10,
       pageIndex: 0,
     },
     defaultSizes = [5, 10, 20],
+    renderSubComponent,
+    getRowCanExpand,
   } = props;
 
   const [sorting, setSorting] = useState<SortingState>(defaultSorting ?? []);
   const [pagination, setPagination] =
     useState<PaginationState>(defaultPagination);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
     columns,
+    rowCount: data.length,
+
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+
     onSortingChange: setSorting,
+
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    rowCount: data.length,
+
+    onColumnVisibilityChange: setColumnVisibility,
+
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand,
+
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+
     state: {
       sorting,
+      columnVisibility,
       pagination,
       columnFilters,
     },
@@ -77,16 +110,21 @@ export function RenderTable<T>(props: IRenderTableProps<T>) {
   return (
     <section id={id} className="h-full flex flex-col justify-between gap-4">
       <div className="flex flex-col gap-2">
-        <TopTableCommands<T>
+        <ToolbarTableCommands<T>
           table={table}
           refetch={refetch}
           searchOptions={searchOptions}
           columnChooser={columnChooser}
+          columnFilter={columnFilter}
         />
 
         <Table>
           <HeaderTable<T> table={table} />
-          <BodyTable<T> emptyMessage={emptyMessage} table={table} />
+          <BodyTable<T>
+            emptyMessage={emptyMessage}
+            table={table}
+            renderSubComponent={renderSubComponent}
+          />
         </Table>
       </div>
 

@@ -15,7 +15,7 @@ export class CNPJ {
     } else if (this.isValidCNPJ(value)) {
       this.value = value.replace(/[^\d]/g, ""); // Ensure value is unformatted
     } else {
-      throw new Error("Invalid CNPJ provided.");
+      throw new Error("Valor de CNPJ inválido.");
     }
   }
 

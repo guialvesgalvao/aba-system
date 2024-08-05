@@ -3,12 +3,13 @@ import { StaticColumn } from "./static-table";
 
 interface IStaticTableHeaderProps<TData> {
   columns: StaticColumn<TData>[];
+  hasBorder?: boolean;
 }
 
 export function StaticTableHeader<TData>(
   props: Readonly<IStaticTableHeaderProps<TData>>
 ) {
-  const { columns } = props;
+  const { columns, hasBorder } = props;
 
   function renderHeads(columns: StaticColumn<TData>[]) {
     return columns.map((column, index) => (
@@ -17,7 +18,7 @@ export function StaticTableHeader<TData>(
   }
 
   return (
-    <TableHeader>
+    <TableHeader className={`${hasBorder ? "bg-gray-200 border-b border-gray-300" : ""}`}>
       <TableRow>{renderHeads(columns)}</TableRow>
     </TableHeader>
   );

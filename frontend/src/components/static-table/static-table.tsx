@@ -14,6 +14,7 @@ interface IStaticTableProps<TData> {
   caption?: string;
   headers: StaticColumn<TData>[];
   data: TData[];
+  hasBorder?: boolean;
   rowConfig?: {
     className?: string;
   };
@@ -23,16 +24,16 @@ export function StaticTable<TData>(props: Readonly<IStaticTableProps<TData>>) {
   const {
     caption,
     headers,
+    hasBorder,
     data,
     rowConfig = {
       className: "h-14",
     },
   } = props;
-
   return (
-    <Table>
+    <Table className={`${hasBorder ? 'border border-gray-300' : ''}`}>
       {caption && <TableCaption>{caption}</TableCaption>}
-      <StaticTableHeader columns={headers} />
+      <StaticTableHeader hasBorder={hasBorder} columns={headers} />
       <StaticTableBody columns={headers} data={data} config={rowConfig} />
     </Table>
   );

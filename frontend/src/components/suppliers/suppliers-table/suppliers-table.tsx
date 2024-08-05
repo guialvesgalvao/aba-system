@@ -8,7 +8,6 @@ import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
 import { SuppliersProducts } from "./suppliers-products";
 
-
 import { STATUS_OPTIONS } from "@/shared/constants";
 
 export interface ISuppliersTableProps extends ComponentResponse<Supplier> {}
@@ -76,7 +75,9 @@ export function SuppliersTable(props: Readonly<ISuppliersTableProps>) {
       defaultSizes={[5, 10, 20]}
       getRowCanExpand={() => true}
       renderSubComponent={({ row }) => (
-        <SuppliersProducts supplier={row.original} />
+        <div className="bg-white hover:bg-white">
+          <SuppliersProducts supplier={row.original} />
+        </div>
       )}
     />
   );

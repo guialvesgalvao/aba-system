@@ -9,12 +9,14 @@ import { ProductsDashboard } from "../../pages/products-dashboard";
 import { SuppliersDashboard } from "../../pages/suppliers-dashboard";
 
 import { RepeaterTeste } from "@/pages/RepeaterTeste";
+import { CustomersDashboard } from "@/pages/customers-dashboard";
 
 export function RoutesController() {
   return (
     <Routes>
       <Route path={SystemRoutes.ALL} element={<NotFound />} />
       <Route path={SystemRoutes.HOME} element={<Home />} />
+      <Route path={SystemRoutes.CUSTOMERS} element={<CustomersDashboard />} />
       <Route path={SystemRoutes.PRODUCTS} element={<ProductsDashboard />} />
       <Route path={SystemRoutes.ORIGINS} element={<OriginsDashboard />} />
       <Route

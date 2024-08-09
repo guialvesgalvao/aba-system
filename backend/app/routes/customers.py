@@ -31,37 +31,37 @@ def get_customers():
     
     return jsonify([customer.as_dict() for customer in customers])
 
-@customers_bp.route('/customers/<int:id>', methods=['GET'])
-def get_origin_by_id(id):
+@customers_bp.route('/customer/<int:id>', methods=['GET'])
+def get_customer_by_id(id):
     check_api_key()
-    origin = Customers.query.get_or_404(id)
-    return jsonify(origin.as_dict())
+    customer = Customers.query.get_or_404(id)
+    return jsonify(customer.as_dict())
 
-@customers_bp.route('/customers/<int:id>', methods=['PUT'])
-def edit_origin_by_id(id):
+@customers_bp.route('/customer/<int:id>', methods=['PUT'])
+def edit_customer_by_id(id):
     check_api_key()
-    origin = Customers.query.get_or_404(id)
+    customer = Customers.query.get_or_404(id)
     data = request.get_json()
     if not data:
         abort(400, 'Invalid data')
 
-    origin.name = data.get('fantasy_name', origin.name)
-    origin.status = data.get('status', origin.status)
-    origin.modified_by = data.get('modified_by', origin.modified_by)
-    origin.modified_at = datetime.now()
+    customer.fantasy_name = data.get('fantasy_name', customer.fantasy_name)
+    customer.status = data.get('status', customer.status)
+    customer.modified_by = data.get('modified_by', customer.modified_by)
+    customer.modified_at = datetime.now()
 
     db.session.commit()
-    return jsonify(origin.as_dict())
+    return jsonify(customer.as_dict())
 
 @customers_bp.route('/customers', methods=['POST'])
-def create_new_origin():
+def create_new_customer():
     check_api_key()
     data = request.get_json()
-    if not data or not all(k in data for k in ("name", "status", "created_by")):
+    if not data or not all(k in data for k in ("fantasy_name", "status", "created_by")):
         abort(400, 'Invalid data')
 
     new_customer = Customers(
-        name=data['fantasy_name'],
+        fantasy_name=data['fantasy_name'],
         status=data['status'],
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
@@ -75,7 +75,7 @@ def create_new_origin():
 @customers_bp.route('/customers/<int:id>', methods=['DELETE'])
 def delete_customer(id):
     check_api_key()
-    origin = Customers.query.get_or_404(id)
-    db.session.delete(origin)
+    customer = Customers.query.get_or_404(id)
+    db.session.delete(customer)
     db.session.commit()
     return '', 204

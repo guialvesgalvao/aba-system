@@ -10,6 +10,7 @@ import {
   Factory,
   MapPin,
   Package,
+  User,
   Truck,
 } from "lucide-react";
 
@@ -43,6 +44,12 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     to: "/products",
     text: "Produtos",
     tooltip: "Ir para páginas de produtos",
+  },
+  {
+    icon: User,
+    to: "/customers",
+    text: "Clientes",
+    tooltip: "Ir para páginas de Clientes",
   },
   {
     icon: Factory,

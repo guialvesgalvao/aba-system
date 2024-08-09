@@ -14,6 +14,7 @@ import { DeliveryPersonsDashboard } from "./pages/delivery-persons-dashboard";
 import { SuppliersDashboard } from "./pages/suppliers-dashboard";
 
 import { SYSTEM_ROUTES } from "./shared/constants";
+import { CustomersDashboard } from "./pages/customers-dashboard";
 
 export default function App() {
   return (
@@ -29,6 +30,10 @@ export default function App() {
               <Route
                 path={SystemRoutes.PRODUCTS}
                 element={<ProductsDashboard />}
+              />
+              <Route
+                path={SystemRoutes.CUSTOMERS}
+                element={<CustomersDashboard />}
               />
               <Route
                 path={SystemRoutes.ORIGINS}

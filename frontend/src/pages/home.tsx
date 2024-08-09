@@ -18,7 +18,7 @@ import { RefreshButton } from "@/components/utilities/refresh-button";
 import { DateRangePicker } from "@/components/inputs/date-range-picker/date-range-picker";
 import { subDays } from "date-fns";
 
-function Home() {
+export function Home() {
   const tiles: TileElement[] = [
     {
       title: "Valor Total Vendido",
@@ -105,5 +105,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

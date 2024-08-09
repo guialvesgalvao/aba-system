@@ -18,7 +18,7 @@ interface IRenderFormProps<T extends FieldValues> {
   onSubmit: (data: T) => Promise<T | void>;
   onCreate?: (data: T) => Promise<T | void>;
   onUpdate?: (data: T) => Promise<T | void>;
-  onDelete: (id: number) => Promise<void>;
+  onDelete?: (id: number) => Promise<void>;
   onRender: (options: OnRenderProps<T>) => React.ReactNode;
 }
 

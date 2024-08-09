@@ -4,12 +4,8 @@ import App from "./app.tsx";
 
 import "./index.css";
 
-import { TooltipProvider } from "./components/ui/tooltip.tsx";
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <TooltipProvider delayDuration={0}>
-      <App />
-    </TooltipProvider>
+    <App />
   </React.StrictMode>
 );

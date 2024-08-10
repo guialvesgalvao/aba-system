@@ -3,7 +3,6 @@ import { SystemSidebar } from "./pages/system-sidebar";
 import { AppCollapsedWrapper } from "./components/app-collapsed-wrapper/app-collapsed-wrapper";
 
 import { SYSTEM_ROUTES } from "./shared/constants";
-import { CustomersDashboard } from "./pages/customers-dashboard";
 
 import { RoutesController } from "./components/routes-controller/routes-controller";
 import { ProvidersWrapper } from "./components/providers-wrapper/providers-wrapper";

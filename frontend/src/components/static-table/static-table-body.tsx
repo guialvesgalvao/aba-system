@@ -1,5 +1,6 @@
+import { useMemo } from "react";
 import { TableBody, TableCell, TableRow } from "../ui/table";
-import { StaticColumn } from "./static-table";
+import { StaticColumn, StaticSortState } from "./static-table";
 
 export type RowConfig = {
   className?: string;
@@ -9,13 +10,28 @@ interface IStaticTableBodyProps<TData> {
   columns: StaticColumn<TData>[];
   data: TData[];
   config: RowConfig;
+
+  defaultSorting?: StaticSortState<TData>;
 }
 
 export function StaticTableBody<TData>(
   props: Readonly<IStaticTableBodyProps<TData>>
 ) {
-  const { columns, data, config } = props;
+  const { columns, data, config, defaultSorting } = props;
   const { className } = config;
+
+  const sortedData = useMemo(() => {
+    if (!defaultSorting) return data;
+
+    const { id, desc } = defaultSorting;
+    const sorted = [...data].sort((a, b) => {
+      if (a[id] < b[id]) return desc ? 1 : -1;
+      if (a[id] > b[id]) return desc ? -1 : 1;
+      return 0;
+    });
+
+    return sorted;
+  }, [data, defaultSorting]);
 
   function renderRow(data: TData[]) {
     return data?.map((row, index) => (
@@ -35,5 +51,5 @@ export function StaticTableBody<TData>(
     });
   }
 
-  return <TableBody className={className}>{renderRow(data)}</TableBody>;
+  return <TableBody className={className}>{renderRow(sortedData)}</TableBody>;
 }

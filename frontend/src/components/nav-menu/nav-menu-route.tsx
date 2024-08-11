@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
 
 interface INavMenuRouteProps extends AppRoute {
   currentPath: string;
+  handleMenuControl: (value: boolean) => void;
 }
 
 export function NavMenuRoute(props: Readonly<INavMenuRouteProps>) {
-  const { currentPath, to, icon, text } = props;
+  const { currentPath, to, icon, text, handleMenuControl } = props;
 
   const isPathSelect = currentPath === to;
 
@@ -21,6 +22,7 @@ export function NavMenuRoute(props: Readonly<INavMenuRouteProps>) {
           ? "text-primary"
           : "text-muted-foreground hover:text-foreground "
       )}
+      onClick={() => handleMenuControl(false)}
     >
       {createElement(icon, {
         className: "h-6 w-6",

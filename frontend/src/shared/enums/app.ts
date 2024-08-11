@@ -3,7 +3,8 @@ export enum SystemRoutes {
   HOME = "/",
   PRODUCTS = "/products",
   ORIGINS = "/origins",
-  DELIVERYPERSONS = "/delivery-persons",
+  ORDERS = "/orders",
+  DELIVERY_PERSONS = "/delivery-persons",
   SUPPLIERS = "/suppliers",
   CUSTOMERS = "/customers",
 }

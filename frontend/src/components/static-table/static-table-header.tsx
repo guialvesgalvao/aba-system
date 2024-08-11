@@ -1,5 +1,6 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StaticColumn } from "./static-table";
+import { StaticSortColumn } from "./utilities/static-sort-column";
 
 interface IStaticTableHeaderProps<TData> {
   columns: StaticColumn<TData>[];
@@ -12,13 +13,19 @@ export function StaticTableHeader<TData>(
   const { columns, hasBorder } = props;
 
   function renderHeads(columns: StaticColumn<TData>[]) {
-    return columns.map((column, index) => (
-      <TableHead key={"static-table-column" + index}>{column.header}</TableHead>
-    ));
+    return columns.map((column) => {
+      return (
+        <TableHead key={"static-table-column" + (column.id as string)}>
+          <StaticSortColumn<TData> column={column} />
+        </TableHead>
+      );
+    });
   }
 
   return (
-    <TableHeader className={`${hasBorder ? "bg-gray-200 border-b border-gray-300" : ""}`}>
+    <TableHeader
+      className={`${hasBorder ? "bg-gray-200 border-b border-gray-300" : ""}`}
+    >
       <TableRow>{renderHeads(columns)}</TableRow>
     </TableHeader>
   );

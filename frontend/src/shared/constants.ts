@@ -12,6 +12,7 @@ import {
   Package,
   User,
   Truck,
+  ShoppingBag,
 } from "lucide-react";
 
 export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
@@ -40,10 +41,16 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     tooltip: "Ir para página inicial",
   },
   {
+    icon: ShoppingBag,
+    to: "/orders",
+    text: "Pedidos",
+    tooltip: "Ir para páginas de Pedidos",
+  },
+  {
     icon: Package,
     to: "/products",
     text: "Produtos",
-    tooltip: "Ir para páginas de produtos",
+    tooltip: "Ir para páginas de Produtos",
   },
   {
     icon: User,
@@ -55,18 +62,18 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     icon: Factory,
     to: "/suppliers",
     text: "Fornecedores",
-    tooltip: "Ir para páginas de fornecedores",
+    tooltip: "Ir para páginas de Fornecedores",
   },
   {
     icon: MapPin,
     to: "/origins",
     text: "Origens",
-    tooltip: "Ir para páginas de origens",
+    tooltip: "Ir para páginas de Origens",
   },
   {
     icon: Truck,
     to: "/delivery-persons",
     text: "Tipos de Entrega",
-    tooltip: "Ir para páginas de tipos de entrega",
+    tooltip: "Ir para páginas de Tipos de Entrega",
   },
 ];

@@ -1,10 +1,10 @@
+import { useMediaQuery } from "@/shared/hooks/use-media-query";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
 
 interface IUserAvatarProps {
   name?: {
     text: string;
-    enabled?: boolean;
   };
   image: string;
   fallback?: {
@@ -14,6 +14,8 @@ interface IUserAvatarProps {
 }
 
 export function UserAvatar(props: Readonly<IUserAvatarProps>) {
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   const {
     name = {
       text: "User",
@@ -36,9 +38,7 @@ export function UserAvatar(props: Readonly<IUserAvatarProps>) {
           </AvatarFallback>
         )}
       </Avatar>
-      {name && name.enabled && (
-        <Label className="font-medium">{name.text}</Label>
-      )}
+      {name && !isMobile && <Label className="font-medium">{name.text}</Label>}
     </div>
   );
 }

@@ -7,16 +7,24 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { ArrowUpRight, DollarSign, Package } from "lucide-react";
+import { ArrowUpRight, DollarSign, Package, RefreshCcwDot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarChartRender } from "@/components/charts/bar-chart-render";
 import { OrdersStaticTable } from "@/components/orders/orders-static-table/orders-static-table";
 import { ComponentRequest } from "@/components/component-request/component-request";
-import { createProductsMockBasedOnLength } from "@/shared/mocks/products-mocks";
 import { SignatureText } from "@/components/signature-text/signature-text";
 import { RefreshButton } from "@/components/utilities/refresh-button";
-import { DateRangePicker } from "@/components/inputs/date-range-picker/date-range-picker";
-import { subDays } from "date-fns";
+
+import { useNavigate } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { TitlePage } from "@/components/title-page/title-page";
+import { Order } from "@/shared/factories/orders-factory";
+import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
+import { createOrdersMockBasedOnLength } from "@/shared/mocks/orders-mocks";
 
 export function Home() {
   const tiles: TileElement[] = [
@@ -51,23 +59,21 @@ export function Home() {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col px-6 md:px-8">
-      <div className="py-6 flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
-        <h4 className="text-2xl font-bold tracking-tight">Página inicial</h4>
+    <>
+      <header className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
+        <TitlePage
+          title="Página Inicial"
+          subtitle="Analise e Gerencie os pedidos do Aba"
+        />
 
         <div className="flex flex-wrap md:flex-nowrap gap-2">
-          <DateRangePicker
-            fromDate={subDays(new Date(), 30)}
-            toDate={new Date()}
-          />
-
           <RefreshButton
             variant="default"
             text="Atualizar"
             onClick={async () => {}}
           />
         </div>
-      </div>
+      </header>
 
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
         <Tiles tiles={tiles} />
@@ -82,16 +88,18 @@ export function Home() {
                   <SignatureText>Aba.</SignatureText>
                 </CardDescription>
               </div>
-              <Button type="button" size="sm" className="gap-1">
-                Ver pedidos
-                <ArrowUpRight className="h-4 w-4" />
-              </Button>
+
+              <div className="flex gap-2">
+                <ButtonRefreshLastOrders />
+                <ButtonRedirectOrders />
+              </div>
             </CardHeader>
+
             <CardContent className="h-[576px] overflow-auto mr-6">
-              <ComponentRequest
-                storages={["products"]}
+              <ComponentRequest<Order>
+                storages={["orders", "last"]}
                 component={OrdersStaticTable}
-                request={() => createProductsMockBasedOnLength(10)}
+                request={() => createOrdersMockBasedOnLength(100)}
               />
             </CardContent>
           </Card>
@@ -102,6 +110,58 @@ export function Home() {
           </div>
         </div>
       </main>
-    </div>
+    </>
+  );
+}
+
+function ButtonRefreshLastOrders() {
+  async function refreshLastOrders() {
+    await fetchAppQuery<Order[]>(["orders", "last"]);
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <Button
+          variant="outline"
+          type="button"
+          size="sm"
+          className="gap-1"
+          onClick={refreshLastOrders}
+        >
+          Atualizar Pedidos
+          <RefreshCcwDot className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        Clique aqui para atualizar lista de pedidos
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function ButtonRedirectOrders() {
+  const navigate = useNavigate();
+
+  function navigateToOrdersDashboard() {
+    navigate("/orders");
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <Button
+          variant="outline"
+          type="button"
+          size="sm"
+          className="gap-1"
+          onClick={navigateToOrdersDashboard}
+        >
+          Ver pedidos
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>Clique aqui para acessar os pedidos</TooltipContent>
+    </Tooltip>
   );
 }

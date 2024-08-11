@@ -4,7 +4,7 @@ export async function fetchAppQuery<TResponse>(
   queryKey: string[]
 ): Promise<TResponse> {
   try {
-    const response = (await queryClient.fetchQuery({ queryKey })) as TResponse;
+    const response: TResponse = await queryClient.fetchQuery({ queryKey });
 
     return response;
   } catch (error) {

@@ -5,9 +5,9 @@ import { columns } from "./orders-static-columns";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { AlertCircle } from "lucide-react";
-import { Product } from "@/shared/factories/products-factory";
+import { Order } from "@/shared/factories/orders-factory";
 
-export interface IOrdersStaticTableProps extends ComponentResponse<Product> {}
+export interface IOrdersStaticTableProps extends ComponentResponse<Order> {}
 
 export function OrdersStaticTable(props: Readonly<IOrdersStaticTableProps>) {
   const { data: orders, isLoading, isError, error, isFetching } = props;
@@ -25,15 +25,19 @@ export function OrdersStaticTable(props: Readonly<IOrdersStaticTableProps>) {
   if (isLoading || isFetching)
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <LoadingSpinner text="Buscando todos produtos" className="w-12 h-12" />
+        <LoadingSpinner text="Buscando todos pedidos" className="w-12 h-12" />
       </div>
     );
 
   return (
-    <StaticTable<Product>
+    <StaticTable<Order>
       caption="Todos os últimos pedidos feitos no sistema"
       headers={columns}
       data={orders}
+      defaultSorting={{
+        id: "modifiedDate",
+        desc: true,
+      }}
     />
   );
 }

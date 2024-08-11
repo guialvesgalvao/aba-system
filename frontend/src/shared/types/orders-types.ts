@@ -9,7 +9,7 @@ export type OrderStatus = keyof typeof OrderStatusEnum;
 export type OrderResponse = {
   id: number;
   client_id: number;
-  status: OrderStatusEnum;
+  status: keyof typeof OrderStatusEnum;
   total_cost_value: number;
   total_sale_value: number;
   extra_details: string;

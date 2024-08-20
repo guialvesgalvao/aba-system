@@ -1,16 +1,16 @@
 import { LoadingSpinner } from "../../loading-spinner/loading-spinner";
 
-import { Origin } from "@/shared/factories/origins-factory";
-import { columns } from "./origins-columns";
+import { Order } from "@/shared/factories/orders-factory";
+import { columns } from "./orders-columns";
 import RenderTable from "@/components/render-table/render-table";
 import { ComponentResponse } from "@/components/component-request/component-request";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
-import { STATUS_OPTIONS } from "@/shared/constants";
+import { STATUS_ORDERS_OPTIONS } from "@/shared/constants";
 
-export interface IOriginsTableProps extends ComponentResponse<Origin> {}
+export interface IOrdersTableProps extends ComponentResponse<Order> {}
 
-export function OriginsTable(props: IOriginsTableProps) {
+export function OrdersTable(props: IOrdersTableProps) {
   const {
     data: products,
     isLoading,
@@ -34,21 +34,21 @@ export function OriginsTable(props: IOriginsTableProps) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <LoadingSpinner
-          text="Buscando todas as origens"
+          text="Buscando todos os pedidos"
           className="w-12 h-12"
         />
       </div>
     );
 
   return (
-    <RenderTable<Origin>
+    <RenderTable<Order>
       id="products-table"
       refetch={refetch}
       data={products}
       columns={columns}
       emptyMessage="Nenhum produto encontrado"
       searchOptions={{
-        placeholder: "Filtrar origem pelo nome...",
+        placeholder: "Filtrar pedidos pelo nome...",
         columnId: "name",
       }}
       columnFilter={{
@@ -56,7 +56,7 @@ export function OriginsTable(props: IOriginsTableProps) {
           {
             id: "status",
             title: "Status",
-            options: STATUS_OPTIONS,
+            options: STATUS_ORDERS_OPTIONS,
           },
         ],
       }}

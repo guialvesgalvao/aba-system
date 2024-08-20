@@ -23,11 +23,13 @@ interface ICardDataProps<T> {
     component: (props: ComponentResponse<T>) => JSX.Element;
   };
 
-  form: {
-    name: string;
-    request: (id: number) => Promise<T>;
-    component: (props: FormResponse<T>) => JSX.Element;
-  };
+  form:
+    | {
+        name: string;
+        request: (id: number) => Promise<T>;
+        component: (props: FormResponse<T>) => JSX.Element;
+      }
+    | null;
 }
 
 export function CardData<T>(props: Readonly<ICardDataProps<T>>) {
@@ -50,14 +52,15 @@ export function CardData<T>(props: Readonly<ICardDataProps<T>>) {
           request={table.request}
           component={table.component}
         />
-
         <DialogContent className="max-w-[1000px]">
           <DialogTitle>Editar Produto</DialogTitle>
-          <FormRequest<T>
-            form={form.name}
-            request={form.request}
-            component={form.component}
-          />
+          { form &&
+            <FormRequest<T>
+              form={form.name}
+              request={form.request}
+              component={form.component}
+            />
+          }
         </DialogContent>
       </CardContent>
     </Card>

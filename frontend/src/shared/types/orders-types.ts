@@ -1,7 +1,8 @@
 export enum OrderStatusEnum {
-  enabled = "enabled",
   draft = "draft",
-  archived = "archived",
+  in_progress = "in_progress",
+  closed = "closed",
+  canceled = "canceled"
 }
 
 export type OrderStatus = keyof typeof OrderStatusEnum;
@@ -9,7 +10,8 @@ export type OrderStatus = keyof typeof OrderStatusEnum;
 export type OrderResponse = {
   id: number;
   client_id: number;
-  status: keyof typeof OrderStatusEnum;
+  origin_id: number;
+  status: OrderStatusEnum;
   total_cost_value: number;
   total_sale_value: number;
   extra_details: string;
@@ -24,6 +26,7 @@ export type OrderResponse = {
 export type OrderRequest = {
   id?: number;
   client_id: number;
+  origin_id: number;
   status: OrderStatusEnum;
   total_cost_value: number;
   total_sale_value: number;

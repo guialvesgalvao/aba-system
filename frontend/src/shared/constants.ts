@@ -73,7 +73,7 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     icon: Package,
     to: "/products",
     text: "Produtos",
-    tooltip: "Ir para páginas de Produtos",
+    tooltip: "Ir para páginas de produtos",
   },
   {
     icon: User,
@@ -85,18 +85,18 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     icon: Factory,
     to: "/suppliers",
     text: "Fornecedores",
-    tooltip: "Ir para páginas de Fornecedores",
+    tooltip: "Ir para páginas de fornecedores",
   },
   {
     icon: MapPin,
     to: "/origins",
     text: "Origens",
-    tooltip: "Ir para páginas de Origens",
+    tooltip: "Ir para páginas de origens",
   },
   {
     icon: Truck,
     to: "/delivery-persons",
     text: "Tipos de Entrega",
-    tooltip: "Ir para páginas de Tipos de Entrega",
+    tooltip: "Ir para páginas de tipos de entrega",
   },
 ];

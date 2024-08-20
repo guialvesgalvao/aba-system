@@ -12,7 +12,7 @@ import {
   Package,
   User,
   Truck,
-  Plus
+  Plus,
 } from "lucide-react";
 
 export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [

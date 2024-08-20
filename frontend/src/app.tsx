@@ -6,14 +6,18 @@ import { SYSTEM_ROUTES } from "./shared/constants";
 
 import { RoutesController } from "./components/routes-controller/routes-controller";
 import { ProvidersWrapper } from "./components/providers-wrapper/providers-wrapper";
+import { AppContentWrapper } from "./components/utilities/app-content-wrapper";
 
 export default function App() {
   return (
     <ProvidersWrapper>
       <div className="w-full flex flex-col md:flex-row">
         <SystemSidebar routes={SYSTEM_ROUTES} />
+
         <AppCollapsedWrapper>
-          <RoutesController />
+          <AppContentWrapper>
+            <RoutesController />
+          </AppContentWrapper>
         </AppCollapsedWrapper>
       </div>
     </ProvidersWrapper>

@@ -21,7 +21,7 @@ export function CollapseButton() {
           variant="outline"
           size="icon"
           className="w-6 h-6 text-muted-foreground transition-all hover:text-primary"
-          onClick={toggleSidebar}
+          onClick={() => toggleSidebar()}
         >
           {icon}
         </Button>

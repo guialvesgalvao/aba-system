@@ -6,6 +6,8 @@ import { NavMenuRoute } from "./nav-menu-route";
 
 import { useLocation } from "react-router-dom";
 import { LinkMention } from "../link-mention/link-mention";
+import { useMediaQuery } from "@/shared/hooks/use-media-query";
+import { useState } from "react";
 
 interface INavMenuProps {
   routes: AppRoute[];
@@ -14,10 +16,19 @@ interface INavMenuProps {
 export function NavMenu(props: Readonly<INavMenuProps>) {
   const { routes } = props;
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   const { pathname } = useLocation();
 
+  const isCollapsedMobile = isMobile && isOpen;
+
+  function handleMenuControl(value: boolean): void {
+    setIsOpen(value);
+  }
+
   return (
-    <Sheet>
+    <Sheet open={isCollapsedMobile} onOpenChange={handleMenuControl}>
       <SheetTrigger asChild>
         <Button
           variant="ghost"
@@ -29,21 +40,27 @@ export function NavMenu(props: Readonly<INavMenuProps>) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">
-        <SheetTitle>Menu</SheetTitle>
+        <SheetTitle>Aba System</SheetTitle>
+
         <nav className="grid gap-2 text-lg font-medium">
           {routes.map((route) => (
-            <NavMenuRoute key={route.to} currentPath={pathname} {...route} />
+            <NavMenuRoute
+              key={route.to}
+              currentPath={pathname}
+              handleMenuControl={handleMenuControl}
+              {...route}
+            />
           ))}
         </nav>
 
         <div className="mt-auto text-sm text-center">
           <p>
             Desenvolvido por <br />
-            <LinkMention to="https://www.linkedin.com/in/olucaspedro/">
+            <LinkMention to="https://www.linkedin.com/in/guigalvao/">
               Guilherme Galvão
             </LinkMention>{" "}
             e{" "}
-            <LinkMention to="https://www.linkedin.com/in/guigalvao/">
+            <LinkMention to="https://www.linkedin.com/in/olucaspedro/">
               Lucas Pedro
             </LinkMention>
           </p>

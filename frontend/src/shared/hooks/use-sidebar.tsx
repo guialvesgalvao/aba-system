@@ -3,12 +3,14 @@ import { useAppStore } from "../stores/app-store";
 export function useSidebar() {
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore();
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (value?: boolean) => {
+    const toggleValue = value ?? !sidebarCollapsed;
+
     localStorage.setItem(
       "aba-system-app:collapsed",
-      JSON.stringify(!sidebarCollapsed)
+      JSON.stringify(toggleValue)
     );
-    setSidebarCollapsed(!sidebarCollapsed);
+    setSidebarCollapsed(toggleValue);
   };
 
   return {

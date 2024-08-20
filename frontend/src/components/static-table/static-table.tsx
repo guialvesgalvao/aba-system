@@ -1,6 +1,7 @@
 import { Table, TableCaption } from "@/components/ui/table";
 import { StaticTableHeader } from "./static-table-header";
 import { StaticTableBody } from "./static-table-body";
+import { StaticTableContextProvider } from "./static-table-provider";
 
 type StaticCell = JSX.Element | string | number | null | undefined;
 
@@ -10,7 +11,12 @@ export type StaticColumn<TData> = {
   cell?: (row: TData) => StaticCell;
 };
 
-interface IStaticTableProps<TData> {
+export type StaticSortState<TData> = {
+  id: keyof TData;
+  desc?: boolean;
+};
+
+export interface IStaticTableProps<TData> {
   caption?: string;
   headers: StaticColumn<TData>[];
   data: TData[];
@@ -18,6 +24,8 @@ interface IStaticTableProps<TData> {
   rowConfig?: {
     className?: string;
   };
+
+  defaultSorting?: StaticSortState<TData>;
 }
 
 export function StaticTable<TData>(props: Readonly<IStaticTableProps<TData>>) {
@@ -29,12 +37,21 @@ export function StaticTable<TData>(props: Readonly<IStaticTableProps<TData>>) {
     rowConfig = {
       className: "h-14",
     },
+    defaultSorting,
   } = props;
+
   return (
-    <Table className={`${hasBorder ? 'border border-gray-300' : ''}`}>
-      {caption && <TableCaption>{caption}</TableCaption>}
-      <StaticTableHeader hasBorder={hasBorder} columns={headers} />
-      <StaticTableBody columns={headers} data={data} config={rowConfig} />
-    </Table>
+    <StaticTableContextProvider<TData> table={props}>
+      <Table className={`${hasBorder ? "border border-gray-300" : ""}`}>
+        {caption && <TableCaption>{caption}</TableCaption>}
+        <StaticTableHeader hasBorder={hasBorder} columns={headers} />
+        <StaticTableBody
+          columns={headers}
+          data={data}
+          config={rowConfig}
+          defaultSorting={defaultSorting}
+        />
+      </Table>
+    </StaticTableContextProvider>
   );
 }

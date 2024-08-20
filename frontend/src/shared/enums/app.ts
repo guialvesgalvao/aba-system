@@ -4,7 +4,7 @@ export enum SystemRoutes {
   ORDERS = "/orders",
   PRODUCTS = "/products",
   ORIGINS = "/origins",
-  DELIVERYPERSONS = "/delivery-persons",
+  DELIVERY_PERSONS = "/delivery-persons",
   SUPPLIERS = "/suppliers",
   CUSTOMERS = "/customers",
 }

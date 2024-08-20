@@ -33,6 +33,29 @@ export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
   },
 ];
 
+export const STATUS_ORDERS_OPTIONS: ColumnFilterOptionsSchema[] = [
+  {
+    value: "draft",
+    label: "Rascunho",
+    icon: BookDashed,
+  },
+  {
+    value: "in_progress",
+    label: "Em andamento",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "closed",
+    label: "Fechado",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "canceled",
+    label: "Cancelado",
+    icon: Archive,
+  },
+];
+
 export const SYSTEM_ROUTES: AppRoute[] = [
   {
     icon: HomeIcon,

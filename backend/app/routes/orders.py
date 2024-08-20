@@ -53,7 +53,6 @@ def create_new_order():
         extra_details=data.get('extra_details'),
         order_date=datetime.fromisoformat(data['order_date']),
         invoicing_date=datetime.fromisoformat(data['invoicing_date']) if data.get('invoicing_date') else None,
-        client_address=data.get('client_address'),
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
         modified_at=datetime.now(),

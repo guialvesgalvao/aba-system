@@ -31,7 +31,6 @@ class Orders(db.Model):
             'extra_details': self.extra_details,
             'order_date': self.order_date.isoformat(),
             'invoicing_date': self.invoicing_date if self.invoicing_date else None,
-            'client_address': self.client_address,
             'created_at': self.created_at.isoformat(),
             'created_by': self.created_by,
             'modified_at': self.modified_at.isoformat(),

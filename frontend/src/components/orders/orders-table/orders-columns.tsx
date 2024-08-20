@@ -39,24 +39,26 @@ export const columns: ColumnDef<Order>[] = [
     header: ({ column }) => (
       <SortingColumn<Order> column={column} text="Cliente" />
     ),
-    accessorKey: "name",
+    accessorKey: "client_name",
   },
   {
-    header: "observações",
-    accessorKey: "extra_details",
-    enableSorting: false,
-    enableResizing: true,
+    header: ({ column }) => (
+      <SortingColumn<Order> column={column} text="Status" />
+    ),
+    accessorKey: "status",
     cell({ row }) {
-      const extra_details: string | undefined = row.getValue("extra_details");
+      const status: OrderStatus = row.getValue("status");
 
       return (
-        <Tooltip delayDuration={400}>
-          <TooltipTrigger>{getShortedText(30, extra_details)}</TooltipTrigger>
-          <TooltipContent className="max-w-80">
-            {extra_details ?? ""}
-          </TooltipContent>
-        </Tooltip>
+        <StatusBadge
+          text={getOrderTextByStatus(status)}
+          className={getBadgeColorBasedOnStatus(status)}
+          description={getOrderDescriptionByStatus(status)}
+        />
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -85,24 +87,23 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
+
   {
-    header: ({ column }) => (
-      <SortingColumn<Order> column={column} text="Status" />
-    ),
-    accessorKey: "status",
+    header: "observações",
+    accessorKey: "extra_details",
+    enableSorting: false,
+    enableResizing: true,
     cell({ row }) {
-      const status: OrderStatus = row.getValue("status");
+      const extra_details: string | undefined = row.getValue("extra_details");
 
       return (
-        <StatusBadge
-          text={getOrderTextByStatus(status)}
-          className={getBadgeColorBasedOnStatus(status)}
-          description={getOrderDescriptionByStatus(status)}
-        />
+        <Tooltip delayDuration={400}>
+          <TooltipTrigger>{getShortedText(30, extra_details)}</TooltipTrigger>
+          <TooltipContent className="max-w-80">
+            {extra_details ?? ""}
+          </TooltipContent>
+        </Tooltip>
       );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {

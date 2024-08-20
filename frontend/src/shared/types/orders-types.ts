@@ -1,7 +1,8 @@
 export enum OrderStatusEnum {
-  enabled = "enabled",
   draft = "draft",
-  archived = "archived",
+  in_progress = "in_progress",
+  closed = "closed",
+  canceled = "canceled"
 }
 
 export type OrderStatus = keyof typeof OrderStatusEnum;

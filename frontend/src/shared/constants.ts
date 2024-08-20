@@ -12,6 +12,7 @@ import {
   Package,
   User,
   Truck,
+  Plus
 } from "lucide-react";
 
 export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
@@ -38,6 +39,12 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     to: "/",
     text: "Início",
     tooltip: "Ir para página inicial",
+  },
+  {
+    icon: Plus,
+    to: "/orders",
+    text: "Pedidos",
+    tooltip: "Ir para páginas de pedidos",
   },
   {
     icon: Package,

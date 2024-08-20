@@ -9,6 +9,7 @@ export type OrderStatus = keyof typeof OrderStatusEnum;
 export type OrderResponse = {
   id: number;
   client_id: number;
+  origin_id: number;
   status: OrderStatusEnum;
   total_cost_value: number;
   total_sale_value: number;
@@ -24,6 +25,7 @@ export type OrderResponse = {
 export type OrderRequest = {
   id?: number;
   client_id: number;
+  origin_id: number;
   status: OrderStatusEnum;
   total_cost_value: number;
   total_sale_value: number;

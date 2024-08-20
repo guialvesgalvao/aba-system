@@ -5,6 +5,7 @@ import { Label } from "../ui/label";
 interface IUserAvatarProps {
   name?: {
     text: string;
+    enabled?: boolean;
   };
   image: string;
   fallback?: {
@@ -38,7 +39,9 @@ export function UserAvatar(props: Readonly<IUserAvatarProps>) {
           </AvatarFallback>
         )}
       </Avatar>
-      {name && !isMobile && <Label className="font-medium">{name.text}</Label>}
+      {name.enabled && !isMobile && (
+        <Label className="font-medium">{name.text}</Label>
+      )}
     </div>
   );
 }

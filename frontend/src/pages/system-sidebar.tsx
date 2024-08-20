@@ -47,6 +47,7 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
             image=""
             name={{
               text: "Admin",
+              enabled: !isCollapsed,
             }}
             fallback={{
               delay: 300,

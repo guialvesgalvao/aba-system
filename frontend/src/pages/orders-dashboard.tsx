@@ -33,12 +33,12 @@ export function OrdersDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Button type="button" size="sm" className="gap-2">
-            <Link to="/google">
+          <Link to={"google"}>
+            <Button type="button" size="sm" className="gap-2">
               <CirclePlus size={18} />
               Criar novo pedido
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </header>
 

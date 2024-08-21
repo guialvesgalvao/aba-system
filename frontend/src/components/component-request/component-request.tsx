@@ -11,7 +11,7 @@ export type ComponentResponse<I> = {
   refetch: () => Promise<void>;
 };
 
-interface IComponentRequestProps<M> {
+export interface IComponentRequestProps<M> {
   storages: string[];
   request: () => Promise<M[]>;
   component: (props: ComponentResponse<M>) => JSX.Element;

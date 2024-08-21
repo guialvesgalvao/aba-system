@@ -1,8 +1,7 @@
 import {
   ComponentRequest,
-  ComponentResponse,
+  IComponentRequestProps,
 } from "../component-request/component-request";
-import { FormRequest, FormResponse } from "../form-request/form-request";
 
 import {
   Card,
@@ -11,29 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { DialogContent, DialogTitle } from "../ui/dialog";
 
 interface ICardDataProps<T> {
   title: string;
   description: string;
-
-  table: {
-    storage: string[];
-    request: () => Promise<T[]>;
-    component: (props: ComponentResponse<T>) => JSX.Element;
-  };
-
-  form:
-    | {
-        name: string;
-        request: (id: number) => Promise<T>;
-        component: (props: FormResponse<T>) => JSX.Element;
-      }
-    | null;
+  table?: IComponentRequestProps<T>;
 }
 
 export function CardData<T>(props: Readonly<ICardDataProps<T>>) {
-  const { title, description, table, form } = props;
+  const { title, description, table } = props;
 
   return (
     <Card className="h-full flex flex-col">
@@ -47,21 +32,7 @@ export function CardData<T>(props: Readonly<ICardDataProps<T>>) {
       </CardHeader>
 
       <CardContent className="h-full">
-        <ComponentRequest<T>
-          storages={table.storage}
-          request={table.request}
-          component={table.component}
-        />
-        <DialogContent className="max-w-[1000px]">
-          <DialogTitle>Editar Produto</DialogTitle>
-          { form &&
-            <FormRequest<T>
-              form={form.name}
-              request={form.request}
-              component={form.component}
-            />
-          }
-        </DialogContent>
+        {table ? <ComponentRequest<T> {...table} /> : null}
       </CardContent>
     </Card>
   );

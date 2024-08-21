@@ -64,7 +64,7 @@ export type CustomersFormValidationType = z.infer<
 interface ICustomersFormProps extends FormResponse<Customer> {}
 
 export function CustomersForm(props: ICustomersFormProps) {
-  const { item: customer, isError, isFetching, isLoading, error } = props;
+  const { formKeys, item: customer, isFetching, isLoading } = props;
 
   if (isError) {
     return (

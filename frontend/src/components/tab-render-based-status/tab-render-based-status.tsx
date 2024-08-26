@@ -3,7 +3,7 @@ import { Tabs, TabsContent } from "../ui/tabs";
 import { useStatusParam } from "@/shared/hooks/use-status-param";
 
 interface ITabRenderBasedStatusProps {
-  tabs: Record<TabsStatusEnum, React.ReactNode>;
+  tabs: Partial<Record<TabsStatusEnum, React.ReactNode>>;
 }
 
 export function TabRenderBasedStatus(
@@ -11,7 +11,9 @@ export function TabRenderBasedStatus(
 ) {
   const { tabs } = props;
   const { currentStatus, onStatusChange } = useStatusParam();
-
+  console.log('teste')
+  console.log(tabs)
+  console.log('teste')
   return (
     <Tabs
       className="h-full flex flex-col"
@@ -26,6 +28,10 @@ export function TabRenderBasedStatus(
         {tabs.enabled}
       </TabsContent>
 
+      <TabsContent className="h-full" value={TabsStatusEnum.Closed}>
+        {tabs.closed}
+      </TabsContent>
+      
       <TabsContent className="h-full" value={TabsStatusEnum.Archived}>
         {tabs.archived}
       </TabsContent>

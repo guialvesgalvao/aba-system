@@ -12,13 +12,14 @@ export interface IOrdersTableProps extends ComponentResponse<Order> {}
 
 export function OrdersTable(props: IOrdersTableProps) {
   const {
-    data: products,
+    data: orders,
     isLoading,
     isError,
     error,
     isFetching,
     refetch,
   } = props;
+
 
   if (isError) {
     return (
@@ -42,9 +43,9 @@ export function OrdersTable(props: IOrdersTableProps) {
 
   return (
     <RenderTable<Order>
-      id="products-table"
+      id="orders-table"
       refetch={refetch}
-      data={products}
+      data={orders}
       columns={columns}
       emptyMessage="Nenhum produto encontrado"
       searchOptions={{

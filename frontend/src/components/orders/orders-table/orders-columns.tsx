@@ -39,7 +39,7 @@ export const columns: ColumnDef<Order>[] = [
     header: ({ column }) => (
       <SortingColumn<Order> column={column} text="Cliente" />
     ),
-    accessorKey: "client_name",
+    accessorKey: "client_id",
   },
   {
     header: ({ column }) => (
@@ -89,7 +89,7 @@ export const columns: ColumnDef<Order>[] = [
   },
 
   {
-    header: "observações",
+    header: "Observações",
     accessorKey: "extra_details",
     enableSorting: false,
     enableResizing: true,

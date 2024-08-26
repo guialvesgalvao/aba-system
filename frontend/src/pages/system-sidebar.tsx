@@ -7,6 +7,7 @@ import { CollapseButton } from "@/components/collapse-button/collapse-button";
 import { UserAvatar } from "@/components/user-avatar/user-avatar";
 
 import { NavMenu } from "@/components/nav-menu/nav-menu";
+import { ModeToggle } from "@/components/theme-button/theme-button";
 
 interface ISystemSidebarProps {
   routes: AppRoute[];
@@ -19,7 +20,7 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
   return (
     <aside
       className={cn(
-        "bg-white w-full h-full group flex flex-col gap-4 data-[collapsed=true]:py-2 border-r fixed transition z-50 border-b md:border-b-0 max-h-20 md:max-h-none",
+        "bg-background w-full h-full group flex flex-col gap-4 data-[collapsed=true]:py-2 border-r fixed transition z-50 border-b md:border-b-0 max-h-20 md:max-h-none",
         isCollapsed ? "md:max-w-20" : "md:max-w-52"
       )}
     >
@@ -42,7 +43,9 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
 
         <Nav routes={routes} />
 
-        <div className="hidden md:flex items-center justify-center mt-auto py-2">
+        <div className="hidden md:flex flex-col items-center justify-center mt-auto py-2 gap-2">
+          <ModeToggle />
+
           <UserAvatar
             image=""
             name={{

@@ -164,7 +164,7 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
             <ProductsForm
-              trigger={<DialogTrigger asChild>Editar</DialogTrigger>}
+              trigger={<DialogTrigger>Editar</DialogTrigger>}
               item={product}
               formKeys={["products"]}
               isFetching={false}

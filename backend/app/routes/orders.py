@@ -1,8 +1,15 @@
 from flask import Blueprint, request, jsonify, abort
 from ..extensions import db
-from ..models.orders import Orders
 from ..config import Config
 from datetime import datetime
+
+from ..models.customers import Customers
+from ..models.origins import Origins
+from ..models.orders import Orders
+from ..models.order_itens import OrderItens
+from ..models.delivery_persons import DeliveryPersons
+from ..models.products import Products
+from ..models.suppliers import Suppliers
 
 orders_bp = Blueprint('orders', __name__)
 
@@ -91,3 +98,41 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     return '', 204
+
+@orders_bp.route('/order_full/<int:order_id>', methods=['GET'])
+def get_order_full(order_id):
+    check_api_key()
+
+    # Obtendo o pedido pelo ID
+    order = Orders.query.get_or_404(order_id)
+
+    # Obter os itens de ordem relacionados ao pedido
+    order_itens = OrderItens.query.filter_by(order_id=order_id).all()
+
+    # Incluir as informações dos produtos, entregadores e fornecedores associadas
+    order_itens_info = []
+    for item in order_itens:
+        product = Products.query.get(item.product_id)
+        delivery_person = DeliveryPersons.query.get(item.delivery_person_id)
+        supplier = Suppliers.query.get(item.invoicing_id)
+
+        item_info = item.as_dict()
+        item_info['product'] = product.as_dict() if product else None
+        item_info['delivery_person'] = delivery_person.as_dict() if delivery_person else None
+        item_info['supplier'] = supplier.as_dict() if supplier else None
+
+        order_itens_info.append(item_info)
+
+    # Obter informações adicionais de cliente e origem
+    client = Customers.query.get(order.client_id)
+    origin = Origins.query.get(order.origin_id)
+
+    # Construir a resposta final
+    response = {
+        'order': order.as_dict(),
+        'order_itens': order_itens_info,
+        'client': client.as_dict() if client else None,
+        'origin': origin.as_dict() if origin else None
+    }
+
+    return jsonify(response)

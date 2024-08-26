@@ -2,9 +2,10 @@ from ..extensions import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import INTEGER
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
-class OrderItems(db.Model):
-    __tablename__ = 'order_items'
+class OrderItens(db.Model):
+    __tablename__ = 'order_itens'
 
     id = db.Column(INTEGER(unsigned=True), primary_key=True, autoincrement=True)
     cost_value = db.Column(db.Float, default=None)
@@ -21,6 +22,11 @@ class OrderItems(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     created_by = db.Column(db.String(255), default=None)
 
+    # Relacionamentos
+    product = relationship('Products', backref='order_itens')
+    delivery_person = relationship('DeliveryPersons', backref='order_itens')
+    supplier = relationship('Suppliers', backref='order_itens')
+
     def as_dict(self):
         return {
             'id': self.id,
@@ -36,5 +42,10 @@ class OrderItems(db.Model):
             'order_id': self.order_id,
             'product_id': self.product_id,
             'invoicing_id': self.invoicing_id,
-            'delivery_person_id': self.delivery_person_id
+            'delivery_person_id': self.delivery_person_id,
+            
+            # Incluindo relacionamentos no dicionário
+            'product': self.product.as_dict() if self.product else None,
+            'delivery_person': self.delivery_person.as_dict() if self.delivery_person else None,
+            'supplier': self.supplier.as_dict() if self.supplier else None,
         }

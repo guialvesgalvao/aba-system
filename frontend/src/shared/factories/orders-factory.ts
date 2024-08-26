@@ -1,14 +1,16 @@
-import { CustomerResponse } from "../types/customers-types";
+import { OrderItensResponse } from "../types/orders-itens-types";
 import { OrderResponse, OrderStatus } from "../types/orders-types";
 import { Customer } from "./customers-factory";
+import { Origin } from "./origins-factory";
 
 export class Order {
   private _id: number;
   private _client_id: number;
   private _client_data: Customer | undefined;
   private _origin_id: number;
+  private _origin_data: Origin | undefined;
   private _status: OrderStatus;
-  private _order_itens: Array<OrderItens> | undefined;
+  private _order_itens: Array<OrderItensResponse> | undefined;
   private _total_cost_value: number;
   private _total_sale_value: number;
   private _extra_details: string;
@@ -19,20 +21,26 @@ export class Order {
   private _modifiedDate: Date;
   private _modifiedBy: string;
 
-  constructor(data: OrderResponse) {
+  constructor(
+    data: OrderResponse,
+    order_itens?: Array<OrderItensResponse> | undefined,
+    origin_data?: Origin | undefined,
+    client_data?: Customer | undefined
+  ) {
     this._id = data.id;
     this._client_id = data.client_id;
-    this._client_data = data.client_data ?? undefined;
     this._origin_id = data.origin_id;
     this._status = data.status;
     this._total_cost_value = data.total_cost_value;
     this._total_sale_value = data.total_sale_value;
     this._extra_details = data.extra_details;
+    this._client_data = client_data ?? undefined;
+    this._origin_data = origin_data ?? undefined;
+    this._order_itens = order_itens ?? undefined;
+    
+    // If the data is not provided, the date will be undefined
     this._order_date = new Date(data.order_date);
     this._invoicing_date = new Date(data.invoicing_date);
-    this._order_itens = data.order_itens ?? undefined;
-
-    // If the data is not provided, the date will be undefined
     this._createdDate = new Date(data.created_at);
     this._createdBy = data.created_by;
     this._modifiedDate = new Date(data.modified_at);
@@ -56,7 +64,7 @@ export class Order {
     return this._status;
   }
 
-  public get order_itens(): OrderItensExtendedResponse[] {
+  public get order_itens(): OrderItensResponse[] {
     if (this._order_itens && this._order_itens.length > 0) {
       return this._order_itens;
     }
@@ -66,6 +74,10 @@ export class Order {
 
   public get client_data(): Customer | undefined{
       return this._client_data ?? undefined;
+  }
+
+  public get origin_data(): Origin | undefined{
+      return this._origin_data ?? undefined;
   }
 
   public get total_cost_value(): number {

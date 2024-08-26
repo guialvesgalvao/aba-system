@@ -63,8 +63,8 @@ export function OrdersDashboard() {
                 title="Pedidos Ativos"
                 description="Lista de pedidos ativos no sistema"
                 table={{
-                  storage: ["orders", "enabled"],
-                  request: () => getOrdersByStatus("enabled"),
+                  storage: ["orders", "in_progress"],
+                  request: () => getOrdersByStatus("in_progress"),
                   component: OrdersTable,
                 }}
                 form={null}
@@ -73,10 +73,22 @@ export function OrdersDashboard() {
             archived: (
               <CardData<Order>
                 title="Pedidos Arquivados"
-                description="Lista de pedidos arquivados no sistema"
+                description="Lista de pedidos cancelados no sistema"
                 table={{
-                  storage: ["orders", "archived"],
-                  request: () => getOrdersByStatus("archived"),
+                  storage: ["orders", "canceled"],
+                  request: () => getOrdersByStatus("canceled"),
+                  component: OrdersTable,
+                }}
+                form={null}
+              />
+            ),
+            closed: (
+              <CardData<Order>
+                title="Pedidos Encerrados"
+                description="Lista de pedidos encerrados no sistema"
+                table={{
+                  storage: ["orders", "closed"],
+                  request: () => getOrdersByStatus("closed"),
                   component: OrdersTable,
                 }}
                 form={null}

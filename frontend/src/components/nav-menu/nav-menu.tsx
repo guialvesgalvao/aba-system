@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { LinkMention } from "../link-mention/link-mention";
 import { useMediaQuery } from "@/shared/hooks/use-media-query";
 import { useState } from "react";
+import { ModeToggle } from "../theme-button/theme-button";
 
 interface INavMenuProps {
   routes: AppRoute[];
@@ -52,6 +53,10 @@ export function NavMenu(props: Readonly<INavMenuProps>) {
             />
           ))}
         </nav>
+
+        <div>
+          <ModeToggle />
+        </div>
 
         <div className="mt-auto text-sm text-center">
           <p>

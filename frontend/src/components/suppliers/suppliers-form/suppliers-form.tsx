@@ -61,7 +61,7 @@ export type SuppliersFormValidationType = z.infer<
 interface ISuppliersFormProps extends FormResponse<Supplier> {}
 
 export function SuppliersForm(props: ISuppliersFormProps) {
-  const { item: supplier, isError, isFetching, isLoading, error } = props;
+  const { formKeys, item: supplier, isFetching, isLoading } = props;
 
   if (isError) {
     return (
@@ -162,9 +162,7 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                       name="cnpj"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel htmlFor="cnpj">
-                            CNPJ (Opcional)
-                          </FormLabel>
+                          <FormLabel htmlFor="cnpj">CNPJ (Opcional)</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Adicione o CNPJ fornecedor"
@@ -177,16 +175,19 @@ export function SuppliersForm(props: ISuppliersFormProps) {
                     />
 
                     <FormField
-                      control={form.control}                        
+                      control={form.control}
                       name="automatic_invoicing"
                       render={({ field }) => (
                         <FormItem>
-                            <Label htmlFor="automatic_invoicing">Faturamento Automático</Label>
+                          <Label htmlFor="automatic_invoicing">
+                            Faturamento Automático
+                          </Label>
                           <FormControl>
-                            <Switch 
-                            id="automatic_invoicing" 
-                            value={field.name}
-                            defaultChecked={false}/>    
+                            <Switch
+                              id="automatic_invoicing"
+                              value={field.name}
+                              defaultChecked={false}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

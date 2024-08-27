@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { ArrowUpRight, DollarSign, Package, RefreshCcwDot } from "lucide-react";
+import { ArrowUpRight, DollarSign, Package, RefreshCcwDot, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarChartRender } from "@/components/charts/bar-chart-render";
 import { OrdersStaticTable } from "@/components/orders/orders-static-table/orders-static-table";
@@ -49,13 +49,6 @@ export function Home() {
       percentage: "30%",
       description: "Description 3",
     },
-    {
-      title: "Pedidos Cancelados",
-      icon: <Package className="w-6 h-6 text-gray-400" />,
-      value: "Value 4",
-      percentage: "40%",
-      description: "Description 4",
-    },
   ];
 
   return (
@@ -76,7 +69,23 @@ export function Home() {
       </header>
 
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
-        <Tiles tiles={tiles} />
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 transition-all">
+          <div className="rounded-xl border border-slate-200 text-slate-950 shadow dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50">
+            <Button
+              type="button"
+              className="min-h rounded-xl w-full h-full items-center justify-center gap-2"
+            >
+              <div className="flex items-center justify-center">
+                <Plus className="w-10 h-10" />
+              </div>
+              <div className="flex flex-col items-start">
+                <h5 className="text-base font-semibold">Criar pedido</h5>
+                <p className="text-sm">Crie um novo pedido</p>
+              </div>
+            </Button>
+          </div>
+          <Tiles tiles={tiles} />
+        </div>
 
         <div className="h-full grid pb-6 gap-4 md:gap-8 lg:grid-cols-2">
           <Card>

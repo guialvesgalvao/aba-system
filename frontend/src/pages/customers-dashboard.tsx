@@ -38,7 +38,7 @@ export function CustomersDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Dialog>
+          <Dialog modal>
             <DialogTrigger asChild>
               <Button type="button" size="sm" className="gap-2">
                 <CirclePlus size={18} />
@@ -46,7 +46,10 @@ export function CustomersDashboard() {
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-[1000px]">
+            <DialogContent
+                  onInteractOutside={(event) => event.preventDefault()}
+                  className="max-w-[1000px]"
+                >
               <DialogTitle>Criar Cliente</DialogTitle>
               <CustomersForm
                 item={undefined}

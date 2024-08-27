@@ -19,15 +19,36 @@ import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
 import { CardData } from "@/components/card-data/card-data";
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 import { TitlePage } from "@/components/title-page/title-page";
+import { OriginStatus } from "@/shared/types/origins-types";
+import { IComponentRequestProps } from "@/components/component-request/component-request";
 
 export function OriginsDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllOrigins, getOriginsByStatus, getOriginById } =
+  const { getAllOrigins, getOriginsByStatus } =
     new OriginsService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Origin[]>(["origins", status]);
+  }
+
+  
+  function generateTable(
+    status?: OriginStatus
+  ): IComponentRequestProps<Origin> {
+    if (!status) {
+      return {
+        storages: ["origins", "all"],
+        request: getAllOrigins,
+        component: OriginsTable,
+      };
+    }
+
+    return {
+      storages: ["origins", status],
+      request: () => getOriginsByStatus(status),
+      component: OriginsTable,
+    };
   }
 
   return (
@@ -49,11 +70,10 @@ export function OriginsDashboard() {
             <DialogContent className="max-w-[1000px]">
               <DialogTitle>Criar origem</DialogTitle>
               <OriginsForm
+                formKeys={["origins"]}
                 item={undefined}
                 isLoading={false}
                 isFetching={false}
-                isError={false}
-                error={null}
               />
             </DialogContent>
           </Dialog>
@@ -69,64 +89,28 @@ export function OriginsDashboard() {
               <CardData<Origin>
                 title="Todas as Origens"
                 description="Lista de todas as origens no sistema"
-                table={{
-                  storage: ["origins", "all"],
-                  request: getAllOrigins,
-                  component: OriginsTable,
-                }}
-                form={{
-                  name: "origins",
-                  request: getOriginById,
-                  component: OriginsForm,
-                }}
+                table={generateTable()}
               />
             ),
             enabled: (
               <CardData<Origin>
                 title="Origens Ativos"
                 description="Lista de origens ativos no sistema"
-                table={{
-                  storage: ["origins", "enabled"],
-                  request: () => getOriginsByStatus("enabled"),
-                  component: OriginsTable,
-                }}
-                form={{
-                  name: "origins",
-                  request: getOriginById,
-                  component: OriginsForm,
-                }}
+                table={generateTable('enabled')}
               />
             ),
             archived: (
               <CardData<Origin>
                 title="Origens Arquivados"
                 description="Lista de origens arquivados no sistema"
-                table={{
-                  storage: ["origins", "archived"],
-                  request: () => getOriginsByStatus("archived"),
-                  component: OriginsTable,
-                }}
-                form={{
-                  name: "origins",
-                  request: getOriginById,
-                  component: OriginsForm,
-                }}
+                table={generateTable('archived')}
               />
             ),
             draft: (
               <CardData<Origin>
                 title="Origens em Rascunho"
                 description="Lista de origens em rascunho no sistema"
-                table={{
-                  storage: ["origins", "draft"],
-                  request: () => getOriginsByStatus("draft"),
-                  component: OriginsTable,
-                }}
-                form={{
-                  name: "origins",
-                  request: getOriginById,
-                  component: OriginsForm,
-                }}
+                table={generateTable('draft')}
               />
             ),
           }}

@@ -6,8 +6,6 @@ import { Product } from "@/shared/factories/products-factory";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import {
   Dialog,
-  DialogContent,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -30,7 +28,7 @@ export function ProductsDashboard() {
   const { getCurrentStatus } = useStatusParam();
   const { getAllProducts, getProductsByStatus } = new ProductsService();
 
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen] = useState(false);
 
   console.log("ProductsDashboard", isFormOpen);
 

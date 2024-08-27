@@ -7,7 +7,7 @@ interface IStatusBadgeProps {
   className?: string;
 }
 
-export function StatusBadge(props: IStatusBadgeProps) {
+export function StatusBadge(props: Readonly<IStatusBadgeProps>) {
   const { text, description, className } = props;
 
   return (

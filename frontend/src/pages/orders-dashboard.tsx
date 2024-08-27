@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { TitlePage } from "@/components/title-page/title-page";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import { Dialog } from "@/components/ui/dialog";
+import { OrderStatus } from "@/shared/types/orders-types";
+import { IComponentRequestProps } from "@/components/component-request/component-request";
 
 export function OrdersDashboard() {
   const { getCurrentStatus } = useStatusParam();
@@ -23,6 +25,25 @@ export function OrdersDashboard() {
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Order[]>(["orders", status]);
+  }
+
+  
+  function generateTable(
+    status?: OrderStatus
+  ): IComponentRequestProps<Order> {
+    if (!status) {
+      return {
+        storages: ["orders", "all"],
+        request: getAllOrders,
+        component: OrdersTable,
+      };
+    }
+
+    return {
+      storages: ["orders", status],
+      request: () => getOrdersByStatus(status),
+      component: OrdersTable,
+    };
   }
 
   return (
@@ -50,60 +71,35 @@ export function OrdersDashboard() {
               <CardData<Order>
                 title="Todos os pedidos"
                 description="Lista de todos os pedidos do sistema"
-                table={{
-                  storage: ["orders", "all"],
-                  request: getAllOrders,
-                  component: OrdersTable,
-                }}
-                form={null}
+                table={generateTable()}
               />
             ),
             enabled: (
               <CardData<Order>
                 title="Pedidos Ativos"
                 description="Lista de pedidos ativos no sistema"
-                table={{
-                  storage: ["orders", "in_progress"],
-                  request: () => getOrdersByStatus("in_progress"),
-                  component: OrdersTable,
-                }}
-                form={null}
+                table={generateTable('in_progress')}
               />
             ),
             archived: (
               <CardData<Order>
                 title="Pedidos Arquivados"
                 description="Lista de pedidos cancelados no sistema"
-                table={{
-                  storage: ["orders", "canceled"],
-                  request: () => getOrdersByStatus("canceled"),
-                  component: OrdersTable,
-                }}
-                form={null}
+                table={generateTable('canceled')}
               />
             ),
             closed: (
               <CardData<Order>
                 title="Pedidos Encerrados"
                 description="Lista de pedidos encerrados no sistema"
-                table={{
-                  storage: ["orders", "closed"],
-                  request: () => getOrdersByStatus("closed"),
-                  component: OrdersTable,
-                }}
-                form={null}
+                table={generateTable('closed')}
               />
             ),
             draft: (
               <CardData<Order>
                 title="Pedidos em Rascunho"
                 description="Lista de pedidos em rascunho no sistema"
-                table={{
-                  storage: ["orders", "draft"],
-                  request: () => getOrdersByStatus("draft"),
-                  component: OrdersTable,
-                }}
-                form={null}
+                table={generateTable('draft')}
               />
             ),
           }}

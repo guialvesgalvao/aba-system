@@ -19,18 +19,38 @@ import { CardData } from "@/components/card-data/card-data";
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import { TitlePage } from "@/components/title-page/title-page";
+import { DeliveryPersonStatus } from "@/shared/types/delivery-persons-types";
+import { IComponentRequestProps } from "@/components/component-request/component-request";
 
 export function DeliveryPersonsDashboard() {
   const { getCurrentStatus } = useStatusParam();
   const {
     getAllDeliveryPersons,
-    getDeliveryPersonsByStatus,
-    getDeliveryPersonById,
+    getDeliveryPersonsByStatus
   } = new DeliveryPersonsService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<DeliveryPerson[]>(["delivery-persons", status]);
+  }
+
+  
+  function generateTable(
+    status?: DeliveryPersonStatus
+  ): IComponentRequestProps<DeliveryPerson> {
+    if (!status) {
+      return {
+        storages: ["delivery-persons", "all"],
+        request: getAllDeliveryPersons,
+        component: DeliveryPersonsTable,
+      };
+    }
+
+    return {
+      storages: ["delivery-persons", status],
+      request: () => getDeliveryPersonsByStatus(status),
+      component: DeliveryPersonsTable,
+    };
   }
 
   return (
@@ -55,11 +75,10 @@ export function DeliveryPersonsDashboard() {
             <DialogContent className="max-w-[1000px]">
               <DialogTitle>Criar Tipo de Entrega</DialogTitle>
               <DeliveryPersonsForm
+                formKeys={["delivery-persons"]}
                 item={undefined}
                 isLoading={false}
                 isFetching={false}
-                isError={false}
-                error={null}
               />
             </DialogContent>
           </Dialog>
@@ -75,64 +94,28 @@ export function DeliveryPersonsDashboard() {
               <CardData<DeliveryPerson>
                 title="Todos os Tipos de Entrega"
                 description="Lista com todos os tipos de entrega cadastrados no sistema"
-                table={{
-                  storage: ["delivery-persons", "all"],
-                  request: getAllDeliveryPersons,
-                  component: DeliveryPersonsTable,
-                }}
-                form={{
-                  name: "delivery-persons",
-                  request: getDeliveryPersonById,
-                  component: DeliveryPersonsForm,
-                }}
+                table={generateTable()}
               />
             ),
             enabled: (
               <CardData<DeliveryPerson>
                 title="Tipos de Entrega Ativos"
                 description="Lista com tipos de entregas ativos no sistema"
-                table={{
-                  storage: ["delivery-persons", "enabled"],
-                  request: () => getDeliveryPersonsByStatus("enabled"),
-                  component: DeliveryPersonsTable,
-                }}
-                form={{
-                  name: "delivery-persons",
-                  request: getDeliveryPersonById,
-                  component: DeliveryPersonsForm,
-                }}
+                table={generateTable("enabled")}
               />
             ),
             archived: (
               <CardData<DeliveryPerson>
                 title="Tipos de Entrega Arquivados"
                 description="Lista com tipos de entregas arquivados no sistema"
-                table={{
-                  storage: ["delivery-persons", "archived"],
-                  request: () => getDeliveryPersonsByStatus("archived"),
-                  component: DeliveryPersonsTable,
-                }}
-                form={{
-                  name: "delivery-persons",
-                  request: getDeliveryPersonById,
-                  component: DeliveryPersonsForm,
-                }}
+                table={generateTable("archived")}
               />
             ),
             draft: (
               <CardData<DeliveryPerson>
                 title="Tipos de Entrega Rascunho"
                 description="Lista com tipos de entregas em rascunho no sistema"
-                table={{
-                  storage: ["delivery-persons", "draft"],
-                  request: () => getDeliveryPersonsByStatus("draft"),
-                  component: DeliveryPersonsTable,
-                }}
-                form={{
-                  name: "delivery-persons",
-                  request: getDeliveryPersonById,
-                  component: DeliveryPersonsForm,
-                }}
+                table={generateTable("draft")}
               />
             ),
           }}

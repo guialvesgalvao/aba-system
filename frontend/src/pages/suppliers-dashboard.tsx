@@ -20,15 +20,35 @@ import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 import { CardData } from "@/components/card-data/card-data";
 import { TitlePage } from "@/components/title-page/title-page";
+import { SupplierStatus } from "@/shared/types/suppliers-types";
+import { IComponentRequestProps } from "@/components/component-request/component-request";
 
 export function SuppliersDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllSuppliers, getSuppliersByStatus, getSupplierById } =
+  const { getAllSuppliers, getSuppliersByStatus } =
     new SuppliersService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Supplier[]>(["suppliers", status]);
+  }
+  
+  function generateTable(
+    status?: SupplierStatus
+  ): IComponentRequestProps<Supplier> {
+    if (!status) {
+      return {
+        storages: ["suppliers", "all"],
+        request: getAllSuppliers,
+        component: SuppliersTable,
+      };
+    }
+
+    return {
+      storages: ["suppliers", status],
+      request: () => getSuppliersByStatus(status),
+      component: SuppliersTable,
+    };
   }
 
   return (
@@ -53,8 +73,7 @@ export function SuppliersDashboard() {
                 item={undefined}
                 isLoading={false}
                 isFetching={false}
-                isError={false}
-                error={null}
+                formKeys={["suppliers"]}
               />
             </DialogContent>
           </Dialog>
@@ -70,64 +89,28 @@ export function SuppliersDashboard() {
               <CardData<Supplier>
                 title="Todos os Fornecedores"
                 description="Lista de todos os fornecedores cadastrados no sistema"
-                table={{
-                  storage: ["suppliers", "all"],
-                  request: getAllSuppliers,
-                  component: SuppliersTable,
-                }}
-                form={{
-                  name: "suppliers",
-                  request: getSupplierById,
-                  component: SuppliersForm,
-                }}
+                table={generateTable()}
               />
             ),
             enabled: (
               <CardData<Supplier>
                 title="Fornecedores Ativos"
                 description="Lista de fornecedores ativos no sistema"
-                table={{
-                  storage: ["suppliers", "enabled"],
-                  request: () => getSuppliersByStatus("enabled"),
-                  component: SuppliersTable,
-                }}
-                form={{
-                  name: "suppliers",
-                  request: getSupplierById,
-                  component: SuppliersForm,
-                }}
+                table={generateTable('enabled')}
               />
             ),
             archived: (
               <CardData<Supplier>
                 title="Fornecedores Arquivados"
                 description="Lista de fornecedores arquivados no sistema"
-                table={{
-                  storage: ["suppliers", "archived"],
-                  request: () => getSuppliersByStatus("archived"),
-                  component: SuppliersTable,
-                }}
-                form={{
-                  name: "suppliers",
-                  request: getSupplierById,
-                  component: SuppliersForm,
-                }}
+                table={generateTable('archived')}
               />
             ),
             draft: (
               <CardData<Supplier>
                 title="Fornecedores Rascunho"
                 description="Lista de fornecedores em rascunho no sistema"
-                table={{
-                  storage: ["suppliers", "draft"],
-                  request: () => getSuppliersByStatus("draft"),
-                  component: SuppliersTable,
-                }}
-                form={{
-                  name: "suppliers",
-                  request: getSupplierById,
-                  component: SuppliersForm,
-                }}
+                table={generateTable('draft')}
               />
             ),
           }}

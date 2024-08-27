@@ -19,15 +19,35 @@ import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
 import { CardData } from "@/components/card-data/card-data";
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 import { TitlePage } from "@/components/title-page/title-page";
+import { CustomerStatus } from "@/shared/types/customers-types";
+import { IComponentRequestProps } from "@/components/component-request/component-request";
 
 export function CustomersDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllCustomers, getCustomersByStatus, getCustomerById } =
+  const { getAllCustomers, getCustomersByStatus } =
     new CustomersService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Customer[]>(["customers", status]);
+  }
+
+  function generateTable(
+    status?: CustomerStatus
+  ): IComponentRequestProps<Customer> {
+    if (!status) {
+      return {
+        storages: ["customers", "all"],
+        request: getAllCustomers,
+        component: CustomersTable,
+      };
+    }
+
+    return {
+      storages: ["customers", status],
+      request: () => getCustomersByStatus(status),
+      component: CustomersTable,
+    };
   }
 
   return (
@@ -47,9 +67,9 @@ export function CustomersDashboard() {
             </DialogTrigger>
 
             <DialogContent
-                  onInteractOutside={(event) => event.preventDefault()}
-                  className="max-w-[1000px]"
-                >
+              onInteractOutside={(event) => event.preventDefault()}
+              className="max-w-[1000px]"
+            >
               <DialogTitle>Criar Cliente</DialogTitle>
               <CustomersForm
                 item={undefined}
@@ -72,64 +92,28 @@ export function CustomersDashboard() {
               <CardData<Customer>
                 title="Todos os Clientes"
                 description="Lista de todos os clientes"
-                table={{
-                  storage: ["customers", "all"],
-                  request: getAllCustomers,
-                  component: CustomersTable,
-                }}
-                form={{
-                  name: "customers",
-                  request: getCustomerById,
-                  component: CustomersForm,
-                }}
+                table={generateTable()}
               />
             ),
             enabled: (
               <CardData<Customer>
                 title="Clientes Ativos"
                 description="Lista de clientes ativos no sistema"
-                table={{
-                  storage: ["customers", "enabled"],
-                  request: () => getCustomersByStatus("enabled"),
-                  component: CustomersTable,
-                }}
-                form={{
-                  name: "customers",
-                  request: getCustomerById,
-                  component: CustomersForm,
-                }}
+                table={generateTable("enabled")}
               />
             ),
             archived: (
               <CardData<Customer>
                 title="Clientes Arquivados"
                 description="Lista de clientes arquivados no sistema"
-                table={{
-                  storage: ["customers", "archived"],
-                  request: () => getCustomersByStatus("archived"),
-                  component: CustomersTable,
-                }}
-                form={{
-                  name: "customers",
-                  request: getCustomerById,
-                  component: CustomersForm,
-                }}
+                table={generateTable("archived")}
               />
             ),
             draft: (
               <CardData<Customer>
                 title="Clientes em Rascunho"
                 description="Lista de clientes em rascunho no sistema"
-                table={{
-                  storage: ["customers", "draft"],
-                  request: () => getCustomersByStatus("draft"),
-                  component: CustomersTable,
-                }}
-                form={{
-                  name: "customers",
-                  request: getCustomerById,
-                  component: CustomersForm,
-                }}
+                table={generateTable("draft")}
               />
             ),
           }}

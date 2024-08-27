@@ -1,3 +1,4 @@
+import { FormRequest } from "@/components/form-request/form-request";
 import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,8 @@ import { ProductStatus } from "@/shared/types/products-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { ProductsForm } from "../products-form/products-form";
+import ProductsService from "@/shared/services/products-service";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -142,13 +145,17 @@ export const columns: ColumnDef<Product>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
+      const product = row.original;
 
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button type="button" aria-haspopup="true" size="icon" variant="ghost">
+            <Button
+              type="button"
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+            >
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>
@@ -156,17 +163,13 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full"
-                onClick={() => {
-                  searchParams.set("formId", id.toString());
-                  setSearchParams(searchParams);
-                }}
-              >
-                Editar
-              </DialogTrigger>
-            </DropdownMenuItem>
+            <ProductsForm
+              trigger={<DialogTrigger>Editar</DialogTrigger>}
+              item={product}
+              formKeys={["products"]}
+              isFetching={false}
+              isLoading={false}
+            />
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -5,6 +5,7 @@ import { TabValue } from "@/components/status-tabs-chooser/status-tabs-chooser";
 const TABS: TabValue[] = [
   { text: "Todos", value: TabsStatusEnum.All },
   { text: "Ativos", value: TabsStatusEnum.Active },
+  { text: "Encerrados", value: TabsStatusEnum.Closed },
   { text: "Rascunhos", value: TabsStatusEnum.Draft },
   { text: "Arquivados", value: TabsStatusEnum.Archived },
 ];

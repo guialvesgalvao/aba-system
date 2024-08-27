@@ -18,6 +18,7 @@ import { RefreshButton } from "@/components/utilities/refresh-button";
 import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
 import { CardData } from "@/components/card-data/card-data";
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
+import { TitlePage } from "@/components/title-page/title-page";
 
 export function CustomersDashboard() {
   const { getCurrentStatus } = useStatusParam();
@@ -30,110 +31,110 @@ export function CustomersDashboard() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <div className="w-full h-full flex flex-col gap-4">
-        <Dialog>
-          <div className="flex justify-between flex-wrap gap-2">
-            <StatusTabsChooser />
+    <Dialog>
+      <header className="flex justify-between flex-wrap gap-2">
+        <TitlePage title="Clientes" subtitle="Gerencie seus clientes" />
 
-            <div className="flex items-center gap-2">
-              <RefreshButton text="Atualizar página" onClick={refreshPage} />
+        <div className="flex items-center gap-2">
+          <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-              <Dialog modal>
-                <DialogTrigger asChild>
-                  <Button type="button" size="sm" className="gap-2">
-                    <CirclePlus size={18} />
-                    Criar novo cliente
-                  </Button>
-                </DialogTrigger>
+          <Dialog modal>
+            <DialogTrigger asChild>
+              <Button type="button" size="sm" className="gap-2">
+                <CirclePlus size={18} />
+                Criar novo
+              </Button>
+            </DialogTrigger>
 
-                <DialogContent
+            <DialogContent
                   onInteractOutside={(event) => event.preventDefault()}
                   className="max-w-[1000px]"
                 >
-                  <DialogTitle>Criar Cliente</DialogTitle>
-                  <CustomersForm
-                    item={undefined}
-                    isLoading={false}
-                    isFetching={false}
-                    isError={false}
-                    error={null}
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
+              <DialogTitle>Criar Cliente</DialogTitle>
+              <CustomersForm
+                item={undefined}
+                isLoading={false}
+                isFetching={false}
+                isError={false}
+                error={null}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </header>
 
-          <TabRenderBasedStatus
-            tabs={{
-              all: (
-                <CardData<Customer>
-                  title="Todos os Clientes"
-                  description="Lista de todos os clientes"
-                  table={{
-                    storage: ["customers", "all"],
-                    request: getAllCustomers,
-                    component: CustomersTable,
-                  }}
-                  form={{
-                    name: "customers",
-                    request: getCustomerById,
-                    component: CustomersForm,
-                  }}
-                />
-              ),
-              enabled: (
-                <CardData<Customer>
-                  title="Clientes Ativos"
-                  description="Lista de clientes ativos no sistema"
-                  table={{
-                    storage: ["customers", "enabled"],
-                    request: () => getCustomersByStatus("enabled"),
-                    component: CustomersTable,
-                  }}
-                  form={{
-                    name: "customers",
-                    request: getCustomerById,
-                    component: CustomersForm,
-                  }}
-                />
-              ),
-              archived: (
-                <CardData<Customer>
-                  title="Clientes Arquivados"
-                  description="Lista de clientes arquivados no sistema"
-                  table={{
-                    storage: ["customers", "archived"],
-                    request: () => getCustomersByStatus("archived"),
-                    component: CustomersTable,
-                  }}
-                  form={{
-                    name: "customers",
-                    request: getCustomerById,
-                    component: CustomersForm,
-                  }}
-                />
-              ),
-              draft: (
-                <CardData<Customer>
-                  title="Clientes em Rascunho"
-                  description="Lista de clientes em rascunho no sistema"
-                  table={{
-                    storage: ["customers", "draft"],
-                    request: () => getCustomersByStatus("draft"),
-                    component: CustomersTable,
-                  }}
-                  form={{
-                    name: "customers",
-                    request: getCustomerById,
-                    component: CustomersForm,
-                  }}
-                />
-              ),
-            }}
-          />
-        </Dialog>
-      </div>
-    </div>
+      <main className="flex flex-1 flex-col gap-2 md:gap-4">
+        <StatusTabsChooser />
+
+        <TabRenderBasedStatus
+          tabs={{
+            all: (
+              <CardData<Customer>
+                title="Todos os Clientes"
+                description="Lista de todos os clientes"
+                table={{
+                  storage: ["customers", "all"],
+                  request: getAllCustomers,
+                  component: CustomersTable,
+                }}
+                form={{
+                  name: "customers",
+                  request: getCustomerById,
+                  component: CustomersForm,
+                }}
+              />
+            ),
+            enabled: (
+              <CardData<Customer>
+                title="Clientes Ativos"
+                description="Lista de clientes ativos no sistema"
+                table={{
+                  storage: ["customers", "enabled"],
+                  request: () => getCustomersByStatus("enabled"),
+                  component: CustomersTable,
+                }}
+                form={{
+                  name: "customers",
+                  request: getCustomerById,
+                  component: CustomersForm,
+                }}
+              />
+            ),
+            archived: (
+              <CardData<Customer>
+                title="Clientes Arquivados"
+                description="Lista de clientes arquivados no sistema"
+                table={{
+                  storage: ["customers", "archived"],
+                  request: () => getCustomersByStatus("archived"),
+                  component: CustomersTable,
+                }}
+                form={{
+                  name: "customers",
+                  request: getCustomerById,
+                  component: CustomersForm,
+                }}
+              />
+            ),
+            draft: (
+              <CardData<Customer>
+                title="Clientes em Rascunho"
+                description="Lista de clientes em rascunho no sistema"
+                table={{
+                  storage: ["customers", "draft"],
+                  request: () => getCustomersByStatus("draft"),
+                  component: CustomersTable,
+                }}
+                form={{
+                  name: "customers",
+                  request: getCustomerById,
+                  component: CustomersForm,
+                }}
+              />
+            ),
+          }}
+        />
+      </main>
+    </Dialog>
   );
 }

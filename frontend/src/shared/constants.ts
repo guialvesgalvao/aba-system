@@ -12,6 +12,7 @@ import {
   Package,
   User,
   Truck,
+  Plus,
 } from "lucide-react";
 
 export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
@@ -32,12 +33,41 @@ export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
   },
 ];
 
+export const STATUS_ORDERS_OPTIONS: ColumnFilterOptionsSchema[] = [
+  {
+    value: "draft",
+    label: "Rascunho",
+    icon: BookDashed,
+  },
+  {
+    value: "in_progress",
+    label: "Em andamento",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "closed",
+    label: "Fechado",
+    icon: CircleCheckBig,
+  },
+  {
+    value: "canceled",
+    label: "Cancelado",
+    icon: Archive,
+  },
+];
+
 export const SYSTEM_ROUTES: AppRoute[] = [
   {
     icon: HomeIcon,
     to: "/",
     text: "Início",
     tooltip: "Ir para página inicial",
+  },
+  {
+    icon: Plus,
+    to: "/orders",
+    text: "Pedidos",
+    tooltip: "Ir para páginas de pedidos",
   },
   {
     icon: Package,

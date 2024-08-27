@@ -35,8 +35,7 @@ export function NavButton(props: Readonly<INavButtonProps>) {
             variant={isPathSelect ? "default" : "ghost"}
             className={cn(
               "md:w-full h-10 flex items-center justify-start gap-3 rounded-md px-3 py-2 transition-all",
-              !isPathSelect &&
-                "text-muted-foreground hover:text-primary"
+              !isPathSelect && "text-muted-foreground hover:text-primary"
             )}
           >
             {createElement(icon, { className: "h-4 w-4" })}

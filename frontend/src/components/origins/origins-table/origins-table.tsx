@@ -48,7 +48,7 @@ export function OriginsTable(props: IOriginsTableProps) {
       columns={columns}
       emptyMessage="Nenhum produto encontrado"
       searchOptions={{
-        placeholder: "Filtrar produtos pelo nome...",
+        placeholder: "Filtrar origem pelo nome...",
         columnId: "name",
       }}
       columnFilter={{

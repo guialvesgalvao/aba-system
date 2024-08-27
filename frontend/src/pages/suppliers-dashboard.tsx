@@ -19,6 +19,7 @@ import { RefreshButton } from "@/components/utilities/refresh-button";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-render-based-status";
 import { CardData } from "@/components/card-data/card-data";
+import { TitlePage } from "@/components/title-page/title-page";
 
 export function SuppliersDashboard() {
   const { getCurrentStatus } = useStatusParam();
@@ -31,35 +32,37 @@ export function SuppliersDashboard() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 py-4 px-6">
-      <Dialog>
-        <div className="flex justify-between flex-wrap gap-2">
-          <StatusTabsChooser />
+    <Dialog>
+      <header className="flex justify-between flex-wrap gap-2">
+        <TitlePage title="Fornecedores" subtitle="Gerencie seus fornecedores" />
 
-          <div className="flex items-center gap-2">
-            <RefreshButton text="Atualizar página" onClick={refreshPage} />
+        <div className="flex items-center gap-2">
+          <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button type="button" size="sm" className="gap-2">
-                  <CirclePlus size={18} />
-                  Criar novo fornecedor
-                </Button>
-              </DialogTrigger>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button type="button" size="sm" className="gap-2">
+                <CirclePlus size={18} />
+                Criar novo
+              </Button>
+            </DialogTrigger>
 
-              <DialogContent className="max-w-[1000px]">
-                <DialogTitle>Criar fornecedor</DialogTitle>
-                <SuppliersForm
-                  item={undefined}
-                  isLoading={false}
-                  isFetching={false}
-                  isError={false}
-                  error={null}
-                />
-              </DialogContent>
-            </Dialog>
-          </div>
+            <DialogContent className="max-w-[1000px]">
+              <DialogTitle>Criar fornecedor</DialogTitle>
+              <SuppliersForm
+                item={undefined}
+                isLoading={false}
+                isFetching={false}
+                isError={false}
+                error={null}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
+      </header>
+
+      <main className="flex flex-1 flex-col gap-2 md:gap-4">
+        <StatusTabsChooser />
 
         <TabRenderBasedStatus
           tabs={{
@@ -129,7 +132,7 @@ export function SuppliersDashboard() {
             ),
           }}
         />
-      </Dialog>
-    </div>
+      </main>
+    </Dialog>
   );
 }

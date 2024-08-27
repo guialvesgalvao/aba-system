@@ -3,4 +3,5 @@ export enum TabsStatusEnum {
   Active = "enabled",
   Draft = "draft",
   Archived = "archived",
+  Closed = "closed"
 }

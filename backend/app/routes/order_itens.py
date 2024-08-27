@@ -1,50 +1,51 @@
 from flask import Blueprint, request, jsonify, abort
+
 from ..extensions import db
-from ..models.order_items import OrderItems
+from ..models.order_itens import OrderItens
 from ..config import Config
 from datetime import datetime
 
-order_items_bp = Blueprint('order_items', __name__)
+order_itens_bp = Blueprint('order_itens', __name__)
 
 def check_api_key():
     api_key = request.headers.get('X-Api-Key')
     if api_key != Config.API_KEY:
         abort(401, 'Unauthorized: Missing or invalid API key')
 
-@order_items_bp.route('/order_items', methods=['GET'])
-def get_order_items():
+@order_itens_bp.route('/order_itens', methods=['GET'])
+def get_order_itens():
     check_api_key()
     # Capturando os parâmetros de consulta
     status = request.args.get('status')
     limit = request.args.get('limit', type=int)
     
-    query = OrderItems.query
+    query = OrderItens.query
     
     # Definindo filtros para consulta
     if status:
-        query = query.filter(OrderItems.status == status)
+        query = query.filter(OrderItens.status == status)
     if limit:
         query = query.limit(limit)
     
     # Executando a consulta
-    order_items = query.all()
+    order_itens = query.all()
     
-    return jsonify([item.as_dict() for item in order_items])
+    return jsonify([item.as_dict() for item in order_itens])
 
-@order_items_bp.route('/order_items/<int:id>', methods=['GET'])
+@order_itens_bp.route('/order_itens/<int:id>', methods=['GET'])
 def get_order_item_by_id(id):
     check_api_key()
-    order_item = OrderItems.query.get_or_404(id)
+    order_item = OrderItens.query.get_or_404(id)
     return jsonify(order_item.as_dict())
 
-@order_items_bp.route('/order_items', methods=['POST'])
+@order_itens_bp.route('/order_itens', methods=['POST'])
 def create_new_order_item():
     check_api_key()
     data = request.get_json()
     if not data or not all(k in data for k in ("cost_value", "quantity", "status", "sale_value", "created_by", "order_id", "product_id")):
         abort(400, 'Invalid data')
 
-    new_order_item = OrderItems(
+    new_order_item = OrderItens(
         cost_value=data['cost_value'],
         quantity=data['quantity'],
         status=data['status'],
@@ -63,10 +64,10 @@ def create_new_order_item():
     db.session.commit()
     return jsonify(new_order_item.as_dict()), 201
 
-@order_items_bp.route('/order_items/<int:id>', methods=['PUT'])
+@order_itens_bp.route('/order_itens/<int:id>', methods=['PUT'])
 def edit_order_item_by_id(id):
     check_api_key()
-    order_item = OrderItems.query.get_or_404(id)
+    order_item = OrderItens.query.get_or_404(id)
     data = request.get_json()
     if not data:
         abort(400, 'Invalid data')
@@ -86,10 +87,10 @@ def edit_order_item_by_id(id):
     db.session.commit()
     return jsonify(order_item.as_dict())
 
-@order_items_bp.route('/order_items/<int:id>', methods=['DELETE'])
+@order_itens_bp.route('/order_itens/<int:id>', methods=['DELETE'])
 def delete_order_item(id):
     check_api_key()
-    order_item = OrderItems.query.get_or_404(id)
+    order_item = OrderItens.query.get_or_404(id)
     db.session.delete(order_item)
     db.session.commit()
     return '', 204

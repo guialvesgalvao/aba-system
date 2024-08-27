@@ -1,8 +1,15 @@
 from flask import Blueprint, request, jsonify, abort
 from ..extensions import db
-from ..models.orders import Orders
 from ..config import Config
 from datetime import datetime
+
+from ..models.customers import Customers
+from ..models.origins import Origins
+from ..models.orders import Orders
+from ..models.order_itens import OrderItens
+from ..models.delivery_persons import DeliveryPersons
+from ..models.products import Products
+from ..models.suppliers import Suppliers
 
 orders_bp = Blueprint('orders', __name__)
 
@@ -41,18 +48,18 @@ def get_order_by_id(id):
 def create_new_order():
     check_api_key()
     data = request.get_json()
-    if not data or not all(k in data for k in ("client_name", "status", "order_date", "created_by")):
+    if not data or not all(k in data for k in ("client_id", "status", "order_date", "created_by")):
         abort(400, 'Invalid data')
 
     new_order = Orders(
-        client_name=data['client_name'],
+        client_id=data['client_id'],
+        origin_id=data['origin_id'],
         status=data['status'],
         total_cost_value=data.get('total_cost_value'),
         total_sale_value=data.get('total_sale_value'),
         extra_details=data.get('extra_details'),
         order_date=datetime.fromisoformat(data['order_date']),
         invoicing_date=datetime.fromisoformat(data['invoicing_date']) if data.get('invoicing_date') else None,
-        client_address=data.get('client_address'),
         created_by=data['created_by'],
         modified_by=data.get('modified_by'),
         modified_at=datetime.now(),
@@ -70,14 +77,14 @@ def edit_order_by_id(id):
     if not data:
         abort(400, 'Invalid data')
 
-    order.client_name = data.get('client_name', order.client_name)
+    order.client_id = data.get('client_id', order.client_id)
+    order.origin_id = data.get('origin_id', order.origin_id)
     order.status = data.get('status', order.status)
     order.total_cost_value = data.get('total_cost_value', order.total_cost_value)
     order.total_sale_value = data.get('total_sale_value', order.total_sale_value)
     order.extra_details = data.get('extra_details', order.extra_details)
     order.order_date = datetime.fromisoformat(data['order_date']) if 'order_date' in data else order.order_date
     order.invoicing_date = datetime.fromisoformat(data['invoicing_date']) if 'invoicing_date' in data else order.invoicing_date
-    order.client_address = data.get('client_address', order.client_address)
     order.modified_by = data.get('modified_by', order.modified_by)
     order.modified_at = datetime.now()
 
@@ -91,3 +98,41 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     return '', 204
+
+@orders_bp.route('/order_full/<int:order_id>', methods=['GET'])
+def get_order_full(order_id):
+    check_api_key()
+
+    # Obtendo o pedido pelo ID
+    order = Orders.query.get_or_404(order_id)
+
+    # Obter os itens de ordem relacionados ao pedido
+    order_itens = OrderItens.query.filter_by(order_id=order_id).all()
+
+    # Incluir as informações dos produtos, entregadores e fornecedores associadas
+    order_itens_info = []
+    for item in order_itens:
+        product = Products.query.get(item.product_id)
+        delivery_person = DeliveryPersons.query.get(item.delivery_person_id)
+        supplier = Suppliers.query.get(item.invoicing_id)
+
+        item_info = item.as_dict()
+        item_info['product'] = product.as_dict() if product else None
+        item_info['delivery_person'] = delivery_person.as_dict() if delivery_person else None
+        item_info['supplier'] = supplier.as_dict() if supplier else None
+
+        order_itens_info.append(item_info)
+
+    # Obter informações adicionais de cliente e origem
+    client = Customers.query.get(order.client_id)
+    origin = Origins.query.get(order.origin_id)
+
+    # Construir a resposta final
+    response = {
+        'order': order.as_dict(),
+        'order_itens': order_itens_info,
+        'client': client.as_dict() if client else None,
+        'origin': origin.as_dict() if origin else None
+    }
+
+    return jsonify(response)

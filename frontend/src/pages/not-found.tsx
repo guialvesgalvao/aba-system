@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { SystemRoutes } from "@/shared/enums/app";
-import { SearchX } from "lucide-react";
+import { HomeIcon, SearchX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function NotFound() {
@@ -25,8 +25,9 @@ export function NotFound() {
           </p>
         </section>
 
-        <Button type="button" variant="default" onClick={handleRedirectToHome}>
+        <Button className="flex items-center gap-2" type="button" variant="default" onClick={handleRedirectToHome}>
           Voltar para página inicial
+          <HomeIcon className="w-4 h-4" />
         </Button>
       </div>
     </div>

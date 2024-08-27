@@ -1,35 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
+import { ErrorMessage } from "../error-message/error-message";
+import { AlertCircle } from "lucide-react";
 
 export type FormResponse<I> = {
+  trigger?: React.ReactNode;
+  formKeys: string[];
   item: I | undefined;
   isLoading: boolean;
   isFetching: boolean;
-  isError: boolean;
-  error: Error | null;
 };
 
-interface IFormRequestProps<M> {
-  form: string;
+export interface IFormRequestProps<M> {
+  trigger?: React.ReactNode;
+  form: string[];
   request: (id: number) => Promise<M>;
   component: (props: FormResponse<M>) => JSX.Element;
 }
 
 export function FormRequest<M>(props: Readonly<IFormRequestProps<M>>) {
+  const { trigger, form, request, component } = props;
   const [searchParams] = useSearchParams();
 
   const id = searchParams.get("formId");
 
-  if (!id) return null;
-
-  const { form, request, component } = props;
-
   const { data, isLoading, isFetching, isError, error } = useQuery({
-    queryKey: [form, "form"],
+    queryKey: [...form, "form"],
     queryFn: middleware,
     refetchOnWindowFocus: false,
+    enabled: !!id,
   });
+
+  if (!id) return null;
 
   async function middleware(): Promise<M> {
     try {
@@ -44,11 +47,23 @@ export function FormRequest<M>(props: Readonly<IFormRequestProps<M>>) {
     }
   }
 
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
   return React.createElement(component, {
+    trigger,
+    formKeys: form,
     item: data ?? undefined,
     isLoading,
     isFetching,
-    isError,
-    error,
   });
 }

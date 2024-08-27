@@ -7,6 +7,7 @@ import { ComponentResponse } from "@/components/component-request/component-requ
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
 import { STATUS_ORDERS_OPTIONS } from "@/shared/constants";
+import { OrderItens } from "./subc-order-itens";
 
 export interface IOrdersTableProps extends ComponentResponse<Order> {}
 
@@ -72,6 +73,12 @@ export function OrdersTable(props: IOrdersTableProps) {
         pageIndex: 0,
       }}
       defaultSizes={[5, 10, 20]}
+      
+      renderSubComponent={({ row }) => (
+        <div className="bg-white hover:bg-white">
+          <OrderItens order_id={row.original.id} />
+        </div>
+      )}
     />
   );
 }

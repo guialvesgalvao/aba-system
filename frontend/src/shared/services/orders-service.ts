@@ -15,6 +15,14 @@ export default class OrdersService implements OrdersModel {
     this.createOrder = this.createOrder.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
+    this.getOrderExtendedData = this.getOrderExtendedData.bind(this);
+  }
+
+  async getOrderExtendedData(order_id: number): Promise<Order> {
+    const orderExtendedFromRepo = await this._repository.getOrderExtended(order_id);
+    const order =  new Order(orderExtendedFromRepo);
+
+    return order;
   }
 
   async getAllOrders(): Promise<Order[]> {

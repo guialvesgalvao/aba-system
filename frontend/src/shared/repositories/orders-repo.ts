@@ -3,6 +3,7 @@ import { OrderRequest, OrderResponse } from "../types/orders-types";
 
 export class OrdersRepo {
   private _API_URL = "http://localhost:5000/api/orders";
+  private _API_SPECIFIC_URL = "http://localhost:5000/api/order_full";
   private _API_KEY = "ABA";
 
   async getAllOrders(): Promise<OrderResponse[]> {
@@ -24,6 +25,16 @@ export class OrdersRepo {
         },
       }
     );
+
+    return response.data;
+  }
+
+  async getOrderExtended(order_id: number): Promise<OrderResponse> {
+    const response = await axios.get<OrderResponse>(`${this._API_SPECIFIC_URL}/${order_id}`, {
+      headers: {
+        "X-API-KEY": this._API_KEY,
+      },
+    });
 
     return response.data;
   }

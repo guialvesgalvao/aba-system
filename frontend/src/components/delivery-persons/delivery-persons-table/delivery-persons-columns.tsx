@@ -28,7 +28,7 @@ import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
 import { DeliveryPersonStatus } from "@/shared/types/delivery-persons-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { DeliveryPersonsForm } from "../delivery-persons-form/delivery-persons-form";
 
 export const columns: ColumnDef<DeliveryPerson>[] = [
   {
@@ -145,8 +145,7 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
+      const deliveryPerson = row.original;
 
       return (
         <DropdownMenu modal={false}>
@@ -164,16 +163,15 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full"
-                onClick={() => {
-                  searchParams.set("formId", id.toString());
-                  setSearchParams(searchParams);
-                }}
-              >
-                Editar
-              </DialogTrigger>
+            <DropdownMenuItem >
+              <DeliveryPersonsForm 
+              trigger={<DialogTrigger>Editar</DialogTrigger>}
+              item={deliveryPerson}
+              formKeys={["delivery-persons"]}               
+              isFetching={false}
+              isLoading={false}
+              />
+              
             </DropdownMenuItem>
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>

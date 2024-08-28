@@ -35,6 +35,10 @@ import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { FormDialog } from "@/components/utilities/form-dialog";
+import { useMutation } from "@tanstack/react-query";
 
 const SuppliersFormCreateValidation = z.object({
   id: z
@@ -58,35 +62,35 @@ export type SuppliersFormValidationType = z.infer<
   typeof SuppliersFormCreateValidation
 >;
 
-interface ISuppliersFormProps extends FormResponse<Supplier> {}
+interface ISuppliersFormProps extends FormResponse<Supplier> {
+  trigger?: React.ReactNode;
+}
 
-export function SuppliersForm(props: ISuppliersFormProps) {
-  const { formKeys, item: supplier, isFetching, isLoading } = props;
+export function SuppliersForm(props: Readonly<ISuppliersFormProps>) {
+  const { trigger } = props;
+  const [open, setOpen] = useState(false);
 
-  if (isError) {
-    return (
-      <div className="px-10 py-10">
-        <ErrorMessage
-          icon={<AlertCircle className="w-14 h-14" />}
-          className="text-lg"
-          error={error}
-        />
-      </div>
-    );
-  }
+  return (
+    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+      <RenderSupplierForm {...props} setOpen={setOpen} />
+    </FormDialog>
+  );
+}
 
-  if (isLoading || isFetching)
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <LoadingSpinner
-          text="Obtendo informações do fornecedor"
-          className="w-12 h-12"
-        />
-      </div>
-    );
+interface IRenderSupplierForm extends ISuppliersFormProps {
+  setOpen: (open: boolean) => void;
+}
+
+function RenderSupplierForm(props: Readonly<IRenderSupplierForm>) {
+  const { formKeys, item: supplier, isFetching, isLoading, setOpen } = props;
 
   const { createSupplier, updateSupplier, deleteSupplier } =
     new SuppliersService();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: formKeys,
+    mutationFn: handleWhichAction,
+  });
 
   const isEditMode = !!supplier;
 
@@ -112,12 +116,57 @@ export function SuppliersForm(props: ISuppliersFormProps) {
   }
 
   async function onSubmit(data: Supplier) {
-    if (isEditMode) {
-      return await updateSupplier(data as SupplierRequest);
-    } else {
-      return await createSupplier(data as SupplierRequest);
-    }
+    mutate(data);
   }
+
+  async function handleWhichAction(data: Supplier) {
+    if (isEditMode) {
+      await updateSupplier(data as SupplierRequest);
+    } else {
+      await createSupplier(data as SupplierRequest);
+    }
+
+    toast({
+      variant: "default",
+      title: "Fornecedor salvo com sucesso",
+      description: "O Fornecedor foi salvo com sucesso",
+    });
+
+    setOpen(false);
+  }
+
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Salvando informações do fornecedor"
+          className="w-12 h-12"
+        />
+      </div>
+    );
+  }
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Obtendo informações do fornecedor"
+          className="w-12 h-12"
+        />
+      </div>
+    );
 
   return (
     <RenderForm<Supplier>

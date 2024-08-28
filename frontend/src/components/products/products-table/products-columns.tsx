@@ -1,4 +1,3 @@
-import { FormRequest } from "@/components/form-request/form-request";
 import { SortingColumn } from "@/components/render-table/utilities/sorting-column";
 import { StatusBadge } from "@/components/status-badge/status-badge";
 import { Button } from "@/components/ui/button";
@@ -29,9 +28,7 @@ import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
 import { ProductStatus } from "@/shared/types/products-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
 import { ProductsForm } from "../products-form/products-form";
-import ProductsService from "@/shared/services/products-service";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -163,13 +160,16 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <ProductsForm
-              trigger={<DialogTrigger>Editar</DialogTrigger>}
-              item={product}
-              formKeys={["products"]}
-              isFetching={false}
-              isLoading={false}
-            />
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <ProductsForm
+                trigger={<DialogTrigger>Editar</DialogTrigger>}
+                item={product}
+                formKeys={["products"]}
+                isFetching={false}
+                isLoading={false}
+              />
+            </DropdownMenuItem>
+
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

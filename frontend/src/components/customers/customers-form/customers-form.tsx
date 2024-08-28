@@ -31,6 +31,10 @@ import { FormResponse } from "@/components/form-request/form-request";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { useState } from "react";
+import { FormDialog } from "@/components/utilities/form-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
 const CustomersFormCreateValidation = z.object({
   id: z
@@ -61,35 +65,33 @@ export type CustomersFormValidationType = z.infer<
   typeof CustomersFormCreateValidation
 >;
 
-interface ICustomersFormProps extends FormResponse<Customer> {}
+interface ICustomersFormProps extends FormResponse<Customer> {
+  trigger?: React.ReactNode;
+}
 
-export function CustomersForm(props: ICustomersFormProps) {
-  const { formKeys, item: customer, isFetching, isLoading } = props;
+export function CustomersForm(props: Readonly<ICustomersFormProps>) {
+  const { trigger } = props;
+  const [open, setOpen] = useState(false);
 
-  if (isError) {
-    return (
-      <div className="px-10 py-10">
-        <ErrorMessage
-          icon={<AlertCircle className="w-14 h-14" />}
-          className="text-lg"
-          error={error}
-        />
-      </div>
-    );
-  }
+  return (
+    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+      <RenderCustomerForm {...props} setOpen={setOpen} />
+    </FormDialog>
+  );
+}
 
-  if (isLoading || isFetching)
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <LoadingSpinner
-          text="Obtendo informações do cliente"
-          className="w-12 h-12"
-        />
-      </div>
-    );
+interface IRenderCustomerForm extends ICustomersFormProps {
+  setOpen: (open: boolean) => void;
+}
+function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
+  const { formKeys, item: customer, isFetching, isLoading, setOpen } = props;
 
-  const { createCustomer, updateCustomer, deleteCustomer } =
-    new CustomersService();
+  const { createCustomer, updateCustomer, deleteCustomer } = new CustomersService();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: formKeys,
+    mutationFn: handleWhichAction,
+  });
 
   const isEditMode = !!customer;
 
@@ -113,12 +115,57 @@ export function CustomersForm(props: ICustomersFormProps) {
   }
 
   async function onSubmit(data: Customer) {
-    if (isEditMode) {
-      return await updateCustomer(data as CustomerRequest);
-    } else {
-      return await createCustomer(data as CustomerRequest);
-    }
+    mutate(data);
   }
+
+  async function handleWhichAction(data: Customer) {
+    if (isEditMode) {
+      await updateCustomer(data as CustomerRequest);
+    } else {
+      await createCustomer(data as CustomerRequest);
+    }
+
+    toast({
+      variant: "default",
+      title: "Cliente salvo com sucesso",
+      description: "O cliente foi salvo com sucesso",
+    });
+
+    setOpen(false);
+  }
+
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Salvando informações do cliente"
+          className="w-12 h-12"
+        />
+      </div>
+    );
+  }
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Obtendo informações do cliente"
+          className="w-12 h-12"
+        />
+      </div>
+    );
 
   return (
     <RenderForm<Customer>

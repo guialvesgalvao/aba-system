@@ -32,6 +32,10 @@ import { FormResponse } from "@/components/form-request/form-request";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { useState } from "react";
+import { FormDialog } from "@/components/utilities/form-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
 const OriginsFormCreateValidation = z.object({
   id: z
@@ -54,34 +58,35 @@ export type OriginsFormValidationType = z.infer<
   typeof OriginsFormCreateValidation
 >;
 
-interface IOriginsFormProps extends FormResponse<Origin> {}
+interface IOriginsFormProps extends FormResponse<Origin> {
+  trigger?: React.ReactNode;
+}
 
-export function OriginsForm(props: IOriginsFormProps) {
-  const { formKeys, item: origin, isFetching, isLoading } = props;
+export function OriginsForm(props: Readonly<IOriginsFormProps>) {
 
-  if (isError) {
-    return (
-      <div className="px-10 py-10">
-        <ErrorMessage
-          icon={<AlertCircle className="w-14 h-14" />}
-          className="text-lg"
-          error={error}
-        />
-      </div>
-    );
-  }
+  const { trigger } = props;
+  const [open, setOpen] = useState(false);
 
-  if (isLoading || isFetching)
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <LoadingSpinner
-          text="Obtendo informações da origem"
-          className="w-12 h-12"
-        />
-      </div>
-    );
+  return (
+    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+      <RenderOriginForm {...props} setOpen={setOpen} />
+    </FormDialog>
+  );
+}
+
+interface IRenderOriginForm extends IOriginsFormProps {
+  setOpen: (open: boolean) => void;
+}
+
+function RenderOriginForm(props: Readonly<IRenderOriginForm>) {
+  const { formKeys, item: origin, isFetching, isLoading, setOpen } = props;
 
   const { createOrigin, updateOrigin, deleteOrigin } = new OriginsService();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: formKeys,
+    mutationFn: handleWhichAction,
+  });
 
   const isEditMode = !!origin;
 
@@ -105,13 +110,59 @@ export function OriginsForm(props: IOriginsFormProps) {
   }
 
   async function onSubmit(data: Origin) {
-    if (isEditMode) {
-      return await updateOrigin(data as OriginRequest);
-    } else {
-      return await createOrigin(data as OriginRequest);
-    }
+    mutate(data);
   }
 
+  async function handleWhichAction(data: Origin) {
+    if (isEditMode) {
+      await updateOrigin(data as OriginRequest);
+    } else {
+      await createOrigin(data as OriginRequest);
+    }
+
+    toast({
+      variant: "default",
+      title: "Origem salva com sucesso",
+      description: "A origem foi salva com sucesso",
+    });
+
+    setOpen(false);
+  }
+
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Salvando informações da origem"
+          className="w-12 h-12"
+        />
+      </div>
+    );
+  }
+
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Obtendo informações da origem"
+          className="w-12 h-12"
+        />
+      </div>
+    );
+    
   return (
     <RenderForm<Origin>
       resolver={OriginsFormCreateValidation}

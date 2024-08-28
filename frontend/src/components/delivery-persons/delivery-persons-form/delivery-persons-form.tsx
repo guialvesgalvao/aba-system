@@ -32,6 +32,10 @@ import { FormResponse } from "@/components/form-request/form-request";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { ErrorMessage } from "@/components/error-message/error-message";
 import { AlertCircle } from "lucide-react";
+import { FormDialog } from "@/components/utilities/form-dialog";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
 const DeliveryPersonsFormCreateValidation = z.object({
   id: z
@@ -54,37 +58,42 @@ export type DeliveryPersonsFormValidationType = z.infer<
   typeof DeliveryPersonsFormCreateValidation
 >;
 
-interface IDeliveryPersonsFormProps extends FormResponse<DeliveryPerson> {}
+interface IDeliveryPersonsFormProps extends FormResponse<DeliveryPerson> {
+  trigger?: React.ReactNode;
+}
 
 export function DeliveryPersonsForm(
   props: Readonly<IDeliveryPersonsFormProps>
 ) {
-  const { formKeys, item: deliveryPerson, isFetching, isLoading } = props;
+  const { trigger } = props;
+  const [open, setOpen] = useState(false);
 
-  if (isError) {
-    return (
-      <div className="px-10 py-10">
-        <ErrorMessage
-          icon={<AlertCircle className="w-14 h-14" />}
-          className="text-lg"
-          error={error}
-        />
-      </div>
-    );
-  }
+  return (
+    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+      <RenderDeliveryPersonForm {...props} setOpen={setOpen} />
+    </FormDialog>
+  );
+}
+interface IRenderDeliveryPersonForm extends IDeliveryPersonsFormProps {
+  setOpen: (open: boolean) => void;
+}
 
-  if (isLoading || isFetching)
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <LoadingSpinner
-          text="Obtendo informações do tipo de entrega"
-          className="w-12 h-12"
-        />
-      </div>
-    );
+function RenderDeliveryPersonForm(props: Readonly<IRenderDeliveryPersonForm>) {
+  const {
+    formKeys,
+    item: deliveryPerson,
+    isFetching,
+    isLoading,
+    setOpen,
+  } = props;
 
   const { createDeliveryPerson, updateDeliveryPerson, deleteDeliveryPerson } =
     new DeliveryPersonsService();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: formKeys,
+    mutationFn: handleWhichAction,
+  });
 
   const isEditMode = !!deliveryPerson;
 
@@ -108,12 +117,58 @@ export function DeliveryPersonsForm(
   }
 
   async function onSubmit(data: DeliveryPerson) {
-    if (isEditMode) {
-      return await updateDeliveryPerson(data as DeliveryPersonRequest);
-    } else {
-      return await createDeliveryPerson(data as DeliveryPersonRequest);
-    }
+    mutate(data);
   }
+
+  async function handleWhichAction(data: DeliveryPerson) {
+    if (isEditMode) {
+      await updateDeliveryPerson(data as DeliveryPersonRequest);
+    } else {
+      await createDeliveryPerson(data as DeliveryPersonRequest);
+    }
+
+    toast({
+      variant: "default",
+      title: "Tipo de entrega salvo com sucesso",
+      description: "O Tipo de entrega foi salvo com sucesso",
+    });
+
+    setOpen(false);
+  }
+
+  
+  if (isError) {
+    return (
+      <div className="px-10 py-10">
+        <ErrorMessage
+          icon={<AlertCircle className="w-14 h-14" />}
+          className="text-lg"
+          error={error}
+        />
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Salvando informações do tipo de entrega"
+          className="w-12 h-12"
+        />
+      </div>
+    );
+  }
+
+  if (isLoading || isFetching)
+    return (
+      <div className="w-full h-96 flex items-center justify-center">
+        <LoadingSpinner
+          text="Obtendo informações do tipo de entrega"
+          className="w-12 h-12"
+        />
+      </div>
+    );
 
   return (
     <RenderForm<DeliveryPerson>

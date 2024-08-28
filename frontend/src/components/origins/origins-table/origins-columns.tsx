@@ -28,7 +28,7 @@ import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
 import { OriginStatus } from "@/shared/types/origins-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { OriginsForm } from "../origins-form/origins-form";
 
 export const columns: ColumnDef<Origin>[] = [
   {
@@ -140,9 +140,8 @@ export const columns: ColumnDef<Origin>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
 
+      const origin: Origin = row.original
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
@@ -154,21 +153,21 @@ export const columns: ColumnDef<Origin>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full"
-                onClick={() => {
-                  searchParams.set("formId", id.toString());
-                  setSearchParams(searchParams);
-                }}
-              >
-                Editar
-              </DialogTrigger>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <OriginsForm
+              trigger={<DialogTrigger>Editar</DialogTrigger>}
+              item={origin}
+              formKeys={["origins"]}
+              isFetching={false}
+              isLoading={false}
+              />
+
             </DropdownMenuItem>
+
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
-];
+]

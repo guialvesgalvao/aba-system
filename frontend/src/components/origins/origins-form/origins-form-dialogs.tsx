@@ -13,10 +13,10 @@ import { Button } from "@/components/ui/button";
 
 import { FieldValues, useFormContext } from "react-hook-form";
 
-export function SubmitDialog<T extends FieldValues>(props: {
+export function SubmitDialog<T extends FieldValues>(props: Readonly<{
   isEditMode: boolean;
   onSubmit: (data: T) => Promise<T | void>;
-}) {
+}>) {
   const { isEditMode, onSubmit } = props;
 
   const { formState, handleSubmit } = useFormContext<T>();

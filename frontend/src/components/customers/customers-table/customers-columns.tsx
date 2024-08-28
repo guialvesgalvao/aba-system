@@ -27,8 +27,8 @@ import {
 import { CustomerStatus } from "@/shared/types/customers-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
 import { CNPJ } from "@/shared/helpers/cnpj-helper/cnpj-helper";
+import { CustomersForm } from "../customers-form/customers-form";
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -169,8 +169,7 @@ export const columns: ColumnDef<Customer>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
+      const customer = row.original;
 
       return (
         <DropdownMenu modal={false}>
@@ -183,16 +182,14 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full"
-                onClick={() => {
-                  searchParams.set("formId", id.toString());
-                  setSearchParams(searchParams);
-                }}
-              >
-                Editar
-              </DialogTrigger>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <CustomersForm 
+              trigger={<DialogTrigger>Editar</DialogTrigger>}
+              item={customer}
+              formKeys={['customers']}
+              isFetching={false}
+              isLoading={false}
+              />
             </DropdownMenuItem>
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>

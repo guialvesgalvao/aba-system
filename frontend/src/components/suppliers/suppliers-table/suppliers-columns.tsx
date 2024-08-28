@@ -30,7 +30,7 @@ import {
 import { SupplierStatus } from "@/shared/types/suppliers-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { SuppliersForm } from "../suppliers-form/suppliers-form";
 
 export const columns: ColumnDef<Supplier>[] = [
   {
@@ -170,8 +170,7 @@ export const columns: ColumnDef<Supplier>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
+      const supplier = row.original;
 
       return (
         <DropdownMenu modal={false}>
@@ -189,17 +188,16 @@ export const columns: ColumnDef<Supplier>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full"
-                onClick={() => {
-                  searchParams.set("formId", id.toString());
-                  setSearchParams(searchParams);
-                }}
-              >
-                Editar
-              </DialogTrigger>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <SuppliersForm
+              trigger={<DialogTrigger>Editar</DialogTrigger>} 
+              item={supplier}
+              formKeys={['suppliers']}
+              isFetching={false}
+              isLoading={false}
+              />
             </DropdownMenuItem>
+
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

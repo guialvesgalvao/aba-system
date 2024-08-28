@@ -1,3 +1,7 @@
+import { CustomerResponse } from "./customers-types";
+import { OrderItensResponse } from "./orders-itens-types";
+import { OriginResponse } from "./origins-types";
+
 export enum OrderStatusEnum {
   draft = "draft",
   in_progress = "in_progress",
@@ -17,6 +21,9 @@ export type OrderResponse = {
   extra_details: string;
   order_date: string;
   invoicing_date: string;
+  client_data?: CustomerResponse;
+  origin_data?: OriginResponse;
+  order_itens?: OrderItensResponse[];
   created_at: string;
   created_by: string;
   modified_by: string;

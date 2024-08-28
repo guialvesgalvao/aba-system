@@ -1,14 +1,13 @@
+import { CustomerResponse } from "../types/customers-types";
 import { OrderItensResponse } from "../types/orders-itens-types";
 import { OrderResponse, OrderStatus } from "../types/orders-types";
-import { Customer } from "./customers-factory";
-import { Origin } from "./origins-factory";
-
+import { OriginResponse } from "../types/origins-types";
 export class Order {
   private _id: number;
   private _client_id: number;
-  private _client_data: Customer | undefined;
+  private _client_data: CustomerResponse | undefined;
   private _origin_id: number;
-  private _origin_data: Origin | undefined;
+  private _origin_data: OriginResponse | undefined;
   private _status: OrderStatus;
   private _order_itens: Array<OrderItensResponse> | undefined;
   private _total_cost_value: number;
@@ -22,10 +21,7 @@ export class Order {
   private _modifiedBy: string;
 
   constructor(
-    data: OrderResponse,
-    order_itens?: Array<OrderItensResponse> | undefined,
-    origin_data?: Origin | undefined,
-    client_data?: Customer | undefined
+    data: OrderResponse
   ) {
     this._id = data.id;
     this._client_id = data.client_id;
@@ -34,9 +30,9 @@ export class Order {
     this._total_cost_value = data.total_cost_value;
     this._total_sale_value = data.total_sale_value;
     this._extra_details = data.extra_details;
-    this._client_data = client_data ?? undefined;
-    this._origin_data = origin_data ?? undefined;
-    this._order_itens = order_itens ?? undefined;
+    this._client_data = data.client_data ?? undefined;
+    this._origin_data = data.origin_data ?? undefined;
+    this._order_itens = data.order_itens ?? undefined;
     
     // If the data is not provided, the date will be undefined
     this._order_date = new Date(data.order_date);
@@ -72,11 +68,11 @@ export class Order {
     return [];
   }
 
-  public get client_data(): Customer | undefined{
+  public get client_data(): CustomerResponse | undefined{
       return this._client_data ?? undefined;
   }
 
-  public get origin_data(): Origin | undefined{
+  public get origin_data(): OriginResponse | undefined{
       return this._origin_data ?? undefined;
   }
 

@@ -116,10 +116,25 @@ def get_order_full(order_id):
         delivery_person = DeliveryPersons.query.get(item.delivery_person_id)
         supplier = Suppliers.query.get(item.invoicing_id)
 
-        item_info = item.as_dict()
-        item_info['product'] = product.as_dict() if product else None
-        item_info['delivery_person'] = delivery_person.as_dict() if delivery_person else None
-        item_info['supplier'] = supplier.as_dict() if supplier else None
+        item_info = {
+            'id': item.id,
+            'order_id': item.order_id,
+            'product_id': item.product_id,
+            'delivery_person_id': item.delivery_person_id,
+            'invoicing_id': item.invoicing_id,
+            'quantity': item.quantity,
+            'cost_value': item.cost_value,
+            'sale_value': item.sale_value,
+            'status': item.status,
+            'delivery_date': item.delivery_date,
+            'created_at': item.created_at,
+            'created_by': item.created_by,
+            'modified_at': item.modified_at,
+            'modified_by': item.modified_by,
+            'product': product.as_dict() if product else None,
+            'delivery_person': delivery_person.as_dict() if delivery_person else None,
+            'supplier': supplier.as_dict() if supplier else None
+        }
 
         order_itens_info.append(item_info)
 
@@ -129,10 +144,22 @@ def get_order_full(order_id):
 
     # Construir a resposta final
     response = {
-        'order': order.as_dict(),
+        'id': order.id,
+        'client_id': order.client_id,
+        'origin_id': order.origin_id,
+        'status': order.status,
+        'total_cost_value': order.total_cost_value,
+        'total_sale_value': order.total_sale_value,
+        'extra_details': order.extra_details,
+        'order_date': order.order_date,
+        'invoicing_date': order.invoicing_date,
+        'client_data': client.as_dict() if client else None,
+        'origin_data': origin.as_dict() if origin else None,
         'order_itens': order_itens_info,
-        'client': client.as_dict() if client else None,
-        'origin': origin.as_dict() if origin else None
+        'created_at': order.created_at,
+        'created_by': order.created_by,
+        'modified_at': order.modified_at,
+        'modified_by': order.modified_by
     }
 
     return jsonify(response)

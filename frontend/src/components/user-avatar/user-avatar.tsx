@@ -15,7 +15,7 @@ interface IUserAvatarProps {
 }
 
 export function UserAvatar(props: Readonly<IUserAvatarProps>) {
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isMobile = useMediaQuery("(max-width: 750px)");
 
   const {
     name = {
@@ -27,7 +27,7 @@ export function UserAvatar(props: Readonly<IUserAvatarProps>) {
   } = props;
 
   return (
-    <div className="w-full flex items-center gap-2 px-4">
+    <div className="flex items-center gap-2">
       <Avatar>
         <AvatarImage src={image} alt="User image" />
         {fallback && (

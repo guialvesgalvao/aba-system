@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import App from "./app.tsx";
 
 import "./index.css";
+import { ThemeProvider } from "./components/theme-provider/theme-provider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider defaultTheme="dark" storageKey="aba-system-ui-theme">
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );

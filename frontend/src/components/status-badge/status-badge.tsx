@@ -13,9 +13,7 @@ export function StatusBadge(props: Readonly<IStatusBadgeProps>) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Badge className={className} variant="default">
-          {text}
-        </Badge>
+        <Badge>{text}</Badge>
       </TooltipTrigger>
       <TooltipContent>{description}</TooltipContent>
     </Tooltip>

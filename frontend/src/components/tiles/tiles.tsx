@@ -7,11 +7,5 @@ interface ITilesProps {
 export function Tiles(props: Readonly<ITilesProps>) {
   const { tiles } = props;
 
-  return (
-    <>
-      {tiles.map((tile) => (
-        <Tile key={tile.title} {...tile} />
-      ))}
-    </>
-  );
+  return tiles.map((tile) => <Tile key={tile.title} {...tile} />);
 }

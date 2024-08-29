@@ -7,7 +7,13 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { ArrowUpRight, DollarSign, Package, RefreshCcwDot, Plus } from "lucide-react";
+import {
+  ArrowUpRight,
+  DollarSign,
+  Package,
+  RefreshCcwDot,
+  Plus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarChartRender } from "@/components/charts/bar-chart-render";
 import { OrdersStaticTable } from "@/components/orders/orders-static-table/orders-static-table";
@@ -70,13 +76,13 @@ export function Home() {
 
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 transition-all">
-          <div className="rounded-xl border border-slate-200 text-slate-950 shadow dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50">
+          <div className="h-[126px] md:h-full rounded-xl border border-slate-200 text-slate-950 shadow dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50">
             <Button
               type="button"
-              className="min-h rounded-xl w-full h-full items-center justify-center gap-2"
+              className="min-h rounded-xl w-full h-full flex items-center justify-center gap-2 px-6"
             >
               <div className="flex items-center justify-center">
-                <Plus className="w-10 h-10" />
+                <Plus className="w-8 h-8" />
               </div>
               <div className="flex flex-col items-start">
                 <h5 className="text-base font-semibold">Criar pedido</h5>
@@ -84,10 +90,11 @@ export function Home() {
               </div>
             </Button>
           </div>
+
           <Tiles tiles={tiles} />
         </div>
 
-        <div className="h-full grid pb-6 gap-4 md:gap-8 lg:grid-cols-2">
+        <div className="h-full flex flex-col md:grid pb-6 gap-4 md:gap-8 lg:grid-cols-2">
           <Card>
             <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
               <div className="grid gap-2">
@@ -98,7 +105,7 @@ export function Home() {
                 </CardDescription>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <ButtonRefreshLastOrders />
                 <ButtonRedirectOrders />
               </div>

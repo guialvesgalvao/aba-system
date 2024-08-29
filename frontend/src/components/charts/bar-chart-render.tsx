@@ -58,9 +58,9 @@ export function BarChartRender() {
             <Line
               dataKey="desktop"
               type="linear"
-              fill="var(--color-desktop)"
+              fill="var(--primary)"
               dot={{
-                fill: "var(--color-desktop)",
+                fill: "var(--primary)",
               }}
               activeDot={{
                 r: 6,

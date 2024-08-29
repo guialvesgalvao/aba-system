@@ -1,8 +1,14 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PanelLeftDashed,
+  PanelLeftOpen,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 import { useSidebar } from "@/shared/hooks/use-sidebar";
+import { ToolbarButtonVariant } from "../toolbar/toolbar";
 
 export function CollapseButton() {
   const { isCollapsed, toggleSidebar } = useSidebar();
@@ -25,6 +31,29 @@ export function CollapseButton() {
         >
           {icon}
         </Button>
+      </TooltipTrigger>
+      <TooltipContent side="top">
+        {isCollapsed ? "Expandir" : "Colapsar"}
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+export function ToolbarCollapseButton() {
+  const { isCollapsed, toggleSidebar } = useSidebar();
+
+  const icon = isCollapsed ? (
+    <PanelLeftOpen className="w-5 h-5" />
+  ) : (
+    <PanelLeftDashed className="w-5 h-5" />
+  );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ToolbarButtonVariant onClick={() => toggleSidebar()}>
+          {icon}
+        </ToolbarButtonVariant>
       </TooltipTrigger>
       <TooltipContent side="top">
         {isCollapsed ? "Expandir" : "Colapsar"}

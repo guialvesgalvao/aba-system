@@ -8,6 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider/theme-provider";
+import { ToolbarButtonVariant } from "../toolbar/toolbar";
+import { Tooltip, TooltipContent } from "../ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -33,5 +36,31 @@ export function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function ToolbarThemeButton() {
+  const { theme, setTheme } = useTheme();
+
+  const icon =
+    theme === "light" ? (
+      <Sun className="w-5 h-5" />
+    ) : (
+      <Moon className="w-5 h-5" />
+    );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ToolbarButtonVariant
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {icon}
+        </ToolbarButtonVariant>
+      </TooltipTrigger>
+      <TooltipContent>
+        {theme === "light" ? "Mudar para tema escuro" : "Mudar para tema claro"}
+      </TooltipContent>
+    </Tooltip>
   );
 }

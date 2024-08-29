@@ -11,9 +11,7 @@ export function TabRenderBasedStatus(
 ) {
   const { tabs } = props;
   const { currentStatus, onStatusChange } = useStatusParam();
-  console.log('teste')
-  console.log(tabs)
-  console.log('teste')
+
   return (
     <Tabs
       className="h-full flex flex-col"
@@ -31,7 +29,7 @@ export function TabRenderBasedStatus(
       <TabsContent className="h-full" value={TabsStatusEnum.Closed}>
         {tabs.closed}
       </TabsContent>
-      
+
       <TabsContent className="h-full" value={TabsStatusEnum.Archived}>
         {tabs.archived}
       </TabsContent>

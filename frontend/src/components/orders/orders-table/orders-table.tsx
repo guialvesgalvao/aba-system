@@ -73,7 +73,7 @@ export function OrdersTable(props: IOrdersTableProps) {
         pageIndex: 0,
       }}
       defaultSizes={[5, 10, 20]}
-      
+      getRowCanExpand={() => true}      
       renderSubComponent={({ row }) => (
         <div className="bg-white hover:bg-white">
           <OrderItens order_id={row.original.id} />

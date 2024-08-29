@@ -1,14 +1,8 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { TabsStatusEnum } from "../enums/data";
 import { TabValue } from "@/components/status-tabs-chooser/status-tabs-chooser";
-
-const TABS: TabValue[] = [
-  { text: "Todos", value: TabsStatusEnum.All },
-  { text: "Ativos", value: TabsStatusEnum.Active },
-  { text: "Encerrados", value: TabsStatusEnum.Closed },
-  { text: "Rascunhos", value: TabsStatusEnum.Draft },
-  { text: "Arquivados", value: TabsStatusEnum.Archived },
-];
+import { DefaultTabs, OrderTabs } from "../constants";
+import { SystemRoutes } from "../enums/app";
 
 type UseStatusParam = {
   statusTabs: TabValue[];
@@ -20,6 +14,9 @@ type UseStatusParam = {
 export function useStatusParam(): UseStatusParam {
   const [searchParams, setSearchParams] = useSearchParams();
   const status = getCurrentStatus();
+  const { pathname } = useLocation();
+
+  const tabs = pathname === SystemRoutes.ORDERS ? OrderTabs : DefaultTabs;
 
   function getCurrentStatus(): TabsStatusEnum {
     return (searchParams.get("status") as TabsStatusEnum) || TabsStatusEnum.All;
@@ -38,7 +35,7 @@ export function useStatusParam(): UseStatusParam {
   }
 
   return {
-    statusTabs: TABS,
+    statusTabs: tabs,
     currentStatus: status,
     onStatusChange: addOrRemoveStatusFromSearchParam,
     getCurrentStatus,

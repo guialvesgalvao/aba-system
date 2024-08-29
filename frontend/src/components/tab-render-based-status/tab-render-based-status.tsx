@@ -11,9 +11,7 @@ export function TabRenderBasedStatus(
 ) {
   const { tabs } = props;
   const { currentStatus, onStatusChange } = useStatusParam();
-  console.log('teste')
-  console.log(tabs)
-  console.log('teste')
+
   return (
     <Tabs
       className="h-full flex flex-col"

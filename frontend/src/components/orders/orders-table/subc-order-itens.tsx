@@ -1,5 +1,3 @@
-import { Order } from "@/shared/factories/orders-factory";
-
 import OrdersService from "@/shared/services/orders-service";
 import { OrderItensStaticTable } from "../orders-itens-static-table/orders-itens-static-table";
 import { ComponentRequest } from "@/components/component-request/component-request";
@@ -14,7 +12,6 @@ export function OrderItens(props: Readonly<IOrderItensProps>) {
   async function getOrderItens() {
     const service = new OrdersService();
     const orderWithItens = await service.getOrderExtendedData(order_id);
-
     return orderWithItens.order_itens;
   }
 

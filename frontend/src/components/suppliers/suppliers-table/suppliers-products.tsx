@@ -21,10 +21,10 @@ export function SuppliersProducts(props: Readonly<ISuppliersProductsProps>) {
   }
 
   return (
-      <ComponentRequest
-        storages={["supplier-products"]}
-        component={SupplierProductsStaticTable}
-        request={() => getSupplierProducts()}
-      />
+    <ComponentRequest
+      storages={["supplier-products", supplier.id.toString()]}
+      component={SupplierProductsStaticTable}
+      request={() => getSupplierProducts()}
+    />
   );
 }

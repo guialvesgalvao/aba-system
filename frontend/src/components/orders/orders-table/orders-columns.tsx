@@ -36,8 +36,8 @@ export const columns: ColumnDef<Order>[] = [
     id: "expander",
     header: () => null,
     cell: ({ row }) => {
-      const isExpanded = row.getIsExpanded();
-
+      const isExpanded = row.getIsExpanded()
+      
       return row.getCanExpand() ? (
         <SubComponentButton
           isExpanded={isExpanded}

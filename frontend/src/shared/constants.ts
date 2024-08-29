@@ -1,6 +1,7 @@
 import { AppRoute } from "@/components/nav/nav";
 
 import { ColumnFilterOptionsSchema } from "@/components/render-table/column-filter-controller/column-filter-controller";
+import { TabValue } from "@/components/status-tabs-chooser/status-tabs-chooser";
 
 import {
   CircleCheckBig,
@@ -14,6 +15,7 @@ import {
   Truck,
   Plus,
 } from "lucide-react";
+import { TabsStatusEnum } from "./enums/data";
 
 export const STATUS_OPTIONS: ColumnFilterOptionsSchema[] = [
   {
@@ -99,4 +101,20 @@ export const SYSTEM_ROUTES: AppRoute[] = [
     text: "Tipos de Entrega",
     tooltip: "Ir para páginas de tipos de entrega",
   },
+];
+
+
+export const DefaultTabs: TabValue[] = [
+  { text: "Todos", value: TabsStatusEnum.All },
+  { text: "Ativos", value: TabsStatusEnum.Active },
+  { text: "Rascunhos", value: TabsStatusEnum.Draft },
+  { text: "Arquivados", value: TabsStatusEnum.Archived },
+];
+
+export const OrderTabs: TabValue[] = [
+  { text: "Todos", value: TabsStatusEnum.All },
+  { text: "Ativos", value: TabsStatusEnum.Active },
+  { text: "Encerrados", value: TabsStatusEnum.Closed },
+  { text: "Rascunhos", value: TabsStatusEnum.Draft },
+  { text: "Arquivados", value: TabsStatusEnum.Archived },
 ];

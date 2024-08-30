@@ -163,3 +163,20 @@ def get_order_full(order_id):
     }
 
     return jsonify(response)
+
+@orders_bp.route('/orders_full/<int:id>', methods=['DELETE'])
+def delete_order_full(id):
+    check_api_key()
+    
+    order = Orders.query.get_or_404(id)
+    
+    # Excluindo todos os produtos relacionados a esse fornecedor
+    OrderItens.query.filter_by(order_id=id).delete()
+    
+    # Excluindo o fornecedor
+    db.session.delete(order)
+    
+    # Commitando todas as exclusões
+    db.session.commit()
+    
+    return '', 204

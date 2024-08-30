@@ -29,6 +29,8 @@ import { ProductStatus } from "@/shared/types/products-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { ProductsForm } from "../products-form/products-form";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
+import ProductsService from "@/shared/services/products-service";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -143,7 +145,8 @@ export const columns: ColumnDef<Product>[] = [
     enableColumnFilter: false,
     cell({ row }) {
       const product = row.original;
-
+      const service = new ProductsService();
+      
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
@@ -169,8 +172,14 @@ export const columns: ColumnDef<Product>[] = [
                 isLoading={false}
               />
             </DropdownMenuItem>
-
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir este produto?"}
+                onSubmit={() => service.deleteProduct(product.id)}
+                queryKey={["products"]}
+              />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

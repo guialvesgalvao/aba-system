@@ -17,7 +17,7 @@ export function OrderItens(props: Readonly<IOrderItensProps>) {
 
   return (
     <ComponentRequest
-      storages={["order-itens"]}
+      storages={["order-itens", order_id.toString()]}
       component={OrderItensStaticTable}
       request={() => getOrderItens()}
     />

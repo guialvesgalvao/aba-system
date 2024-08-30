@@ -29,10 +29,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { CNPJ } from "@/shared/helpers/cnpj-helper/cnpj-helper";
 import { CustomersForm } from "../customers-form/customers-form";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
+import CustomersService from "@/shared/services/customers-service";
 
 export const columns: ColumnDef<Customer>[] = [
   {
-    header: ({ column }) => <SortingColumn<Customer> column={column} text="ID" />,
+    header: ({ column }) => (
+      <SortingColumn<Customer> column={column} text="ID" />
+    ),
     accessorKey: "id",
   },
   {
@@ -87,7 +91,7 @@ export const columns: ColumnDef<Customer>[] = [
     ),
     accessorKey: "delivery_address",
   },
-  
+
   {
     header: ({ column }) => (
       <SortingColumn<Customer> column={column} text="Status" />
@@ -170,11 +174,17 @@ export const columns: ColumnDef<Customer>[] = [
     enableColumnFilter: false,
     cell({ row }) {
       const customer = row.original;
+      const service = new CustomersService();
 
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button type="button" aria-haspopup="true" size="icon" variant="ghost">
+            <Button
+              type="button"
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+            >
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Toggle menu</span>
             </Button>
@@ -183,15 +193,22 @@ export const columns: ColumnDef<Customer>[] = [
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
             <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-              <CustomersForm 
-              trigger={<DialogTrigger>Editar</DialogTrigger>}
-              item={customer}
-              formKeys={['customers']}
-              isFetching={false}
-              isLoading={false}
+              <CustomersForm
+                trigger={<DialogTrigger>Editar</DialogTrigger>}
+                item={customer}
+                formKeys={["customers"]}
+                isFetching={false}
+                isLoading={false}
               />
             </DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir este cliente?"}
+                onSubmit={() => service.deleteCustomer(customer.id)}
+                queryKey={["customers"]}
+              />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

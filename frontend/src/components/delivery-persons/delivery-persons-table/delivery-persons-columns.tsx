@@ -29,6 +29,8 @@ import { DeliveryPersonStatus } from "@/shared/types/delivery-persons-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { DeliveryPersonsForm } from "../delivery-persons-form/delivery-persons-form";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
+import DeliveryPersonsService from "@/shared/services/delivery-persons-service";
 
 export const columns: ColumnDef<DeliveryPerson>[] = [
   {
@@ -146,7 +148,7 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
     enableColumnFilter: false,
     cell({ row }) {
       const deliveryPerson = row.original;
-
+      const service = new DeliveryPersonsService();
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
@@ -173,7 +175,14 @@ export const columns: ColumnDef<DeliveryPerson>[] = [
               />
               
             </DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir este tipo de entrega?"}
+                onSubmit={() => service.deleteDeliveryPerson(deliveryPerson.id)}
+                queryKey={["delivery-persons"]}
+              ></DeleteDialog>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

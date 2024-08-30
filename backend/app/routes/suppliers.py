@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, abort
 from ..extensions import db
 from ..models.suppliers import Suppliers
+from ..models.suppliers_products import SuppliersProducts
 from ..config import Config
 from datetime import datetime
 
@@ -82,4 +83,21 @@ def delete_supplier(id):
     supplier = Suppliers.query.get_or_404(id)
     db.session.delete(supplier)
     db.session.commit()
+    return '', 204
+
+@suppliers_bp.route('/suppliers_full/<int:id>', methods=['DELETE'])
+def delete_supplier_full(id):
+    check_api_key()
+    
+    supplier = Suppliers.query.get_or_404(id)
+    
+    # Excluindo todos os produtos relacionados a esse fornecedor
+    SuppliersProducts.query.filter_by(supplier_id=id).delete()
+    
+    # Excluindo o fornecedor
+    db.session.delete(supplier)
+    
+    # Commitando todas as exclusões
+    db.session.commit()
+    
     return '', 204

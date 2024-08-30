@@ -29,6 +29,8 @@ import { OriginStatus } from "@/shared/types/origins-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { OriginsForm } from "../origins-form/origins-form";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
+import OriginsService from "@/shared/services/origins-service";
 
 export const columns: ColumnDef<Origin>[] = [
   {
@@ -140,8 +142,9 @@ export const columns: ColumnDef<Origin>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-
       const origin: Origin = row.original
+      const service = new OriginsService();
+
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
@@ -163,7 +166,14 @@ export const columns: ColumnDef<Origin>[] = [
               />
 
             </DropdownMenuItem>
-
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir esta origem?"}
+                onSubmit={() => service.deleteOrigin(origin.id)}
+                queryKey={["origins"]}
+              />
+            </DropdownMenuItem>
             <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

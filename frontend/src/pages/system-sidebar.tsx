@@ -1,12 +1,11 @@
-import { AppRoute, Nav } from "@/components/nav/nav";
-import { Logo } from "@/components/logo/logo";
+import { AppRoute } from "@/components/nav/nav";
 
 import { useSidebar } from "@/shared/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
 import { CollapseButton } from "@/components/collapse-button/collapse-button";
-import { UserAvatar } from "@/components/user-avatar/user-avatar";
 
-import { NavMenu } from "@/components/nav-menu/nav-menu";
+import { SidebarHeader } from "@/components/sidebar/sidebar-header";
+import { SidebarRoutes } from "@/components/sidebar/sidebar-routes";
 
 interface ISystemSidebarProps {
   routes: AppRoute[];
@@ -23,39 +22,8 @@ export function SystemSidebar(props: Readonly<ISystemSidebarProps>) {
         isCollapsed ? "md:max-w-20" : "md:max-w-52"
       )}
     >
-      <div className="w-full h-full flex items-center justify-between md:hidden px-6">
-        <NavMenu routes={routes} />
-
-        <div className="flex items-center justify-center py-2">
-          <UserAvatar
-            image=""
-            fallback={{
-              delay: 300,
-              initials: "ADM",
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="w-full h-full hidden md:flex md:flex-col gap-2">
-        <Logo to="/" />
-
-        <Nav routes={routes} />
-
-        <div className="hidden md:flex items-center mt-auto py-2 px-4 gap-2">
-          <UserAvatar
-            image=""
-            name={{
-              text: "Admin",
-              enabled: !isCollapsed,
-            }}
-            fallback={{
-              delay: 300,
-              initials: "ADM",
-            }}
-          />
-        </div>
-      </div>
+      <SidebarHeader routes={routes} />
+      <SidebarRoutes routes={routes} />
 
       <div className="top-1/2 -right-3 absolute hidden md:flex">
         <CollapseButton />

@@ -1,10 +1,10 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { useSidebar } from "@/shared/hooks/use-sidebar";
+import { ArrowRightIcon, ArrowLeftIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-import { useSidebar } from "@/shared/hooks/use-sidebar";
+import { ToggleGroupItem } from "../ui/toggle-group";
 
-export function CollapseButton() {
+export function ToolbarCollapseButton() {
   const { isCollapsed, toggleSidebar } = useSidebar();
 
   const icon = isCollapsed ? (
@@ -16,15 +16,9 @@ export function CollapseButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="w-6 h-6 text-muted-foreground transition-colors hover:text-primary"
-          onClick={() => toggleSidebar()}
-        >
+        <ToggleGroupItem value="collapse" onClick={() => toggleSidebar()}>
           {icon}
-        </Button>
+        </ToggleGroupItem>
       </TooltipTrigger>
       <TooltipContent side="top">
         {isCollapsed ? "Expandir" : "Colapsar"}

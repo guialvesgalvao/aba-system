@@ -19,7 +19,7 @@ export function Tile(props: Readonly<ITileProps>) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-gray-600">
+        <CardTitle className="text-sm font-medium">
           {title}
         </CardTitle>
         {icon}
@@ -36,7 +36,7 @@ export function Tile(props: Readonly<ITileProps>) {
               title={percentage + " " + description}
               className="text-xs flex gap-1 text-muted-foreground"
             >
-              <strong className="text-green-500 font-medium">
+              <strong className="text-primary font-medium">
                 {percentage}
               </strong>
               {description}

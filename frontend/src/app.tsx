@@ -7,12 +7,11 @@ import { SYSTEM_ROUTES } from "./shared/constants";
 import { RoutesController } from "./components/routes-controller/routes-controller";
 import { ProvidersWrapper } from "./components/providers-wrapper/providers-wrapper";
 import { AppContentWrapper } from "./components/utilities/app-content-wrapper";
-import { Toaster } from "./components/ui/toaster";
 
 export default function App() {
   return (
     <ProvidersWrapper>
-      <div className="w-full flex flex-col md:flex-row">
+      <div className="w-full flex flex-col md:flex-row relative">
         <SystemSidebar routes={SYSTEM_ROUTES} />
 
         <AppCollapsedWrapper>
@@ -21,8 +20,6 @@ export default function App() {
           </AppContentWrapper>
         </AppCollapsedWrapper>
       </div>
-
-      <Toaster />
     </ProvidersWrapper>
   );
 }

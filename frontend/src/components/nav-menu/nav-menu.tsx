@@ -7,8 +7,8 @@ import { NavMenuRoute } from "./nav-menu-route";
 import { useLocation } from "react-router-dom";
 import { LinkMention } from "../link-mention/link-mention";
 import { useMediaQuery } from "@/shared/hooks/use-media-query";
-import { useState } from "react";
-import { ModeToggle } from "../theme-button/theme-button";
+
+import { useSidebar } from "@/shared/hooks/use-sidebar";
 
 interface INavMenuProps {
   routes: AppRoute[];
@@ -17,15 +17,15 @@ interface INavMenuProps {
 export function NavMenu(props: Readonly<INavMenuProps>) {
   const { routes } = props;
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const { isCollapsed, toggleSidebar } = useSidebar();
+  const isMobile = useMediaQuery("(max-width: 750px)");
 
   const { pathname } = useLocation();
 
-  const isCollapsedMobile = isMobile && isOpen;
+  const isCollapsedMobile = isMobile && !isCollapsed;
 
-  function handleMenuControl(value: boolean): void {
-    setIsOpen(value);
+  function handleMenuControl(): void {
+    toggleSidebar();
   }
 
   return (
@@ -53,10 +53,6 @@ export function NavMenu(props: Readonly<INavMenuProps>) {
             />
           ))}
         </nav>
-
-        <div>
-          <ModeToggle />
-        </div>
 
         <div className="mt-auto text-sm text-center">
           <p>

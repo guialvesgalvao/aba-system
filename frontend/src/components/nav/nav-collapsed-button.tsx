@@ -23,7 +23,7 @@ export function NavCollapsedButton(props: Readonly<INavCollapsedButtonProps>) {
               className={cn(
                 "w-10 h-10 flex items-center justify-start gap-3 rounded-md px-3 py-2",
                 !isPathSelect &&
-                  "text-muted-foreground transition-all hover:text-primary"
+                  "text-muted-foreground transition-colors hover:text-primary"
               )}
               size="icon"
             >

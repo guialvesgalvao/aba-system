@@ -23,6 +23,7 @@ module.exports = {
         sans: ["Inter", "sans-serif"],
       },
       colors: {
+        toolbar: "hsla(var(--toolbar))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

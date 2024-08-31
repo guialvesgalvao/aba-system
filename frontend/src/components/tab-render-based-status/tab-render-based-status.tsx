@@ -29,7 +29,7 @@ export function TabRenderBasedStatus(
       <TabsContent className="h-full" value={TabsStatusEnum.Closed}>
         {tabs.closed}
       </TabsContent>
-      
+
       <TabsContent className="h-full" value={TabsStatusEnum.Archived}>
         {tabs.archived}
       </TabsContent>

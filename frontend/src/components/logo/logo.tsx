@@ -15,7 +15,7 @@ export function Logo(props: Readonly<ILogoProps>) {
   return (
     <div
       className={cn(
-        "flex md:h-14 items-center border-b-0 border-r md:border-b md:border-r-0 px-4 lg:h-[60px] lg:px-6 transition-all",
+        "flex md:h-14 items-center border-b-0 border-r md:border-b md:border-r-0 px-4 lg:h-[60px] lg:px-6 transition-colors",
         isCollapsed ? "justify-center" : "lg:justify-center"
       )}
     >

@@ -75,7 +75,7 @@ export function Home() {
       </header>
 
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 transition-all">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 transition-colors">
           <div className="h-[126px] md:h-full rounded-xl border border-slate-200 text-slate-950 shadow dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50">
             <Button
               type="button"

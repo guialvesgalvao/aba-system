@@ -1,9 +1,36 @@
+import { useToolbar } from "@/shared/hooks/use-toolbar";
 import { ToolbarContent } from "./toolbar-content";
+import { PanelLeftOpen } from "lucide-react";
+import { ToolbarButtonVariant } from "./toolbar-button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function ToolbarMenu() {
+  const { isCollapsed } = useToolbar();
+
   return (
-    <div className="bg-toolbar h-8 fixed bottom-[4%] rounded-full -translate-x-2/4 -translate-y-2/4 left-2/4 z-50 border shadow p-2">
-      <ToolbarContent />
+    <div
+      id="toolbar-menu"
+      className="bg-toolbar h-9 flex items-center justify-center fixed md:absolute bottom-[4%] border-t border-r border-b left-0 md:left-full z-50 px-1 pr-2 rounded-r-lg"
+    >
+      {isCollapsed ? <OpenToolbarButton /> : <ToolbarContent />}
     </div>
+  );
+}
+
+function OpenToolbarButton() {
+  const { toggleToolbar } = useToolbar();
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ToolbarButtonVariant
+          className="text-white"
+          onClick={() => toggleToolbar()}
+        >
+          <PanelLeftOpen className="w-4 h-4" />
+        </ToolbarButtonVariant>
+      </TooltipTrigger>
+      <TooltipContent>Abrir ferramentas</TooltipContent>
+    </Tooltip>
   );
 }

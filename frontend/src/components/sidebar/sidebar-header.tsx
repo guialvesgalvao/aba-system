@@ -10,7 +10,7 @@ export function SidebarHeader(props: Readonly<ISidebarHeaderProps>) {
   const { routes } = props;
 
   return (
-    <div className="w-full h-full flex items-center justify-between md:hidden px-6">
+    <div id="sidebar-header" className="w-full h-full flex items-center justify-between md:hidden px-6">
       <NavMenu routes={routes} />
 
       <div className="flex items-center justify-center py-2">

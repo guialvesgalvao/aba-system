@@ -1,13 +1,38 @@
-import { ToolbarThemeButton } from "../theme-button/theme-button";
-import { ToolbarCollapseButton } from "../collapse-button/collapse-button";
+import { ToolbarThemeButton } from "../theme-button/toolbar-theme-button";
+import { ToolbarCollapseButton } from "../collapse-button/toolbar-collapse-button";
+import { ToggleGroup } from "../ui/toggle-group";
+import { Separator } from "../ui/separator";
+import { X } from "lucide-react";
+import { useToolbar } from "@/shared/hooks/use-toolbar";
+import { ToolbarButtonVariant } from "./toolbar-button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function ToolbarContent() {
   return (
-    <div className="w-full h-full flex items-center justify-center text-white gap-2">
-      <div className="flex gap-1">
-        <ToolbarThemeButton />
+    <div className="flex items-center gap-1 text-white">
+      <CloseToolbarButton />
+
+      <Separator className="bg-primary h-4 mx-1" orientation="vertical" />
+
+      <ToggleGroup size="sm" variant="default" type="multiple">
         <ToolbarCollapseButton />
-      </div>
+        <ToolbarThemeButton />
+      </ToggleGroup>
     </div>
+  );
+}
+
+function CloseToolbarButton() {
+  const { toggleToolbar } = useToolbar();
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ToolbarButtonVariant onClick={() => toggleToolbar(true)}>
+          <X className="w-4 h-4" />
+        </ToolbarButtonVariant>
+      </TooltipTrigger>
+      <TooltipContent>Fechar</TooltipContent>
+    </Tooltip>
   );
 }

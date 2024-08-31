@@ -19,7 +19,7 @@ export function Nav(props: Readonly<INavProps>) {
   const { pathname } = useLocation();
 
   return (
-    <nav className="w-full flex md:flex-col items-center px-2 gap-3 sm:py-5 transition-all">
+    <nav className="w-full flex md:flex-col items-center px-2 gap-3 sm:py-5 transition-colors">
       {routes?.map((button) => (
         <NavButton key={button.to} currentPath={pathname} {...button} />
       ))}

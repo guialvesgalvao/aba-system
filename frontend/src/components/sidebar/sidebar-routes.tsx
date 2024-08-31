@@ -12,7 +12,7 @@ export function SidebarRoutes(props: Readonly<ISidebarRoutesProps>) {
   const { isCollapsed } = useSidebar();
 
   return (
-    <div className="w-full h-full hidden md:flex md:flex-col gap-2">
+    <div id="sidebar-routes" className="w-full h-full hidden md:flex md:flex-col gap-2">
       <Logo to="/" />
 
       <Nav routes={routes} />

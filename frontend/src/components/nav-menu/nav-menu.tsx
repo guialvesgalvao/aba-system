@@ -24,7 +24,7 @@ export function NavMenu(props: Readonly<INavMenuProps>) {
 
   const isCollapsedMobile = isMobile && !isCollapsed;
 
-  function handleMenuControl(value: boolean): void {
+  function handleMenuControl(): void {
     toggleSidebar();
   }
 

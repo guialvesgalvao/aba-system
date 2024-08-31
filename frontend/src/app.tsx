@@ -7,7 +7,7 @@ import { SYSTEM_ROUTES } from "./shared/constants";
 import { RoutesController } from "./components/routes-controller/routes-controller";
 import { ProvidersWrapper } from "./components/providers-wrapper/providers-wrapper";
 import { AppContentWrapper } from "./components/utilities/app-content-wrapper";
-import { Toolbar } from "./components/toolbar/toolbar";
+import { ToolbarMenu } from "./components/toolbar/toolbar-menu";
 
 export default function App() {
   return (
@@ -21,7 +21,7 @@ export default function App() {
           </AppContentWrapper>
         </AppCollapsedWrapper>
 
-        <Toolbar />
+        <ToolbarMenu />
       </div>
     </ProvidersWrapper>
   );

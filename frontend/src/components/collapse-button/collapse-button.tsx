@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 import { useSidebar } from "@/shared/hooks/use-sidebar";
-import { ToolbarButtonVariant } from "../toolbar/toolbar";
+import { ToolbarButtonVariant } from "../toolbar/toolbar-button";
 
 export function CollapseButton() {
   const { isCollapsed, toggleSidebar } = useSidebar();

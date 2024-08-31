@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider/theme-provider";
-import { ToolbarButtonVariant } from "../toolbar/toolbar";
+import { ToolbarButtonVariant } from "../toolbar/toolbar-button";
 import { Tooltip, TooltipContent } from "../ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 

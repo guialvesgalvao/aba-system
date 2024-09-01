@@ -1,7 +1,4 @@
-import {
-  OnRenderProps,
-  RenderForm,
-} from "@/components/render-form/render-form";
+import { RenderForm } from "@/components/render-form/render-form";
 import { useToast } from "@/components/ui/use-toast";
 import { ErrorToastList } from "@/components/utilities/error-toast-list";
 import { errorsAsStringMessages } from "@/shared/helpers/form-helper/form-helper";
@@ -9,6 +6,7 @@ import { errorsAsStringMessages } from "@/shared/helpers/form-helper/form-helper
 import { FieldErrors } from "react-hook-form";
 import { z } from "zod";
 import { OrdersFormBody } from "./orders-form-body";
+import { OnRenderProps } from "@/components/render-form/interface";
 
 const OrdersFormValidation = z.object({
   id: z.number().optional(),

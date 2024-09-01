@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RequestCombobox } from "@/components/combobox/request-combobox";
-import { OptionValue } from "@/components/combobox/combobox";
+
 import CustomersService from "@/shared/services/customers-service";
 import OriginsService from "@/shared/services/origins-service";
 import { DatePicker } from "@/components/inputs/date-picker/date-picker";
 import { Textarea } from "@/components/ui/textarea";
+import { getPromiseAsOptions } from "@/shared/helpers/form-helper/form-helper";
 
 interface IOrdersFormColumnsProps {
   control: Control<OrdersFormValidationType>;
@@ -25,29 +26,6 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
 
   const { getCustomersByStatus } = new CustomersService();
   const { getOriginsByStatus } = new OriginsService();
-
-  async function getCustomersAsOptions(): Promise<OptionValue[]> {
-    const customers = await getCustomersByStatus("enabled");
-
-    return customers.map(
-      (customer) =>
-        ({
-          value: customer.id.toString(),
-          label: customer.fantasy_name,
-        } as OptionValue)
-    );
-  }
-
-  async function getOriginsAsOptions(): Promise<OptionValue[]> {
-    const origins = await getOriginsByStatus("enabled");
-    return origins.map(
-      (origin) =>
-        ({
-          value: origin.id.toString(),
-          label: origin.name,
-        } as OptionValue)
-    );
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -92,7 +70,16 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
               <FormControl>
                 <RequestCombobox
                   storages={["clients"]}
-                  request={getCustomersAsOptions}
+                  request={() =>
+                    getPromiseAsOptions(
+                      getCustomersByStatus("enabled"),
+                      (customer) => ({
+                        data: customer,
+                        value: customer.id.toString(),
+                        label: customer.fantasy_name,
+                      })
+                    )
+                  }
                   onChange={(option) => {
                     if (!option) onChange(undefined);
 
@@ -126,8 +113,18 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
               <FormControl>
                 <RequestCombobox
                   storages={["origins"]}
-                  request={getOriginsAsOptions}
+                  request={() =>
+                    getPromiseAsOptions(
+                      getOriginsByStatus("enabled"),
+                      (origin) => ({
+                        data: origin,
+                        value: origin.id.toString(),
+                        label: origin.name,
+                      })
+                    )
+                  }
                   onChange={(option) => {
+                    console.log(option);
                     if (!option) onChange(undefined);
 
                     const asInt = parseInt(option?.value);

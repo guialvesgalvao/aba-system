@@ -1,3 +1,4 @@
+import { OptionValue } from "@/components/combobox/interface";
 import { FieldErrors, FieldValues } from "react-hook-form";
 
 export function errorsAsStringMessages<T extends FieldValues>(
@@ -10,4 +11,12 @@ export function errorsAsStringMessages<T extends FieldValues>(
   );
 
   return messages;
+}
+
+export async function getPromiseAsOptions<T>(
+  promise: Promise<T[]>,
+  mapFn: (item: T) => OptionValue
+): Promise<OptionValue[]> {
+  const options = await promise;
+  return options.map(mapFn);
 }

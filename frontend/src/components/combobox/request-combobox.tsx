@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Combobox, ComboboxStrings, OptionValue } from "./combobox";
+import { Combobox, ComboboxStrings } from "./combobox";
+import { OptionValue } from "./interface";
 
 interface IRequestComboboxProps {
   storages: string[];

@@ -1,31 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  UseFormReturn,
-  DefaultValues,
-  FieldValues,
-  FieldErrors,
-  useForm,
-} from "react-hook-form";
-import { ZodType } from "zod";
+import { FieldValues, FieldErrors, useForm } from "react-hook-form";
 
 import { Form } from "../ui/form";
-
-interface IRenderFormProps<T extends FieldValues> {
-  resolver: ZodType<any, any, any>;
-  getDefaultValues: () => DefaultValues<T> | undefined;
-  onValidate: (data: T) => void;
-  onInvalid: (errors: FieldErrors<T>) => void;
-  onSubmit: (data: T) => Promise<T | void>;
-  onCreate?: (data: T) => Promise<T | void>;
-  onUpdate?: (data: T) => Promise<T | void>;
-  onDelete?: (id: number) => Promise<void>;
-  onRender: (options: OnRenderProps<T>) => React.ReactNode;
-}
-
-export type OnRenderProps<T extends FieldValues> = {
-  form: UseFormReturn<T, any, undefined>;
-  params: IRenderFormProps<T>;
-};
+import { IRenderFormProps } from "./interface";
 
 export function RenderForm<T extends FieldValues>(
   props: Readonly<IRenderFormProps<T>>
@@ -59,7 +36,10 @@ export function RenderForm<T extends FieldValues>(
 
   return (
     <Form {...form}>
-      <form className="h-full" onSubmit={handleSubmit(handleWhichAction, handleInvalid)}>
+      <form
+        className="h-full"
+        onSubmit={handleSubmit(handleWhichAction, handleInvalid)}
+      >
         {onRender({ form, params: props })}
       </form>
     </Form>

@@ -1,6 +1,5 @@
 @tailwind base;
 @tailwind components;
-
 @tailwind utilities;
 
 @layer base {
@@ -34,6 +33,7 @@
   }
 
   .dark {
+    --toolbar: 20 14.3% 4.1%;
     --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
@@ -67,9 +67,7 @@
     @apply font-sans;
   }
   #root {
-    height: 100%;
-    min-height: 100vh;
-    display: flex;
+    @apply h-full min-h-screen flex;
   }
   body {
     @apply bg-background text-foreground;

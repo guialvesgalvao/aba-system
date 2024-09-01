@@ -13,14 +13,17 @@ module.exports = {
       center: true,
       padding: "2rem",
       screens: {
-        "md": "640px",
-        "lg": "768px",
+        md: "640px",
+        lg: "768px",
         "2xl": "1400px",
       },
     },
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+      },
+      flexShrink: {
+        1: 1,
       },
       colors: {
         toolbar: "hsla(var(--toolbar))",

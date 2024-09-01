@@ -10,13 +10,17 @@ import { SuppliersDashboard } from "../../pages/suppliers-dashboard";
 
 import { CustomersDashboard } from "@/pages/customers-dashboard";
 import { OrdersDashboard } from "@/pages/orders-dashboard";
+import { OrdersNewForm } from "@/pages/orders-new-form";
 
 export function RoutesController() {
   return (
     <Routes>
       <Route path={SystemRoutes.ALL} element={<NotFound />} />
       <Route path={SystemRoutes.HOME} element={<Home />} />
+
       <Route path={SystemRoutes.ORDERS} element={<OrdersDashboard />} />
+      <Route path={SystemRoutes.ORDERS_NEW} element={<OrdersNewForm />} />
+
       <Route path={SystemRoutes.CUSTOMERS} element={<CustomersDashboard />} />
       <Route path={SystemRoutes.PRODUCTS} element={<ProductsDashboard />} />
       <Route path={SystemRoutes.ORIGINS} element={<OriginsDashboard />} />

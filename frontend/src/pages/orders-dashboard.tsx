@@ -17,6 +17,7 @@ import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-
 import { Dialog } from "@/components/ui/dialog";
 import { OrderStatus } from "@/shared/types/orders-types";
 import { IComponentRequestProps } from "@/components/component-request/component-request";
+import { SystemRoutes } from "@/shared/enums/app";
 
 export function OrdersDashboard() {
   const { getCurrentStatus } = useStatusParam();
@@ -27,10 +28,7 @@ export function OrdersDashboard() {
     await fetchAppQuery<Order[]>(["orders", status]);
   }
 
-  
-  function generateTable(
-    status?: OrderStatus
-  ): IComponentRequestProps<Order> {
+  function generateTable(status?: OrderStatus): IComponentRequestProps<Order> {
     if (!status) {
       return {
         storages: ["orders", "all"],
@@ -54,7 +52,7 @@ export function OrdersDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Link to={"google"}>
+          <Link to={SystemRoutes.ORDERS_NEW}>
             <Button type="button" size="sm" className="gap-2">
               <CirclePlus size={18} />
               Criar novo pedido
@@ -78,28 +76,28 @@ export function OrdersDashboard() {
               <CardData<Order>
                 title="Pedidos Ativos"
                 description="Lista de pedidos ativos no sistema"
-                table={generateTable('in_progress')}
+                table={generateTable("in_progress")}
               />
             ),
             archived: (
               <CardData<Order>
                 title="Pedidos Arquivados"
                 description="Lista de pedidos cancelados no sistema"
-                table={generateTable('canceled')}
+                table={generateTable("canceled")}
               />
             ),
             closed: (
               <CardData<Order>
                 title="Pedidos Encerrados"
                 description="Lista de pedidos encerrados no sistema"
-                table={generateTable('closed')}
+                table={generateTable("closed")}
               />
             ),
             draft: (
               <CardData<Order>
                 title="Pedidos em Rascunho"
                 description="Lista de pedidos em rascunho no sistema"
-                table={generateTable('draft')}
+                table={generateTable("draft")}
               />
             ),
           }}

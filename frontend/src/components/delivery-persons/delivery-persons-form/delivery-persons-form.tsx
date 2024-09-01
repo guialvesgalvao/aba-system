@@ -69,7 +69,12 @@ export function DeliveryPersonsForm(
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog
+      title="Criar tipo de entrega"
+      trigger={trigger}
+      open={open}
+      setOpen={setOpen}
+    >
       <RenderDeliveryPersonForm {...props} setOpen={setOpen} />
     </FormDialog>
   );
@@ -136,7 +141,6 @@ function RenderDeliveryPersonForm(props: Readonly<IRenderDeliveryPersonForm>) {
     setOpen(false);
   }
 
-  
   if (isError) {
     return (
       <div className="px-10 py-10">

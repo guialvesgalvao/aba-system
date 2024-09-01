@@ -21,7 +21,7 @@ import { ComponentRequest } from "@/components/component-request/component-reque
 import { SignatureText } from "@/components/signature-text/signature-text";
 import { RefreshButton } from "@/components/utilities/refresh-button";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Tooltip,
   TooltipContent,
@@ -31,6 +31,7 @@ import { TitlePage } from "@/components/title-page/title-page";
 import { Order } from "@/shared/factories/orders-factory";
 import { fetchAppQuery } from "@/shared/helpers/query-helper/query-helper";
 import { createOrdersMockBasedOnLength } from "@/shared/mocks/orders-mocks";
+import { SystemRoutes } from "@/shared/enums/app";
 
 export function Home() {
   const tiles: TileElement[] = [
@@ -77,18 +78,20 @@ export function Home() {
       <main className="flex flex-1 flex-col gap-4 md:gap-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 transition-colors">
           <div className="h-[126px] md:h-full rounded-xl border border-slate-200 text-slate-950 shadow dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50">
-            <Button
-              type="button"
-              className="min-h rounded-xl w-full h-full flex items-center justify-center gap-2 px-6"
-            >
-              <div className="flex items-center justify-center">
-                <Plus className="w-8 h-8" />
-              </div>
-              <div className="flex flex-col items-start">
-                <h5 className="text-base font-semibold">Criar pedido</h5>
-                <p className="text-sm">Crie um novo pedido</p>
-              </div>
-            </Button>
+            <Link to={SystemRoutes.ORDERS_NEW}>
+              <Button
+                type="button"
+                className="min-h rounded-xl w-full h-full flex items-center justify-center gap-2 px-6"
+              >
+                <div className="flex items-center justify-center">
+                  <Plus className="w-8 h-8" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <h5 className="text-base font-semibold">Criar pedido</h5>
+                  <p className="text-sm">Crie um novo pedido</p>
+                </div>
+              </Button>
+            </Link>
           </div>
 
           <Tiles tiles={tiles} />

@@ -37,6 +37,10 @@ export type OrdersFormValidationType = z.infer<typeof OrdersFormValidation>;
 export function OrdersForm() {
   const { toast } = useToast();
 
+  async function handleSubmit(data: OrdersFormValidationType) {
+    console.log(data);
+  }
+
   function getDefaultValues() {
     return {
       order_date: new Date().toISOString(),
@@ -64,7 +68,7 @@ export function OrdersForm() {
       getDefaultValues={getDefaultValues}
       onValidate={validateFormData}
       onInvalid={notifyErrorsByToast}
-      onSubmit={async (data) => console.log(data)}
+      onSubmit={handleSubmit}
       onRender={OrdersFormRender}
     />
   );

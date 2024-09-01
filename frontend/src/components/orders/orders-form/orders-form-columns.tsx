@@ -16,6 +16,7 @@ import OriginsService from "@/shared/services/origins-service";
 import { DatePicker } from "@/components/inputs/date-picker/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { getPromiseAsOptions } from "@/shared/helpers/form-helper/form-helper";
+import { MapPin, User } from "lucide-react";
 
 interface IOrdersFormColumnsProps {
   control: Control<OrdersFormValidationType>;
@@ -34,15 +35,16 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         <FormField
           control={control}
           name="title"
-          render={({ field: { value, onChange } }) => (
+          render={({ field: { name, value, onChange } }) => (
             <FormItem className="w-full">
               <FormLabel htmlFor="title" required>
                 Título
               </FormLabel>
               <FormControl>
                 <Input
+                  name={name}
                   type="text"
-                  value={value}
+                  value={value ?? ""}
                   onChange={onChange}
                   placeholder="Título do pedido..."
                 />
@@ -57,18 +59,19 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4 flex-wrap">
         {/* Campo Cliente */}
         <FormField
           control={control}
           name="client_id"
-          render={({ field: { onChange } }) => (
-            <FormItem className="w-full">
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <FormItem className="flex-1">
               <FormLabel htmlFor="client_id" required>
                 Cliente
               </FormLabel>
               <FormControl>
                 <RequestCombobox
+                  icon={User}
                   storages={["clients"]}
                   request={() =>
                     getPromiseAsOptions(
@@ -86,11 +89,13 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
                     const asInt = parseInt(option?.value);
                     onChange(asInt);
                   }}
+                  selectedValue={value?.toString()}
                   strings={{
-                    placeholder: "Procurar pelo cliente...",
-                    search: "Procurar...",
+                    placeholder: "Selecione o cliente",
+                    search: "Procurar cliente...",
                     empty: "Nenhum cliente encontrado.",
                   }}
+                  isError={!!error}
                 />
               </FormControl>
               <FormDescription>
@@ -105,13 +110,14 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         <FormField
           control={control}
           name="origin_id"
-          render={({ field: { onChange } }) => (
-            <FormItem className="w-full">
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <FormItem className="flex-1">
               <FormLabel htmlFor="origin_id" required>
                 Origem
               </FormLabel>
               <FormControl>
                 <RequestCombobox
+                  icon={MapPin}
                   storages={["origins"]}
                   request={() =>
                     getPromiseAsOptions(
@@ -124,17 +130,18 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
                     )
                   }
                   onChange={(option) => {
-                    console.log(option);
                     if (!option) onChange(undefined);
 
                     const asInt = parseInt(option?.value);
                     onChange(asInt);
                   }}
+                  selectedValue={value?.toString()}
                   strings={{
-                    placeholder: "Procurar pela origem do pedido...",
-                    search: "Procurar...",
+                    placeholder: "Selecione a origem do pedido",
+                    search: "Procurar origem...",
                     empty: "Nenhuma origem encontrado.",
                   }}
+                  isError={!!error}
                 />
               </FormControl>
               <FormDescription>
@@ -151,21 +158,27 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         <FormField
           control={control}
           name="order_date"
-          render={({ field: { value, onChange } }) => (
+          render={({
+            field: { name, value, onChange },
+            fieldState: { error },
+          }) => (
             <FormItem className="w-full">
               <FormLabel htmlFor="order_date" required>
                 Data do Pedido
               </FormLabel>
               <FormControl>
                 <DatePicker
-                  value={value ? new Date(value) : undefined}
+                  name={name}
+                  selectedDate={value ? new Date(value) : undefined}
                   onChange={(date) => {
+                    if (!date) return onChange(undefined);
                     onChange(date?.toISOString());
                   }}
                   strings={{
                     button: "Escolha a data do pedido",
                     placeholder: "Escolha uma data",
                   }}
+                  isError={!!error}
                 />
               </FormControl>
               <FormDescription>
@@ -180,20 +193,27 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         <FormField
           control={control}
           name="order_payment_date"
-          render={({ field: { onChange } }) => (
+          render={({
+            field: { name, onChange, value },
+            fieldState: { error },
+          }) => (
             <FormItem className="w-full">
               <FormLabel htmlFor="order_payment_date" required>
                 Data de Faturamento
               </FormLabel>
               <FormControl>
                 <DatePicker
+                  name={name}
+                  selectedDate={value ? new Date(value) : undefined}
                   onChange={(date) => {
+                    if (!date) return onChange(undefined);
                     onChange(date?.toISOString());
                   }}
                   strings={{
                     button: "Escolha a data de faturamento",
                     placeholder: "Escolha uma data",
                   }}
+                  isError={!!error}
                 />
               </FormControl>
               <FormDescription>
@@ -210,12 +230,13 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
         <FormField
           control={control}
           name="description"
-          render={({ field: { value, onChange } }) => (
+          render={({ field: { name, value, onChange } }) => (
             <FormItem className="w-full">
               <FormLabel htmlFor="description">Descrição</FormLabel>
               <FormControl>
                 <Textarea
-                  value={value}
+                  name={name}
+                  value={value ?? ""}
                   onChange={onChange}
                   placeholder="Adicione uma descrição ao pedido..."
                   rows={4}

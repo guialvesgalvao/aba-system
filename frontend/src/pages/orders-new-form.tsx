@@ -9,7 +9,7 @@ export function OrdersNewForm() {
   return (
     <>
       <header className="flex justify-between gap-2 flex-wrap">
-        <TitlePage title="Pedido" subtitle="Criar um novo pedido" />
+        <TitlePage title="Pedidos" subtitle="Criar um novo pedido" />
 
         <Link className="w-auto" to={SystemRoutes.ORDERS}>
           <Button

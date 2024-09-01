@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronsUpDown, OctagonAlert } from "lucide-react";
+import { ChevronsUpDown, Database, OctagonAlert } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -26,10 +26,14 @@ export interface IComboboxProps {
     enabled?: boolean;
   };
 
+  icon?: React.ComponentType<{ className?: string }>;
+
+  isMountingError?: boolean;
   isError?: boolean;
   isFetching?: boolean;
 
   onChange?: (value: OptionValue) => void;
+  selectedValue?: string | null;
 
   options: OptionValue[];
   strings?: ComboboxStrings;
@@ -42,8 +46,10 @@ export function Combobox(props: Readonly<IComboboxProps>) {
     heading = {
       enabled: false,
     },
+    icon = Database,
     options,
     onChange,
+    isMountingError = false,
     isError = false,
     isFetching = false,
     strings = {
@@ -51,11 +57,26 @@ export function Combobox(props: Readonly<IComboboxProps>) {
       search: "Procurar...",
       empty: "Nenhum opção encontrada.",
     },
+    selectedValue,
     errorMessage,
   } = props;
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<OptionValue | null>(null);
+
+  React.useEffect(() => {
+    if (selectedValue) {
+      const option = options.find((option) => option.value === selectedValue);
+
+      if (option) {
+        setValue(option);
+      }
+    }
+
+    if (!selectedValue) {
+      setValue(null);
+    }
+  }, [selectedValue]);
 
   const currentLabel = useMemo(
     () =>
@@ -80,7 +101,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
       return <LoadingSpinner className="h-5 w-5" />;
     }
 
-    if (isError) {
+    if (isMountingError) {
       return <OctagonAlert className="h-5 w-5" />;
     }
 
@@ -95,12 +116,18 @@ export function Combobox(props: Readonly<IComboboxProps>) {
           variant="outline"
           className={cn(
             "w-full justify-between",
-            isError && "text-destructive border-destructive",
-            isFetching && "text-muted-foreground border-muted-foreground"
+            !value && "text-muted-foreground",
+            isMountingError && "text-destructive border-destructive",
+            isError && "border-destructive",
+            isFetching && "text-muted-foreground border-muted-foreground",
+            open && "border-primary"
           )}
-          disabled={isFetching || isError}
+          disabled={isFetching || isMountingError}
         >
-          {errorMessage ?? currentLabel ?? strings.placeholder}
+          <div className="flex items-center gap-2">
+            {React.createElement(icon, { className: "h-4 w-4" })}
+            {errorMessage ?? currentLabel ?? strings.placeholder}
+          </div>
           {getIcon()}
         </Button>
       </PopoverTrigger>

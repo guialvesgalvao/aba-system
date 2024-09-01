@@ -103,7 +103,6 @@ export const SYSTEM_ROUTES: AppRoute[] = [
   },
 ];
 
-
 export const DefaultTabs: TabValue[] = [
   { text: "Todos", value: TabsStatusEnum.All },
   { text: "Ativos", value: TabsStatusEnum.Active },

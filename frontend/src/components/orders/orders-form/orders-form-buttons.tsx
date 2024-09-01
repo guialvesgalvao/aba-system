@@ -30,8 +30,8 @@ export function OrdersFormButtons(props: Readonly<IOrdersFormButtonsProps>) {
 
       <div className="w-full md:w-auto flex flex-col-reverse md:flex-row justify-center items-center md:justify-end gap-4">
         <Button
-          className="w-full md:w-auto gap-2"
           type="submit"
+          className="w-full md:w-auto gap-2"
           variant="default"
           disabled={isLoading || isSubmitting || isValidating}
         >

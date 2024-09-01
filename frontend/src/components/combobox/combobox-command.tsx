@@ -12,6 +12,7 @@ import { ComboboxStrings } from "./combobox";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { groupByHeading } from "@/shared/helpers/inputs-helper/combobox-helper";
+import { useMemo } from "react";
 
 interface IComboboxCommandProps {
   heading?: {
@@ -34,6 +35,14 @@ export function ComboboxCommand(props: Readonly<IComboboxCommandProps>) {
     strings,
   } = props;
 
+  const items = useMemo(() => {
+    if (heading.enabled) {
+      return generateOptionsWithHeading(groupByHeading(options), value);
+    }
+
+    return generateOptions(options, value);
+  }, [heading, options, value]);
+
   function generateOptions(
     options: OptionValue[],
     selectedOption: OptionValue | null
@@ -41,7 +50,7 @@ export function ComboboxCommand(props: Readonly<IComboboxCommandProps>) {
     return options.map((option) => (
       <CommandItem
         key={option.value}
-        value={option.value}
+        value={option.label}
         onSelect={() => onChange(option)}
       >
         <Check
@@ -73,11 +82,7 @@ export function ComboboxCommand(props: Readonly<IComboboxCommandProps>) {
       <CommandInput placeholder={strings.search} />
       <CommandList>
         <CommandEmpty>{strings.empty}</CommandEmpty>
-        <CommandGroup>
-          {heading.enabled
-            ? generateOptionsWithHeading(groupByHeading(options), value)
-            : generateOptions(options, value)}
-        </CommandGroup>
+        <CommandGroup>{items}</CommandGroup>
       </CommandList>
     </Command>
   );

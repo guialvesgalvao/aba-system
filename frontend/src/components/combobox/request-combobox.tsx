@@ -14,10 +14,10 @@ interface IRequestComboboxProps {
 export function RequestCombobox(props: Readonly<IRequestComboboxProps>) {
   const { storages, request, enabled, ...combobox } = props;
 
-  const { data, isFetching, isError } = useQuery({
+  const { data, isFetching, isError, error } = useQuery({
     queryKey: ["combobox", ...storages],
     queryFn: request,
-    retry: false,
+    retry: 2,
     enabled,
     refetchOnWindowFocus: false,
   });
@@ -27,6 +27,7 @@ export function RequestCombobox(props: Readonly<IRequestComboboxProps>) {
       options={data ?? []}
       isError={isError}
       isFetching={isFetching}
+      errorMessage={error?.message}
       {...combobox}
     />
   );

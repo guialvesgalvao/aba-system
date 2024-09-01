@@ -44,6 +44,8 @@ export interface IComboboxProps {
 
   options: OptionValue[];
   strings?: ComboboxStrings;
+
+  errorMessage?: string;
 }
 
 export function Combobox(props: Readonly<IComboboxProps>) {
@@ -60,6 +62,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
       search: "Procurar...",
       empty: "Nenhum opção encontrada.",
     },
+    errorMessage,
   } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -162,7 +165,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
           )}
           disabled={isFetching || isError}
         >
-          {currentLabel ?? strings.placeholder}
+          {errorMessage ?? currentLabel ?? strings.placeholder}
           {getIcon()}
         </Button>
       </PopoverTrigger>

@@ -68,7 +68,7 @@ export function OriginsForm(props: Readonly<IOriginsFormProps>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog  title="Criar origem" trigger={trigger} open={open} setOpen={setOpen}>
       <RenderOriginForm {...props} setOpen={setOpen} />
     </FormDialog>
   );

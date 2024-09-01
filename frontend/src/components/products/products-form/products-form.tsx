@@ -70,7 +70,12 @@ export function ProductsForm(props: Readonly<IProductsFormProps>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog
+      title="Criar produto"
+      trigger={trigger}
+      open={open}
+      setOpen={setOpen}
+    >
       <RenderProductForm {...props} setOpen={setOpen} />
     </FormDialog>
   );

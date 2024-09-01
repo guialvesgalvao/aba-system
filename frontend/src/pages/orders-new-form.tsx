@@ -8,7 +8,7 @@ export function OrdersNewForm() {
         <TitlePage title="Pedido" subtitle="Criar um novo pedido" />
       </header>
 
-      <main className="flex flex-1 flex-col gap-2 md:gap-4">
+      <main className="flex flex-1 flex-col pt-4 gap-2 md:gap-4">
         <OrdersForm />
       </main>
     </>

@@ -74,7 +74,12 @@ export function CustomersForm(props: Readonly<ICustomersFormProps>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog
+      title="Criar cliente"
+      trigger={trigger}
+      open={open}
+      setOpen={setOpen}
+    >
       <RenderCustomerForm {...props} setOpen={setOpen} />
     </FormDialog>
   );

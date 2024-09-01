@@ -71,7 +71,12 @@ export function SuppliersForm(props: Readonly<ISuppliersFormProps>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog
+      title="Criar fornecedor"
+      trigger={trigger}
+      open={open}
+      setOpen={setOpen}
+    >
       <RenderSupplierForm {...props} setOpen={setOpen} />
     </FormDialog>
   );

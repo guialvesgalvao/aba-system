@@ -59,7 +59,7 @@ export function RenderForm<T extends FieldValues>(
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(handleWhichAction, handleInvalid)}>
+      <form className="h-full" onSubmit={handleSubmit(handleWhichAction, handleInvalid)}>
         {onRender({ form, params: props })}
       </form>
     </Form>

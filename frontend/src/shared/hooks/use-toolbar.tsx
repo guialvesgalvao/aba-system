@@ -5,11 +5,6 @@ export function useToolbar() {
 
   const toggleToolbar = (value?: boolean) => {
     const toggleValue = value ?? !toolbarCollapsed;
-
-    localStorage.setItem(
-      "aba-system-app:toolbar",
-      JSON.stringify(toggleValue)
-    );
     setToolbarCollapsed(toggleValue);
   };
 

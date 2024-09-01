@@ -1,15 +1,8 @@
 import * as React from "react";
-import { Check, ChevronsUpDown, OctagonAlert } from "lucide-react";
+import { ChevronsUpDown, Database, OctagonAlert } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
@@ -18,13 +11,9 @@ import {
 
 import { Button } from "../ui/button";
 import { LoadingSpinner } from "../loading-spinner/loading-spinner";
-
-export type OptionValue = {
-  value: string;
-  label: string;
-
-  heading?: string;
-};
+import { OptionValue } from "./interface";
+import { ComboboxCommand } from "./combobox-command";
+import { useMemo } from "react";
 
 export type ComboboxStrings = {
   placeholder?: string;
@@ -37,10 +26,14 @@ export interface IComboboxProps {
     enabled?: boolean;
   };
 
+  icon?: React.ComponentType<{ className?: string }>;
+
+  isMountingError?: boolean;
   isError?: boolean;
   isFetching?: boolean;
 
   onChange?: (value: OptionValue) => void;
+  selectedValue?: string | null;
 
   options: OptionValue[];
   strings?: ComboboxStrings;
@@ -53,8 +46,10 @@ export function Combobox(props: Readonly<IComboboxProps>) {
     heading = {
       enabled: false,
     },
+    icon = Database,
     options,
     onChange,
+    isMountingError = false,
     isError = false,
     isFetching = false,
     strings = {
@@ -62,94 +57,55 @@ export function Combobox(props: Readonly<IComboboxProps>) {
       search: "Procurar...",
       empty: "Nenhum opção encontrada.",
     },
+    selectedValue,
     errorMessage,
   } = props;
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<OptionValue | null>(null);
 
-  const currentLabel = options.find((option) =>
-    value ? option?.value === value.value : false
-  )?.label;
+  React.useEffect(() => {
+    if (selectedValue) {
+      const option = options.find((option) => option.value === selectedValue);
 
-  function handleChange(option: OptionValue) {
-    setValue(option);
-
-    if (onChange) {
-      onChange(option);
+      if (option) {
+        setValue(option);
+      }
     }
-  }
+
+    if (!selectedValue) {
+      setValue(null);
+    }
+  }, [selectedValue]);
+
+  const currentLabel = useMemo(
+    () =>
+      options.find((option) => (value ? option?.value === value.value : false))
+        ?.label,
+    [options, value]
+  );
+
+  const handleChange = React.useCallback(
+    (option: OptionValue) => {
+      setValue(option);
+
+      if (onChange) {
+        onChange(option);
+      }
+    },
+    [onChange]
+  );
 
   function getIcon() {
     if (isFetching) {
       return <LoadingSpinner className="h-5 w-5" />;
     }
 
-    if (isError) {
+    if (isMountingError) {
       return <OctagonAlert className="h-5 w-5" />;
     }
 
     return <ChevronsUpDown className="h-5 w-5" />;
-  }
-
-  function generateOptions(
-    options: OptionValue[],
-    selectedOption: OptionValue | null
-  ) {
-    return options.map(({ value, label }) => (
-      <CommandItem
-        key={value}
-        value={value}
-        onSelect={(currentValue) =>
-          handleChange({ value: currentValue, label })
-        }
-      >
-        <Check
-          className={cn(
-            "mr-2 h-4 w-4",
-            selectedOption?.value === value ? "opacity-100" : "opacity-0"
-          )}
-        />
-        {label}
-      </CommandItem>
-    ));
-  }
-
-  function generateOptionsWithHeading(
-    hashOptions: Record<string, OptionValue[]>,
-    selectedOption: OptionValue | null
-  ) {
-    return Object.entries(hashOptions).map(([heading, options]) => {
-      return (
-        <CommandGroup key={heading} heading={heading}>
-          {generateOptions(options, selectedOption)}
-        </CommandGroup>
-      );
-    });
-  }
-
-  function groupByHeading(
-    options: OptionValue[]
-  ): Record<string, OptionValue[]> {
-    const groupedOptions: Record<string, OptionValue[]> = {};
-
-    options.forEach((option) => {
-      if (option.heading) {
-        if (!groupedOptions[option.heading]) {
-          groupedOptions[option.heading] = [];
-        }
-
-        groupedOptions[option.heading].push(option);
-      } else {
-        if (!groupedOptions[""]) {
-          groupedOptions[""] = [];
-        }
-
-        groupedOptions[""].push(option);
-      }
-    });
-
-    return groupedOptions;
   }
 
   return (
@@ -160,28 +116,30 @@ export function Combobox(props: Readonly<IComboboxProps>) {
           variant="outline"
           className={cn(
             "w-full justify-between",
-            isError && "text-destructive border-destructive",
-            isFetching && "text-muted-foreground border-muted-foreground"
+            !value && "text-muted-foreground",
+            isMountingError && "text-destructive border-destructive",
+            isError && "border-destructive",
+            isFetching && "text-muted-foreground border-muted-foreground",
+            open && "border-primary"
           )}
-          disabled={isFetching || isError}
+          disabled={isFetching || isMountingError}
         >
-          {errorMessage ?? currentLabel ?? strings.placeholder}
+          <div className="flex items-center gap-2">
+            {React.createElement(icon, { className: "h-4 w-4" })}
+            {errorMessage ?? currentLabel ?? strings.placeholder}
+          </div>
           {getIcon()}
         </Button>
       </PopoverTrigger>
 
       <PopoverContent side="bottom" align="start" className="p-0">
-        <Command>
-          <CommandInput placeholder={strings.search} />
-          <CommandList>
-            <CommandEmpty>{strings.empty}</CommandEmpty>
-            <CommandGroup>
-              {heading.enabled
-                ? generateOptionsWithHeading(groupByHeading(options), value)
-                : generateOptions(options, value)}
-            </CommandGroup>
-          </CommandList>
-        </Command>
+        <ComboboxCommand
+          heading={heading}
+          value={value}
+          options={options}
+          strings={strings}
+          onChange={handleChange}
+        />
       </PopoverContent>
     </Popover>
   );

@@ -18,41 +18,61 @@ type DateStrings = {
 };
 
 interface IDatePickerProps {
-  value?: Date;
+  name: string;
+  selectedDate?: Date;
   onChange?: (date: Date | undefined) => void;
   strings?: DateStrings;
+  isError?: boolean;
 }
 
 export function DatePicker(props: Readonly<IDatePickerProps>) {
   const {
-    value,
+    name,
+    selectedDate,
     onChange,
     strings = {
       button: "Escolha a data",
       placeholder: "Escolha uma data",
     },
+    isError,
   } = props;
 
+  const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined | null>(
-    value ?? null
+    selectedDate ?? null
   );
 
-  function handleChange(date: Date | undefined) {
-    setDate(date);
-
-    if (onChange) {
-      onChange(date);
+  React.useEffect(() => {
+    if (selectedDate) {
+      setDate(selectedDate);
     }
-  }
+
+    if (!selectedDate) {
+      setDate(null);
+    }
+  }, [selectedDate]);
+
+  const handleChange = React.useCallback(
+    (date: Date | undefined) => {
+      setDate(date);
+
+      if (onChange) {
+        onChange(date);
+      }
+    },
+    [onChange]
+  );
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
+            isError && "border-destructive",
+            open && "border-primary"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -68,6 +88,7 @@ export function DatePicker(props: Readonly<IDatePickerProps>) {
 
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
+          id={name}
           mode="single"
           selected={date ?? undefined}
           onSelect={(event) => handleChange(event)}

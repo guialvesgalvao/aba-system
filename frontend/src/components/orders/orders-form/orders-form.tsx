@@ -4,35 +4,14 @@ import { ErrorToastList } from "@/components/utilities/error-toast-list";
 import { errorsAsStringMessages } from "@/shared/helpers/form-helper/form-helper";
 
 import { FieldErrors } from "react-hook-form";
-import { z } from "zod";
+
 import { OrdersFormBody } from "./orders-form-body";
 import { OnRenderProps } from "@/components/render-form/interface";
-
-const OrdersFormValidation = z.object({
-  id: z.number().optional(),
-
-  title: z.string({
-    required_error: "Adicione um título ao pedido",
-  }),
-
-  client_id: z.number({
-    required_error: "Selecione o cliente do pedido",
-  }),
-  origin_id: z.number({
-    required_error: "Selecione a origem do pedido",
-  }),
-
-  order_date: z.string({
-    required_error: "Adicione a data do pedido",
-  }),
-  order_payment_date: z.string({
-    required_error: "Adicione a data de faturamento",
-  }),
-
-  description: z.string().optional(),
-});
-
-export type OrdersFormValidationType = z.infer<typeof OrdersFormValidation>;
+import {
+  OrderProductsValidationType,
+  OrdersFormValidation,
+  OrdersFormValidationType,
+} from "./interface";
 
 export function OrdersForm() {
   const { toast } = useToast();
@@ -41,9 +20,12 @@ export function OrdersForm() {
     console.log(data);
   }
 
-  function getDefaultValues() {
+  function getDefaultValues(): Partial<OrdersFormValidationType> {
+    const initialProducts = [{} as OrderProductsValidationType];
+
     return {
       order_date: new Date().toISOString(),
+      products: initialProducts,
     };
   }
 

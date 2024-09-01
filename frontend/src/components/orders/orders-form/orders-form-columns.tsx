@@ -1,5 +1,5 @@
 import { Control } from "react-hook-form";
-import { OrdersFormValidationType } from "./orders-form";
+import { OrdersFormValidationType } from "./interface";
 import {
   FormControl,
   FormDescription,

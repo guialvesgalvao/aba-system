@@ -20,9 +20,7 @@ export class Order {
   private _modifiedDate: Date;
   private _modifiedBy: string;
 
-  constructor(
-    data: OrderResponse
-  ) {
+  constructor(data: OrderResponse) {
     this._id = data.id;
     this._client_id = data.client_id;
     this._origin_id = data.origin_id;
@@ -33,7 +31,7 @@ export class Order {
     this._client_data = data.client_data ?? undefined;
     this._origin_data = data.origin_data ?? undefined;
     this._order_itens = data.order_itens ?? undefined;
-    
+
     // If the data is not provided, the date will be undefined
     this._order_date = new Date(data.order_date);
     this._invoicing_date = new Date(data.invoicing_date);
@@ -42,7 +40,6 @@ export class Order {
     this._modifiedDate = new Date(data.modified_at);
     this._modifiedBy = data.modified_by;
   }
-
 
   public get id(): number {
     return this._id;
@@ -68,12 +65,12 @@ export class Order {
     return [];
   }
 
-  public get client_data(): CustomerResponse | undefined{
-      return this._client_data ?? undefined;
+  public get client_data(): CustomerResponse | undefined {
+    return this._client_data ?? undefined;
   }
 
-  public get origin_data(): OriginResponse | undefined{
-      return this._origin_data ?? undefined;
+  public get origin_data(): OriginResponse | undefined {
+    return this._origin_data ?? undefined;
   }
 
   public get total_cost_value(): number {

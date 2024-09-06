@@ -20,7 +20,7 @@ export function CollapseButton() {
           type="button"
           variant="outline"
           size="icon"
-          className="w-6 h-6 text-muted-foreground transition-all hover:text-primary"
+          className="w-6 h-6 text-muted-foreground transition-colors hover:text-primary"
           onClick={() => toggleSidebar()}
         >
           {icon}

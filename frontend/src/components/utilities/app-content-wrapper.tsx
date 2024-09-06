@@ -8,7 +8,7 @@ export function AppContentWrapper(props: Readonly<IAppContentWrapperProps>) {
   return (
     <div
       id="app-content-wrapper"
-      className="w-full h-full flex flex-col gap-4 px-6 py-4 md:px-8"
+      className="w-full h-full flex flex-col gap-4 px-6 py-6 md:px-12"
     >
       {children}
     </div>

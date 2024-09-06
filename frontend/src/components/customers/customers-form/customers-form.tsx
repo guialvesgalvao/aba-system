@@ -74,7 +74,12 @@ export function CustomersForm(props: Readonly<ICustomersFormProps>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <FormDialog trigger={trigger} open={open} setOpen={setOpen}>
+    <FormDialog
+      title="Criar cliente"
+      trigger={trigger}
+      open={open}
+      setOpen={setOpen}
+    >
       <RenderCustomerForm {...props} setOpen={setOpen} />
     </FormDialog>
   );
@@ -86,7 +91,8 @@ interface IRenderCustomerForm extends ICustomersFormProps {
 function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
   const { formKeys, item: customer, isFetching, isLoading, setOpen } = props;
 
-  const { createCustomer, updateCustomer, deleteCustomer } = new CustomersService();
+  const { createCustomer, updateCustomer, deleteCustomer } =
+    new CustomersService();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: formKeys,

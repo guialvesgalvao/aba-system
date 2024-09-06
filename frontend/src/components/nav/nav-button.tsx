@@ -34,7 +34,7 @@ export function NavButton(props: Readonly<INavButtonProps>) {
             type="button"
             variant={isPathSelect ? "default" : "ghost"}
             className={cn(
-              "md:w-full h-10 flex items-center justify-start gap-3 rounded-md px-3 py-2 transition-all",
+              "md:w-full h-10 flex items-center justify-start gap-3 rounded-md px-3 py-2 transition-colors",
               !isPathSelect && "text-muted-foreground hover:text-primary"
             )}
           >

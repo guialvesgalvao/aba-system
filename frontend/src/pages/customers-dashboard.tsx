@@ -24,8 +24,7 @@ import { IComponentRequestProps } from "@/components/component-request/component
 
 export function CustomersDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllCustomers, getCustomersByStatus } =
-    new CustomersService();
+  const { getAllCustomers, getCustomersByStatus } = new CustomersService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
@@ -58,28 +57,20 @@ export function CustomersDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Dialog modal>
-            <DialogTrigger asChild>
-              <Button type="button" size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar novo
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent
-              onInteractOutside={(event) => event.preventDefault()}
-              className="max-w-[1000px]"
-            >
-              <DialogTitle>Criar Cliente</DialogTitle>
-              <CustomersForm
-                item={undefined}
-                isLoading={false}
-                isFetching={false}
-                isError={false}
-                error={null}
-              />
-            </DialogContent>
-          </Dialog>
+          <CustomersForm
+            trigger={
+              <DialogTrigger asChild>
+                <Button type="button" size="sm" className="gap-2">
+                  <CirclePlus size={18} />
+                  Criar novo
+                </Button>
+              </DialogTrigger>
+            }
+            formKeys={["customers"]}
+            item={undefined}
+            isLoading={false}
+            isFetching={false}
+          />
         </div>
       </header>
 

@@ -12,20 +12,16 @@ const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
     VariantProps<typeof labelVariants> & { required?: boolean }
->(({ className, ...props }, ref) => {
-  const { required } = props;
-
-  return (
-    <div className="flex items-start gap-1">
-      <LabelPrimitive.Root
-        ref={ref}
-        className={cn(labelVariants(), className)}
-        {...props}
-      />
-      {required ? <span className="text-xs text-red-500">*</span> : null}
-    </div>
-  );
-});
+>(({ className, required, ...props }, ref) => (
+  <div className="flex items-start gap-1">
+    <LabelPrimitive.Root
+      ref={ref}
+      className={cn(labelVariants(), className)}
+      {...props}
+    />
+    {required ? <span className="text-xs text-red-500">*</span> : null}
+  </div>
+));
 Label.displayName = LabelPrimitive.Root.displayName;
 
 export { Label };

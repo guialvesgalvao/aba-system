@@ -19,14 +19,20 @@ export default class CustomersService implements CustomersModel {
 
   async getAllCustomers(): Promise<Customer[]> {
     const customersFromRepo = await this._repository.getAllCustomers();
-    const customers = customersFromRepo.map((customer) => new Customer(customer));
+    const customers = customersFromRepo.map(
+      (customer) => new Customer(customer)
+    );
 
     return customers;
   }
 
   async getCustomersByStatus(status: CustomerStatus): Promise<Customer[]> {
-    const customersFromRepo = await this._repository.getCustomersByStatus(status);
-    const customers = customersFromRepo.map((customer) => new Customer(customer));
+    const customersFromRepo = await this._repository.getCustomersByStatus(
+      status
+    );
+    const customers = customersFromRepo.map(
+      (customer) => new Customer(customer)
+    );
 
     return customers;
   }

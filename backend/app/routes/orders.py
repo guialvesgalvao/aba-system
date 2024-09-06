@@ -173,6 +173,9 @@ def delete_order_full(id):
     # Excluindo todos os produtos relacionados a esse fornecedor
     OrderItens.query.filter_by(order_id=id).delete()
     
+    # Forçando a execução da exclusão antes de continuar
+    db.session.flush()
+    
     # Excluindo o fornecedor
     db.session.delete(order)
     

@@ -13,7 +13,7 @@ class OrderItens(db.Model):
     status = db.Column(db.String(255), default=None)
     sale_value = db.Column(db.Float, default=None)
     delivery_date = db.Column(db.DateTime, default=None)
-    order_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('orders.id'), default=None)
+    order_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('orders.id', ondelete='CASCADE'), default=None)
     product_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('products.id'), default=None)
     delivery_person_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('delivery_persons.id'), default=None)
     invoicing_id = db.Column(INTEGER(unsigned=True), db.ForeignKey('suppliers.id'), default=None)

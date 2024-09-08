@@ -1,13 +1,6 @@
 import { Control } from "react-hook-form";
 import { OrdersFormValidationType } from "./interface";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { RequestCombobox } from "@/components/combobox/request-combobox";
 
@@ -17,6 +10,8 @@ import { DatePicker } from "@/components/inputs/date-picker/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { getPromiseAsOptions } from "@/shared/helpers/form-helper/form-helper";
 import { MapPin, User } from "lucide-react";
+import { RenderField } from "@/components/render-form/render-field";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 
 interface IOrdersFormColumnsProps {
   control: Control<OrdersFormValidationType>;
@@ -31,219 +26,172 @@ export function OrdersFormColumns(props: Readonly<IOrdersFormColumnsProps>) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Campo Título */}
-        <FormField
+        <RenderField
           control={control}
           name="title"
+          label="Título"
+          description="Adicione um título ao pedido de compra. Ex: Pedido de compra de produtos."
           render={({ field: { name, value, onChange } }) => (
-            <FormItem className="w-full">
-              <FormLabel htmlFor="title" required>
-                Título
-              </FormLabel>
-              <FormControl>
-                <Input
-                  name={name}
-                  type="text"
-                  value={value ?? ""}
-                  onChange={onChange}
-                  placeholder="Título do pedido..."
-                />
-              </FormControl>
-              <FormDescription>
-                Adicione um título ao pedido de compra. Ex: Pedido de compra de
-                produtos.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <Input
+              name={name}
+              type="text"
+              value={value ?? ""}
+              onChange={onChange}
+              placeholder="Título do pedido..."
+              autoFocus
+            />
           )}
+          required
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 flex-wrap">
         {/* Campo Cliente */}
-        <FormField
+        <RenderField
+          className="flex-1"
           control={control}
           name="client_id"
+          label="Cliente"
+          description="Selecione o cliente para o pedido de compra."
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <FormItem className="flex-1">
-              <FormLabel htmlFor="client_id" required>
-                Cliente
-              </FormLabel>
-              <FormControl>
-                <RequestCombobox
-                  icon={User}
-                  storages={["clients"]}
-                  request={() =>
-                    getPromiseAsOptions(
-                      getCustomersByStatus("enabled"),
-                      (customer) => ({
-                        data: customer,
-                        value: customer.id.toString(),
-                        label: customer.fantasy_name,
-                      })
-                    )
-                  }
-                  onChange={(option) => {
-                    if (!option) onChange(undefined);
+            <RequestCombobox
+              icon={User}
+              storages={["clients"]}
+              request={() =>
+                getPromiseAsOptions(
+                  getCustomersByStatus("enabled"),
+                  (customer) => ({
+                    data: customer,
+                    value: customer.id.toString(),
+                    label: customer.fantasy_name,
+                  })
+                )
+              }
+              onChange={(option) => {
+                if (!option) onChange(undefined);
 
-                    const asInt = parseInt(option?.value);
-                    onChange(asInt);
-                  }}
-                  selectedValue={value?.toString()}
-                  strings={{
-                    placeholder: "Selecione o cliente",
-                    search: "Procurar cliente...",
-                    empty: "Nenhum cliente encontrado.",
-                  }}
-                  isError={!!error}
-                />
-              </FormControl>
-              <FormDescription>
-                Selecione o cliente para o pedido de compra.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+                const asInt = parseInt(option?.value);
+                onChange(asInt);
+              }}
+              selectedValue={value?.toString()}
+              strings={{
+                placeholder: "Selecione o cliente",
+                search: "Procurar cliente...",
+                empty: "Nenhum cliente encontrado.",
+              }}
+              isError={!!error}
+            />
           )}
+          required
         />
 
-        {/* Campo Origem */}
-        <FormField
+        <RenderField
+          className="flex-1"
           control={control}
           name="origin_id"
+          label="Origem"
+          description="Selecione a origem do pedido de compra."
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <FormItem className="flex-1">
-              <FormLabel htmlFor="origin_id" required>
-                Origem
-              </FormLabel>
-              <FormControl>
-                <RequestCombobox
-                  icon={MapPin}
-                  storages={["origins"]}
-                  request={() =>
-                    getPromiseAsOptions(
-                      getOriginsByStatus("enabled"),
-                      (origin) => ({
-                        data: origin,
-                        value: origin.id.toString(),
-                        label: origin.name,
-                      })
-                    )
-                  }
-                  onChange={(option) => {
-                    if (!option) onChange(undefined);
+            <RequestCombobox
+              icon={MapPin}
+              storages={["origins"]}
+              request={() =>
+                getPromiseAsOptions(
+                  getOriginsByStatus("enabled"),
+                  (origin) => ({
+                    data: origin,
+                    value: origin.id.toString(),
+                    label: origin.name,
+                  })
+                )
+              }
+              onChange={(option) => {
+                if (!option) onChange(undefined);
 
-                    const asInt = parseInt(option?.value);
-                    onChange(asInt);
-                  }}
-                  selectedValue={value?.toString()}
-                  strings={{
-                    placeholder: "Selecione a origem do pedido",
-                    search: "Procurar origem...",
-                    empty: "Nenhuma origem encontrado.",
-                  }}
-                  isError={!!error}
-                />
-              </FormControl>
-              <FormDescription>
-                Selecione a origem do pedido de compra.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+                const asInt = parseInt(option?.value);
+                onChange(asInt);
+              }}
+              selectedValue={value?.toString()}
+              strings={{
+                placeholder: "Selecione a origem do pedido",
+                search: "Procurar origem...",
+                empty: "Nenhuma origem encontrado.",
+              }}
+              isError={!!error}
+            />
           )}
+          required
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Campo Data do Pedido */}
-        <FormField
+        <RenderField
           control={control}
           name="order_date"
+          label="Data do Pedido"
+          description="Adicione a data do pedido de compra."
           render={({
             field: { name, value, onChange },
             fieldState: { error },
           }) => (
-            <FormItem className="w-full">
-              <FormLabel htmlFor="order_date" required>
-                Data do Pedido
-              </FormLabel>
-              <FormControl>
-                <DatePicker
-                  name={name}
-                  selectedDate={value ? new Date(value) : undefined}
-                  onChange={(date) => {
-                    if (!date) return onChange(undefined);
-                    onChange(date?.toISOString());
-                  }}
-                  strings={{
-                    button: "Escolha a data do pedido",
-                    placeholder: "Escolha uma data",
-                  }}
-                  isError={!!error}
-                />
-              </FormControl>
-              <FormDescription>
-                Adicione a data do pedido de compra.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <DatePicker
+              name={name}
+              selectedDate={value ? new Date(value) : undefined}
+              onChange={(date) => {
+                if (!date) return onChange(undefined);
+                onChange(date?.toISOString());
+              }}
+              strings={{
+                button: "Escolha a data do pedido",
+                placeholder: "Escolha uma data",
+              }}
+              isError={!!error}
+            />
           )}
+          required
         />
 
-        {/* Campo Data de Faturamento */}
-        <FormField
+        <RenderField
           control={control}
           name="order_payment_date"
+          label="Data de Faturamento"
+          description="Adicione a data de faturamento do pedido de compra."
           render={({
             field: { name, onChange, value },
             fieldState: { error },
           }) => (
-            <FormItem className="w-full">
-              <FormLabel htmlFor="order_payment_date" required>
-                Data de Faturamento
-              </FormLabel>
-              <FormControl>
-                <DatePicker
-                  name={name}
-                  selectedDate={value ? new Date(value) : undefined}
-                  onChange={(date) => {
-                    if (!date) return onChange(undefined);
-                    onChange(date?.toISOString());
-                  }}
-                  strings={{
-                    button: "Escolha a data de faturamento",
-                    placeholder: "Escolha uma data",
-                  }}
-                  isError={!!error}
-                />
-              </FormControl>
-              <FormDescription>
-                Adicione a data de faturamento do pedido de compra.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <DatePicker
+              name={name}
+              selectedDate={value ? new Date(value) : undefined}
+              onChange={(date) => {
+                if (!date) return onChange(undefined);
+                onChange(date?.toISOString());
+              }}
+              strings={{
+                button: "Escolha a data de faturamento",
+                placeholder: "Escolha uma data",
+              }}
+              isError={!!error}
+            />
           )}
+          required
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Campo Descrição */}
-        <FormField
+        <RenderField
           control={control}
           name="description"
+          label="Descrição"
+          description="Adicione uma descrição ao pedido de compra."
           render={({ field: { name, value, onChange } }) => (
-            <FormItem className="w-full">
-              <FormLabel htmlFor="description">Descrição</FormLabel>
-              <FormControl>
-                <Textarea
-                  name={name}
-                  value={value ?? ""}
-                  onChange={onChange}
-                  placeholder="Adicione uma descrição ao pedido..."
-                  rows={4}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <AutosizeTextarea
+              name={name}
+              value={value ?? ""}
+              onChange={onChange}
+              placeholder="Adicione uma descrição ao pedido..."
+              rows={4}
+            />
           )}
         />
       </div>

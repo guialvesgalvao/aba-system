@@ -8,11 +8,11 @@ import {
   FormMessage,
 } from "../../ui/form";
 
-import { Button } from "../../ui/button";
+import {Button} from "../../ui/button";
 
-import { Input } from "../../ui/input";
+import {Input} from "../../ui/input";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 
 import {
   Select,
@@ -22,19 +22,19 @@ import {
   SelectValue,
 } from "../../ui/select";
 
-import { Customer } from "@/shared/factories/customers-factory";
+import {Customer} from "@/shared/factories/customers-factory";
 import CustomersService from "@/shared/services/customers-service";
-import { CustomerRequest } from "@/shared/types/customers-types";
-import { SubmitDialog } from "./customers-form-dialogs";
-import { RenderForm } from "@/components/render-form/render-form";
-import { FormResponse } from "@/components/form-request/form-request";
-import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
-import { ErrorMessage } from "@/components/error-message/error-message";
-import { AlertCircle } from "lucide-react";
-import { useState } from "react";
-import { FormDialog } from "@/components/utilities/form-dialog";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "@/components/ui/use-toast";
+import {CustomerRequest} from "@/shared/types/customers-types";
+import {SubmitDialog} from "./customers-form-dialogs";
+import {RenderForm} from "@/components/render-form/render-form";
+import {FormResponse} from "@/components/form-request/form-request";
+import {LoadingSpinner} from "@/components/loading-spinner/loading-spinner";
+import {ErrorMessage} from "@/components/error-message/error-message";
+import {AlertCircle} from "lucide-react";
+import {useState} from "react";
+import {FormDialog} from "@/components/utilities/form-dialog";
+import {useMutation} from "@tanstack/react-query";
+import {toast} from "@/components/ui/use-toast";
 
 const CustomersFormCreateValidation = z.object({
   id: z
@@ -59,6 +59,8 @@ const CustomersFormCreateValidation = z.object({
     required_error: "Selecione o status do cliente",
   }),
   created_by: z.string(),
+
+
 });
 
 export type CustomersFormValidationType = z.infer<
@@ -70,7 +72,7 @@ interface ICustomersFormProps extends FormResponse<Customer> {
 }
 
 export function CustomersForm(props: Readonly<ICustomersFormProps>) {
-  const { trigger } = props;
+  const {trigger} = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -80,7 +82,7 @@ export function CustomersForm(props: Readonly<ICustomersFormProps>) {
       open={open}
       setOpen={setOpen}
     >
-      <RenderCustomerForm {...props} setOpen={setOpen} />
+      <RenderCustomerForm {...props} setOpen={setOpen}/>
     </FormDialog>
   );
 }
@@ -88,13 +90,14 @@ export function CustomersForm(props: Readonly<ICustomersFormProps>) {
 interface IRenderCustomerForm extends ICustomersFormProps {
   setOpen: (open: boolean) => void;
 }
-function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
-  const { formKeys, item: customer, isFetching, isLoading, setOpen } = props;
 
-  const { createCustomer, updateCustomer, deleteCustomer } =
+function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
+  const {formKeys, item: customer, isFetching, isLoading, setOpen} = props;
+
+  const {createCustomer, updateCustomer, deleteCustomer} =
     new CustomersService();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const {mutate, isPending, isError, error} = useMutation({
     mutationKey: formKeys,
     mutationFn: handleWhichAction,
   });
@@ -144,7 +147,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
     return (
       <div className="px-10 py-10">
         <ErrorMessage
-          icon={<AlertCircle className="w-14 h-14" />}
+          icon={<AlertCircle className="w-14 h-14"/>}
           className="text-lg"
           error={error}
         />
@@ -181,7 +184,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
       onInvalid={(errors) => console.log(errors)}
       onSubmit={onSubmit}
       onDelete={deleteCustomer}
-      onRender={({ form, params: { onSubmit } }) => {
+      onRender={({form, params: {onSubmit}}) => {
         return (
           <div className="flex flex-col gap-6">
             <div className="">
@@ -195,7 +198,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="fantasy_name"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="name" required>
                             Nome Fantasia
@@ -206,7 +209,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage/>
                         </FormItem>
                       )}
                     />
@@ -214,7 +217,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="cnpj"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="cnpj" required>
                             CNPJ
@@ -225,7 +228,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage/>
                         </FormItem>
                       )}
                     />
@@ -233,7 +236,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="state_registration"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="state_registration" required>
                             Inscrição Estadual
@@ -244,7 +247,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage/>
                         </FormItem>
                       )}
                     />
@@ -252,7 +255,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="complete_address"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="complete_address" required>
                             Endereço Completo
@@ -263,7 +266,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage/>
                         </FormItem>
                       )}
                     />
@@ -271,7 +274,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="delivery_address"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="delivery_address" required>
                             Endereço de Entrega
@@ -282,7 +285,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage/>
                         </FormItem>
                       )}
                     />
@@ -290,7 +293,7 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                     <FormField
                       control={form.control}
                       name="status"
-                      render={({ field }) => (
+                      render={({field}) => (
                         <FormItem>
                           <FormLabel htmlFor="status" required>
                             Status
@@ -301,10 +304,11 @@ function RenderCustomerForm(props: Readonly<IRenderCustomerForm>) {
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Selecione o status do cliente" />
+                                <SelectValue
+                                  placeholder="Selecione o status do cliente"/>
                               </SelectTrigger>
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage/>
 
                             <SelectContent>
                               <SelectItem value="enabled">Ativo</SelectItem>

@@ -4,9 +4,6 @@ import { ProductsRepo } from "../repositories/products-repo";
 import { ProductRequest, ProductStatus } from "../types/products-types";
 
 export default class ProductsService implements ProductsModel {
-  getProduct(id: number): Promise<Product> {
-    throw new Error("Method not implemented.");
-  }
   private _repository: ProductsRepo;
 
   constructor() {

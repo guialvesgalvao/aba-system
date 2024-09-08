@@ -3,6 +3,8 @@ import { Combobox, ComboboxStrings } from "./combobox";
 import { OptionValue } from "./interface";
 
 interface IRequestComboboxProps {
+  name?: string;
+
   storages: string[];
   request: () => Promise<OptionValue[]>;
 
@@ -10,14 +12,15 @@ interface IRequestComboboxProps {
   selectedValue?: string | null;
 
   strings?: ComboboxStrings;
-  enabled?: boolean;
   icon?: React.ComponentType<{ className?: string }>;
 
+  enabled?: boolean;
+  disabled?: boolean;
   isError?: boolean;
 }
 
 export function RequestCombobox(props: Readonly<IRequestComboboxProps>) {
-  const { storages, request, enabled, ...combobox } = props;
+  const { name, storages, request, enabled = true, ...combobox } = props;
 
   const {
     data,
@@ -37,6 +40,7 @@ export function RequestCombobox(props: Readonly<IRequestComboboxProps>) {
       options={data ?? []}
       isMountingError={isMountingError}
       isFetching={isFetching}
+      isDisabled={!enabled}
       errorMessage={error?.message}
       {...combobox}
     />

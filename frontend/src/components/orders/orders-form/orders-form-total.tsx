@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getCoinFormat } from "@/shared/helpers/format-helper";
@@ -23,25 +22,15 @@ export function OrdersFormTotal(props: Readonly<IOrdersFormTotalProps>) {
       <FormField
         control={control}
         name="products"
-        render={() => {
-          if (isEditing) {
-            return (
-              <Input
-                className="w-28 h-6"
-                type="number"
-                onBlur={() => setIsEditing(false)}
-                placeholder="R$ 0,00"
-                autoFocus
-              />
-            );
-          }
-
-          return (
-            <Badge onClick={() => setIsEditing(true)} variant="secondary">
-              {getCoinFormat(totalValue)}
-            </Badge>
-          );
-        }}
+        render={() => (
+          <Input
+            type="number"
+            value={isEditing ? totalValue : getCoinFormat(totalValue)}
+            onBlur={() => setIsEditing(false)}
+            onClick={() => setIsEditing(true)}
+            placeholder="R$ 0,00"
+          />
+        )}
       />
     </div>
   );

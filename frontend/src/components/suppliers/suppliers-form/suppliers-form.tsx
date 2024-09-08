@@ -231,15 +231,14 @@ function RenderSupplierForm(props: Readonly<IRenderSupplierForm>) {
                     <FormField
                       control={form.control}
                       name="automatic_invoicing"
-                      render={({ field }) => (
+                      render={({ field: { name, value, onChange } }) => (
                         <FormItem>
-                          <Label htmlFor="automatic_invoicing">
-                            Faturamento Automático
-                          </Label>
+                          <Label htmlFor={name}>Faturamento Automático</Label>
                           <FormControl>
                             <Switch
-                              id="automatic_invoicing"
-                              value={field.name}
+                              id={name}
+                              checked={value}
+                              onCheckedChange={onChange}
                               defaultChecked={false}
                             />
                           </FormControl>

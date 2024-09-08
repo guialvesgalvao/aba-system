@@ -28,6 +28,7 @@ export interface IComboboxProps {
 
   icon?: React.ComponentType<{ className?: string }>;
 
+  isDisabled?: boolean;
   isMountingError?: boolean;
   isError?: boolean;
   isFetching?: boolean;
@@ -52,6 +53,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
     isMountingError = false,
     isError = false,
     isFetching = false,
+    isDisabled = false,
     strings = {
       placeholder: "Procurar opções...",
       search: "Procurar...",
@@ -122,7 +124,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
             isFetching && "text-muted-foreground border-muted-foreground",
             open && "border-primary"
           )}
-          disabled={isFetching || isMountingError}
+          disabled={isDisabled || isFetching || isMountingError}
         >
           <div className="flex items-center gap-2">
             {React.createElement(icon, { className: "h-4 w-4" })}

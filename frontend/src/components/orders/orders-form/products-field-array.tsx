@@ -1,10 +1,8 @@
 import { Control, UseFormWatch } from "react-hook-form";
 import { OrdersFormValidationType } from "./interface";
 import {
-  FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
@@ -12,12 +10,14 @@ import { RequestCombobox } from "@/components/combobox/request-combobox";
 import { Factory, Package, TrashIcon } from "lucide-react";
 import { getPromiseAsOptions } from "@/shared/helpers/form-helper/form-helper";
 import SuppliersService from "@/shared/services/suppliers-service";
-import ProductsService from "@/shared/services/products-service";
+
 import { Input } from "@/components/ui/input";
 
 import { getCoinFormat } from "@/shared/helpers/format-helper";
 import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
+import { RenderField } from "@/components/render-form/render-field";
+import { SuppliersProductsService } from "@/shared/services/suppliers-products-service";
 
 interface IProductFieldArrayProps {
   index: number;
@@ -34,7 +34,8 @@ export function ProductFieldArray(props: Readonly<IProductFieldArrayProps>) {
   const { index, id, control, watch, remove, hasRemoveButton } = props;
 
   const { getSuppliersByStatus } = new SuppliersService();
-  const { getProductsByStatus } = new ProductsService();
+
+  const { getSuppliersProductsExtended } = new SuppliersProductsService();
 
   const product = watch(`products.${index}`);
 
@@ -60,162 +61,143 @@ export function ProductFieldArray(props: Readonly<IProductFieldArrayProps>) {
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col md:flex-row gap-4">
-          <FormField
+          <RenderField
+            className="flex-1"
             control={control}
             name={`products.${index}.supplier_id`}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <FormItem className="flex-1">
-                <FormLabel htmlFor={`products.${index}.supplier_id`} required>
-                  Fornecedor
-                </FormLabel>
-                <FormControl>
-                  <RequestCombobox
-                    icon={Factory}
-                    storages={["suppliers", id]}
-                    request={() =>
-                      getPromiseAsOptions(
-                        getSuppliersByStatus("enabled"),
-                        (supplier) => ({
-                          data: supplier,
-                          value: supplier.id.toString(),
-                          label: supplier.name,
-                        })
-                      )
-                    }
-                    onChange={(option) => {
-                      if (!option) onChange(undefined);
+            label="Fornecedor"
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <RequestCombobox
+                icon={Factory}
+                storages={["suppliers", id]}
+                request={() =>
+                  getPromiseAsOptions(
+                    getSuppliersByStatus("enabled"),
+                    (supplier) => ({
+                      data: supplier,
+                      value: supplier.id.toString(),
+                      label: supplier.name,
+                    })
+                  )
+                }
+                onChange={(option) => {
+                  if (!option) onChange(undefined);
 
-                      const asInt = parseInt(option?.value);
-                      onChange(asInt);
-                    }}
-                    selectedValue={value?.toString()}
-                    strings={{
-                      placeholder: "Selecione o fornecedor",
-                      search: "Procurar fornecedor...",
-                      empty: "Nenhum fornecedor encontrado.",
-                    }}
-                    isError={!!error}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                  const asInt = parseInt(option?.value);
+                  onChange(asInt);
+                }}
+                selectedValue={value?.toString()}
+                strings={{
+                  placeholder: "Selecione o fornecedor",
+                  search: "Procurar fornecedor...",
+                  empty: "Nenhum fornecedor encontrado.",
+                }}
+                isError={!!error}
+              />
             )}
+            required
           />
 
-          <FormField
+          <RenderField
+            className="flex-1"
             control={control}
             name={`products.${index}.product_id`}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <FormItem className="flex-1">
-                <FormLabel htmlFor={`products.${index}.product_id`} required>
-                  Produto
-                </FormLabel>
-                <FormControl>
-                  <RequestCombobox
-                    icon={Package}
-                    storages={["products", id]}
-                    request={() =>
-                      getPromiseAsOptions(
-                        getProductsByStatus("enabled"),
-                        (product) => ({
-                          data: product,
-                          value: product.id.toString(),
-                          label: product.name,
-                        })
-                      )
-                    }
-                    onChange={(option) => {
-                      if (!option) onChange(undefined);
+            label="Produto"
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <RequestCombobox
+                enabled={!!watch(`products.${index}.supplier_id`)}
+                icon={Package}
+                storages={["products", id]}
+                request={() =>
+                  getPromiseAsOptions(
+                    getSuppliersProductsExtended(
+                      watch(`products.${index}.supplier_id`)
+                    ),
+                    (product) => ({
+                      data: product,
+                      value: product.product_id.toString(),
+                      label: product.product_info.name,
+                    })
+                  )
+                }
+                onChange={(option) => {
+                  if (!option) onChange(undefined);
 
-                      const asInt = parseInt(option?.value);
-                      onChange(asInt);
-                    }}
-                    selectedValue={value?.toString()}
-                    strings={{
-                      placeholder: "Selecione o produto",
-                      search: "Procurar produto...",
-                      empty: "Nenhum produto encontrado.",
-                    }}
-                    isError={!!error}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                  const asInt = parseInt(option?.value);
+                  onChange(asInt);
+                }}
+                selectedValue={value?.toString()}
+                strings={{
+                  placeholder: "Selecione o produto",
+                  search: "Procurar produto...",
+                  empty: "Nenhum produto encontrado.",
+                }}
+                isError={!!error}
+              />
             )}
+            required
           />
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
-          <FormField
+          <RenderField
             control={control}
             name={`products.${index}.quantity`}
+            label="Quantidade"
             render={({ field: { onChange, value } }) => (
-              <FormItem className="flex-1">
-                <FormLabel htmlFor={`products.${index}.quantity`} required>
-                  Quantidade
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    value={value ?? ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
+              <Input
+                type="number"
+                value={value ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
 
-                      if (!value) {
-                        onChange(undefined);
-                        return;
-                      }
+                  if (!value) {
+                    onChange(undefined);
+                    return;
+                  }
 
-                      const asInt = parseInt(e.target.value);
-                      onChange(asInt);
-                    }}
-                    placeholder="Insira a quantidade de produtos"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                  const asInt = parseInt(e.target.value);
+                  onChange(asInt);
+                }}
+                placeholder="Insira a quantidade de produtos"
+              />
             )}
+            required
           />
 
-          <FormField
+          <RenderField
             control={control}
             name={`products.${index}.price`}
+            label="Preço"
             render={({ field: { onChange, value } }) => (
-              <FormItem className="flex-1">
-                <FormLabel htmlFor={`products.${index}.price`} required>
-                  Preço
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    value={value ?? ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
+              <Input
+                type="number"
+                value={value ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
 
-                      if (!value) {
-                        onChange(undefined);
-                        return;
-                      }
+                  if (!value) {
+                    onChange(undefined);
+                    return;
+                  }
 
-                      const asInt = parseFloat(e.target.value);
-                      onChange(asInt);
-                    }}
-                    placeholder="R$ 0,00"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                  const asInt = parseFloat(e.target.value);
+                  onChange(asInt);
+                }}
+                placeholder="R$ 0,00"
+              />
             )}
+            required
           />
         </div>
 
         <div className="flex flex-col md:items-center sm:flex-row justify-between gap-4">
           <FormItem className="flex-1">
-            <FormLabel htmlFor={`products.${index}.price`} required>
+            <FormLabel htmlFor={`products.${index}.price`}>
               Valor Total da Unidade
             </FormLabel>
             <Input
-              className="text-muted-foreground"
+              className="text-muted-foreground cursor-default"
               value={total}
               placeholder="R$ 0,00"
               readOnly

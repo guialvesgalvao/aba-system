@@ -4,10 +4,7 @@ import ProductsService from "@/shared/services/products-service";
 
 import { Product } from "@/shared/factories/products-factory";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
-import {
-  Dialog,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 import { ProductsForm } from "@/components/products/products-form/products-form";
 import { Button } from "@/components/ui/button";
@@ -19,7 +16,6 @@ import { TabRenderBasedStatus } from "@/components/tab-render-based-status/tab-r
 import { CardData } from "@/components/card-data/card-data";
 import { useStatusParam } from "@/shared/hooks/use-status-param";
 import { TitlePage } from "@/components/title-page/title-page";
-import { useState } from "react";
 
 import { IComponentRequestProps } from "@/components/component-request/component-request";
 import { ProductStatus } from "@/shared/types/products-types";
@@ -27,10 +23,6 @@ import { ProductStatus } from "@/shared/types/products-types";
 export function ProductsDashboard() {
   const { getCurrentStatus } = useStatusParam();
   const { getAllProducts, getProductsByStatus } = new ProductsService();
-
-  const [isFormOpen] = useState(false);
-
-  console.log("ProductsDashboard", isFormOpen);
 
   async function refreshPage() {
     const status = getCurrentStatus();

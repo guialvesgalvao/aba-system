@@ -174,7 +174,6 @@ export const columns: ColumnDef<Origin>[] = [
                 queryKey={["origins"]}
               />
             </DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

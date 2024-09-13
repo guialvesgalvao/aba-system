@@ -80,4 +80,12 @@ export class OrdersRepo {
       },
     });
   }
+
+  async deleteOrderExtendendData(id: number): Promise<void> {
+    await axios.delete(`${this._API_SPECIFIC_URL}/${id}`, {
+      headers: {
+        "X-API-KEY": this._API_KEY,
+      },
+    });
+  }
 }

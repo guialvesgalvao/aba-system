@@ -31,6 +31,8 @@ import { SupplierStatus } from "@/shared/types/suppliers-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import { SuppliersForm } from "../suppliers-form/suppliers-form";
+import SuppliersService from "@/shared/services/suppliers-service";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
 
 export const columns: ColumnDef<Supplier>[] = [
   {
@@ -170,7 +172,8 @@ export const columns: ColumnDef<Supplier>[] = [
     enableSorting: false,
     enableColumnFilter: false,
     cell({ row }) {
-      const supplier = row.original;
+      const supplier:Supplier = row.original;
+      const service = new SuppliersService();
 
       return (
         <DropdownMenu modal={false}>
@@ -198,7 +201,14 @@ export const columns: ColumnDef<Supplier>[] = [
               />
             </DropdownMenuItem>
 
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir este fornecedor e seus produtos?"}
+                onSubmit={() => service.deleteSupplierExtendendData(supplier.id)}
+                queryKey={['suppliers']}
+              />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

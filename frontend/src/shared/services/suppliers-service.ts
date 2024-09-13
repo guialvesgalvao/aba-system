@@ -18,6 +18,7 @@ export default class SuppliersService implements SuppliersModel {
     this.createSupplier = this.createSupplier.bind(this);
     this.updateSupplier = this.updateSupplier.bind(this);
     this.deleteSupplier = this.deleteSupplier.bind(this);
+    this.deleteSupplierExtendendData = this.deleteSupplierExtendendData.bind(this);
   }
 
   async getAllSuppliers(): Promise<Supplier[]> {
@@ -83,5 +84,11 @@ export default class SuppliersService implements SuppliersModel {
     if (!id) throw new Error("Supplier ID is required");
 
     await this._repository.deleteSupplier(id);
+  }
+
+  async deleteSupplierExtendendData(id: number): Promise<void> {
+    if (!id) throw new Error("Supplier ID is required");
+
+    await this._repository.deleteSupplierExtendendData(id);
   }
 }

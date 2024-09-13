@@ -164,7 +164,7 @@ def get_order_full(order_id):
 
     return jsonify(response)
 
-@orders_bp.route('/orders_full/<int:id>', methods=['DELETE'])
+@orders_bp.route('/order_full/<int:id>', methods=['DELETE'])
 def delete_order_full(id):
     check_api_key()
     

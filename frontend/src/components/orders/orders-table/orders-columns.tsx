@@ -15,6 +15,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { DeleteDialog } from "@/components/utilities/delete-dialog";
 import { Order } from "@/shared/factories/orders-factory";
 import {
   getFormattedDynamicText,
@@ -26,6 +27,7 @@ import {
   getOrderDescriptionByStatus,
 } from "@/shared/helpers/orders-helper/orders-helper";
 import { getShortedText } from "@/shared/helpers/table-helper/table-helper";
+import OrdersService from "@/shared/services/orders-service";
 import { OrderStatus } from "@/shared/types/orders-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
@@ -185,7 +187,8 @@ export const columns: ColumnDef<Order>[] = [
     enableColumnFilter: false,
     cell({ row }) {
       const [searchParams, setSearchParams] = useSearchParams();
-      const id: number = row.getValue("id");
+      const order: Order = row.original
+      const service = new OrdersService();
 
       return (
         <DropdownMenu modal={false}>
@@ -202,14 +205,22 @@ export const columns: ColumnDef<Order>[] = [
               <DialogTrigger
                 className="w-full"
                 onClick={() => {
-                  searchParams.set("formId", id.toString());
+                  searchParams.set("formId", order.id.toString());
                   setSearchParams(searchParams);
                 }}
               >
                 Editar
               </DialogTrigger>
             </DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            
+            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+              <DeleteDialog
+                trigger={<DialogTrigger>Excluir</DialogTrigger>}
+                confirmMessage={"Tem certeza que deseja excluir este pedido e seus sub-itens?"}
+                onSubmit={() => service.deleteOrderExtendendData(order.id)}
+                queryKey={['orders']}
+              />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

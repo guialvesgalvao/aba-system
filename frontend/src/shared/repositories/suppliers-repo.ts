@@ -2,6 +2,8 @@ import axios from "axios";
 import { SupplierRequest, SupplierResponse } from "../types/suppliers-types";
 
 export class SuppliersRepo {
+
+  private _API_URL_FULL = "http://localhost:5000/api/suppliers_full";
   private _API_URL = "http://localhost:5000/api/suppliers";
   private _API_KEY = "ABA";
 
@@ -71,6 +73,14 @@ export class SuppliersRepo {
 
   async deleteSupplier(id: number): Promise<void> {
     await axios.delete(`${this._API_URL}/${id}`, {
+      headers: {
+        "X-API-KEY": this._API_KEY,
+      },
+    });
+  }
+
+  async deleteSupplierExtendendData(id: number): Promise<void> {
+    await axios.delete(`${this._API_URL_FULL}/${id}`, {
       headers: {
         "X-API-KEY": this._API_KEY,
       },

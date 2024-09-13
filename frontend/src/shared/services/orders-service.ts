@@ -16,6 +16,7 @@ export default class OrdersService implements OrdersModel {
     this.updateOrder = this.updateOrder.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
     this.getOrderExtendedData = this.getOrderExtendedData.bind(this);
+    this.deleteOrderExtendendData = this.deleteOrderExtendendData.bind(this);
   }
 
   async getOrderExtendedData(order_id: number): Promise<Order> {
@@ -70,5 +71,11 @@ export default class OrdersService implements OrdersModel {
     if (!id) throw new Error("Order ID is required");
 
     await this._repository.deleteOrder(id);
+  }
+
+  async deleteOrderExtendendData(id: number): Promise<void> {
+    if (!id) throw new Error("Order ID is required");
+
+    await this._repository.deleteOrderExtendendData(id);
   }
 }

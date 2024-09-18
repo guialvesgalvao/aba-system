@@ -5,8 +5,6 @@ import SuppliersService from "@/shared/services/suppliers-service";
 import { Supplier } from "@/shared/factories/suppliers-factory";
 import {
   Dialog,
-  DialogContent,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { SuppliersForm } from "@/components/suppliers/suppliers-form/suppliers-form";
@@ -25,14 +23,13 @@ import { IComponentRequestProps } from "@/components/component-request/component
 
 export function SuppliersDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllSuppliers, getSuppliersByStatus } =
-    new SuppliersService();
+  const { getAllSuppliers, getSuppliersByStatus } = new SuppliersService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Supplier[]>(["suppliers", status]);
   }
-  
+
   function generateTable(
     status?: SupplierStatus
   ): IComponentRequestProps<Supplier> {
@@ -59,24 +56,21 @@ export function SuppliersDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button type="button" size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar novo
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="max-w-[1000px]">
-              <DialogTitle>Criar fornecedor</DialogTitle>
               <SuppliersForm
+                trigger={
+                  <DialogTrigger asChild>
+                    <Button type="button" size="sm" className="gap-2">
+                      <CirclePlus size={18} />
+                      Criar Fornecedor
+                    </Button>
+                  </DialogTrigger>
+                }
                 item={undefined}
                 isLoading={false}
                 isFetching={false}
                 formKeys={["suppliers"]}
               />
-            </DialogContent>
-          </Dialog>
+            
         </div>
       </header>
 
@@ -96,21 +90,21 @@ export function SuppliersDashboard() {
               <CardData<Supplier>
                 title="Fornecedores Ativos"
                 description="Lista de fornecedores ativos no sistema"
-                table={generateTable('enabled')}
+                table={generateTable("enabled")}
               />
             ),
             archived: (
               <CardData<Supplier>
                 title="Fornecedores Arquivados"
                 description="Lista de fornecedores arquivados no sistema"
-                table={generateTable('archived')}
+                table={generateTable("archived")}
               />
             ),
             draft: (
               <CardData<Supplier>
                 title="Fornecedores Rascunho"
                 description="Lista de fornecedores em rascunho no sistema"
-                table={generateTable('draft')}
+                table={generateTable("draft")}
               />
             ),
           }}

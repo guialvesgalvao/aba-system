@@ -6,8 +6,6 @@ import { Origin } from "@/shared/factories/origins-factory";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import {
   Dialog,
-  DialogContent,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { OriginsForm } from "@/components/origins/origins-form/origins-form";
@@ -24,15 +22,13 @@ import { IComponentRequestProps } from "@/components/component-request/component
 
 export function OriginsDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const { getAllOrigins, getOriginsByStatus } =
-    new OriginsService();
+  const { getAllOrigins, getOriginsByStatus } = new OriginsService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<Origin[]>(["origins", status]);
   }
 
-  
   function generateTable(
     status?: OriginStatus
   ): IComponentRequestProps<Origin> {
@@ -58,25 +54,20 @@ export function OriginsDashboard() {
 
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button type="button" size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar nova
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="max-w-[1000px]">
-              <DialogTitle>Criar origem</DialogTitle>
               <OriginsForm
+                trigger={
+                  <DialogTrigger asChild>
+                    <Button type="button" size="sm" className="gap-2">
+                      <CirclePlus size={18} />
+                      Criar origem
+                    </Button>
+                  </DialogTrigger>
+                }
                 formKeys={["origins"]}
                 item={undefined}
                 isLoading={false}
                 isFetching={false}
               />
-            </DialogContent>
-          </Dialog>
         </div>
       </header>
 
@@ -96,21 +87,21 @@ export function OriginsDashboard() {
               <CardData<Origin>
                 title="Origens Ativos"
                 description="Lista de origens ativos no sistema"
-                table={generateTable('enabled')}
+                table={generateTable("enabled")}
               />
             ),
             archived: (
               <CardData<Origin>
                 title="Origens Arquivados"
                 description="Lista de origens arquivados no sistema"
-                table={generateTable('archived')}
+                table={generateTable("archived")}
               />
             ),
             draft: (
               <CardData<Origin>
                 title="Origens em Rascunho"
                 description="Lista de origens em rascunho no sistema"
-                table={generateTable('draft')}
+                table={generateTable("draft")}
               />
             ),
           }}

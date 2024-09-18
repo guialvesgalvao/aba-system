@@ -6,8 +6,6 @@ import { Customer } from "@/shared/factories/customers-factory";
 import { StatusTabsChooser } from "@/components/status-tabs-chooser/status-tabs-chooser";
 import {
   Dialog,
-  DialogContent,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CustomersForm } from "@/components/customers/customers-form/customers-form";

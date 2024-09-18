@@ -5,8 +5,6 @@ import DeliveryPersonsService from "@/shared/services/delivery-persons-service";
 import { DeliveryPerson } from "@/shared/factories/delivery-persons-factory";
 import {
   Dialog,
-  DialogContent,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DeliveryPersonsForm } from "@/components/delivery-persons/delivery-persons-form/delivery-persons-form";
@@ -24,17 +22,14 @@ import { IComponentRequestProps } from "@/components/component-request/component
 
 export function DeliveryPersonsDashboard() {
   const { getCurrentStatus } = useStatusParam();
-  const {
-    getAllDeliveryPersons,
-    getDeliveryPersonsByStatus
-  } = new DeliveryPersonsService();
+  const { getAllDeliveryPersons, getDeliveryPersonsByStatus } =
+    new DeliveryPersonsService();
 
   async function refreshPage() {
     const status = getCurrentStatus();
     await fetchAppQuery<DeliveryPerson[]>(["delivery-persons", status]);
   }
 
-  
   function generateTable(
     status?: DeliveryPersonStatus
   ): IComponentRequestProps<DeliveryPerson> {
@@ -64,24 +59,20 @@ export function DeliveryPersonsDashboard() {
         <div className="flex items-center gap-2">
           <RefreshButton text="Atualizar página" onClick={refreshPage} />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button type="button" size="sm" className="gap-2">
-                <CirclePlus size={18} />
-                Criar novo
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="max-w-[1000px]">
-              <DialogTitle>Criar Tipo de Entrega</DialogTitle>
-              <DeliveryPersonsForm
-                formKeys={["delivery-persons"]}
-                item={undefined}
-                isLoading={false}
-                isFetching={false}
-              />
-            </DialogContent>
-          </Dialog>
+          <DeliveryPersonsForm
+            trigger={
+              <DialogTrigger asChild>
+                <Button type="button" size="sm" className="gap-2">
+                  <CirclePlus size={18} />
+                  Criar Tipo de Entrega
+                </Button>
+              </DialogTrigger>
+            }
+            formKeys={["delivery-persons"]}
+            item={undefined}
+            isLoading={false}
+            isFetching={false}
+          />
         </div>
       </header>
 

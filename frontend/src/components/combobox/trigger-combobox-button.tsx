@@ -1,7 +1,6 @@
-import { ChevronsUpDown, OctagonAlert } from "lucide-react";
-import { LoadingSpinner } from "../loading-spinner/loading-spinner";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { GenerateIcon } from "./generate-icon-status";
 
 interface ITriggerComboboxButtonProps {
   isError: boolean;
@@ -16,18 +15,6 @@ export function TriggerComboboxButton(
 ) {
   const { isError, isFetching, currentValue, placeholder } = props;
 
-  function getIcon() {
-    if (isFetching) {
-      return <LoadingSpinner className="h-5 w-5" />;
-    }
-
-    if (isError) {
-      return <OctagonAlert className="h-5 w-5" />;
-    }
-
-    return <ChevronsUpDown className="h-5 w-5" />;
-  }
-
   return (
     <Button
       type="button"
@@ -40,7 +27,7 @@ export function TriggerComboboxButton(
       disabled={isFetching || isError}
     >
       {currentValue ?? placeholder}
-      {getIcon()}
+      <GenerateIcon isError={isError} isFetching={isFetching} />
     </Button>
   );
 }

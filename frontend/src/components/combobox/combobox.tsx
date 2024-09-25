@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronsUpDown, Database, OctagonAlert } from "lucide-react";
+import { Database } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/popover";
 
 import { Button } from "../ui/button";
-import { LoadingSpinner } from "../loading-spinner/loading-spinner";
+
 import { OptionValue } from "./interface";
 import { ComboboxCommand } from "./combobox-command";
 import { useMemo } from "react";
+import { GenerateIcon } from "./generate-icon-status";
 
 export type ComboboxStrings = {
   placeholder?: string;
@@ -98,18 +99,6 @@ export function Combobox(props: Readonly<IComboboxProps>) {
     [onChange]
   );
 
-  function getIcon() {
-    if (isFetching) {
-      return <LoadingSpinner className="h-5 w-5" />;
-    }
-
-    if (isMountingError) {
-      return <OctagonAlert className="h-5 w-5" />;
-    }
-
-    return <ChevronsUpDown className="h-5 w-5" />;
-  }
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -130,7 +119,7 @@ export function Combobox(props: Readonly<IComboboxProps>) {
             {React.createElement(icon, { className: "h-4 w-4" })}
             {errorMessage ?? currentLabel ?? strings.placeholder}
           </div>
-          {getIcon()}
+          <GenerateIcon isError={isMountingError} isFetching={isFetching} />
         </Button>
       </PopoverTrigger>
 

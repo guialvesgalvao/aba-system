@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "../../ui/input";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 import {
   Select,
@@ -53,7 +54,7 @@ const SuppliersFormCreateValidation = z.object({
     .max(255, "Adicione no máximo 255 caracteres"),
   status: z.enum(["enabled", "draft", "archived"], {
     required_error: "Selecione o status do fornecedor",
-  }),
+  }),  
   cnpj: z.string().optional(),
   created_by: z.string(),
 });
@@ -88,6 +89,11 @@ interface IRenderSupplierForm extends ISuppliersFormProps {
 
 function RenderSupplierForm(props: Readonly<IRenderSupplierForm>) {
   const { formKeys, item: supplier, isFetching, isLoading, setOpen } = props;
+  const { control, handleSubmit } = useFormContext<Supplier>();
+  const { fields, append, remove } = useFieldArray({
+    name: "filhos",
+    control: control,
+  });
 
   const { createSupplier, updateSupplier, deleteSupplier } =
     new SuppliersService();
@@ -107,6 +113,7 @@ function RenderSupplierForm(props: Readonly<IRenderSupplierForm>) {
         status: supplier.status,
         cnpj: supplier.cnpj,
         automatic_invoicing: supplier.automatic_invoicing,
+
         created_by: "admin",
       };
     }
@@ -210,6 +217,9 @@ function RenderSupplierForm(props: Readonly<IRenderSupplierForm>) {
                         </FormItem>
                       )}
                     />
+
+
+                    
 
                     <FormField
                       control={form.control}

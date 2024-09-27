@@ -1,7 +1,7 @@
 import { Supplier } from "@/shared/factories/suppliers-factory";
 
 import SuppliersService from "@/shared/services/suppliers-service";
-import { SupplierProductsStaticTable } from "../suppliers-products/suppliers-products-static-table";
+import { SupplierProductsStaticTable } from "../../suppliers-products/suppliers-table/suppliers-products-static-table";
 import { ComponentRequest } from "@/components/component-request/component-request";
 
 interface ISuppliersProductsProps {

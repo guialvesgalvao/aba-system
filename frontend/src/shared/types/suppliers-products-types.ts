@@ -22,4 +22,5 @@ export type SupplierProductRequest = {
 
 export type SupplierProductExtendedResponse = SupplierProductResponse & {
   product_info: ProductResponse;
+  actions?: Element;
 };
